@@ -6,7 +6,7 @@ float cameraZ = 0.0f;
 float cameraAngle = 0.0f;
 float cameraDirX;
 float cameraDirZ;
-int size = 15;
+int size;
 const int Path = 0;
 const int Wall = 1;
 const int Key = 2;
@@ -23,6 +23,7 @@ int WindowH = 0;
 int currentItem = 0;
 std::chrono::time_point<std::chrono::steady_clock> start_time;
 char Goal_char[50];
+
 
 AABB cameraBox;
 std::vector<AABB> cubes;
@@ -214,9 +215,36 @@ void myDisplay() {
 	if (scene == play) {
 		glEnable(GL_DEPTH_TEST);
 		glPushMatrix();
+		glLoadIdentity();
+		float light_pos[] = { -34 ,5,-34 ,0 };
+		float light_ambient[] = { 1.0,1.0,1.0,1.0 };
+		float light_diffuse[] = { 1.0,1.0,1.0,1.0 };
+		float light_specular[] = { 1.0,1.0,1.0,1.0 };
+		glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+		glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+		glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+		glPopMatrix();
+		float line_diffuse[] = { 1.0,1.0,1.0,1.0 };
+		float line_specular[] = { 1.0,1.0,1.0,1.0 };
+		float cube_ambient[] = { 0.5,0.5,0.5,1.0 };
+		float cube_diffuse[] = { 0.5,0.5,0.5,1.0 };
+		float cube_specular[] = { 0.5,0.5, 0.5, 1.0 };
+		float cube_shininess[] = { 0.6 };
+		float key_ambient[] = { 0.24725,0.1995,0.0745,1.0 };
+		float key_diffuse[] = { 0.75164,0.60648,0.22648,1.0 };
+		float key_specular[] = { 0.628281,0.555802,0.366065,1.0 };
+		float key_shininess[] = { 0.4 };
+		float mtrl_shininess[] = { 100.0 };
+		glPushMatrix();
 		cameraDirX = cos(cameraAngle);
 		cameraDirZ = sin(cameraAngle);
 		gluLookAt(cameraX, cameraY, cameraZ, cameraX + cameraDirX, 1, cameraZ + cameraDirZ, 0, 1, 0);
+		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, line_diffuse);
+		glMaterialfv(GL_FRONT, GL_SPECULAR, line_specular);
+		glMaterialfv(GL_FRONT, GL_SHININESS, mtrl_shininess);
+		glEnable(GL_LIGHT0);
+		glEnable(GL_LIGHTING);
 		glBegin(GL_LINES);
 		for (int i = -35; i < 36; i += 2) {//°•`‰æ
 			glColor3f(1, 1, 1);
@@ -230,23 +258,31 @@ void myDisplay() {
 		cubes.clear();
 		for (int x = 0; x < size; x++) {//•ÇAŒ®AƒS[ƒ‹•`‰æ
 			for (int z = 0; z < size; z++) {
-				if (maze[x][z] == Wall) {
+				if (maze[x][z] == Wall) {//•Ç
 					glPushMatrix();
 					glColor3f(0, 0, 1);
-					glTranslated(2 * x - 36, 2.5, 2 * z - 36);
-					glScaled(2.0, 5.0, 2.0);
+					glTranslated(2 * x - 36, 7.5, 2 * z - 36);
+					glScaled(2.0, 15.0, 2.0);
 					center = { 2.0f * x - 36, 2.0f, 2.0f * z - 36 };
 					cubes.push_back(GetCubeAABB(center, 2.0));
+					glMaterialfv(GL_FRONT, GL_AMBIENT, cube_ambient);
+					glMaterialfv(GL_FRONT, GL_DIFFUSE, cube_diffuse);
+					glMaterialfv(GL_FRONT, GL_SPECULAR, cube_specular);
+					glMaterialfv(GL_FRONT, GL_SHININESS, cube_shininess);
 					glutSolidCube(1.0);
 					glPopMatrix();
 				}
-				else if (maze[x][z] == Key && !keyflag) {
+				else if (maze[x][z] == Key && !keyflag) {//Œ®
 					glPushMatrix();
 					glColor3f(1, 1, 0);
 					glTranslated(2 * x - 36, 1.0, 2 * z - 36);
 					center = { 2.0f * x - 36, 1.0, 2.0f * z - 36 };
 					KEY = GetKeyAABB(center, 0.5);
 					glScaled(1.0, 1.0, 1.0);
+					glMaterialfv(GL_FRONT, GL_AMBIENT, key_ambient);
+					glMaterialfv(GL_FRONT, GL_DIFFUSE, key_diffuse);
+					glMaterialfv(GL_FRONT, GL_SPECULAR, key_specular);
+					glMaterialfv(GL_FRONT, GL_SHININESS, key_shininess);
 					glutSolidSphere(0.2, 10, 10);
 					for (int i = 0; i < 4; i++) {
 						glTranslated(0, -0.125, 0);
@@ -261,7 +297,7 @@ void myDisplay() {
 					}
 					glPopMatrix();
 				}
-				else if (maze[x][z] == Gate && !gateflag) {
+				else if (maze[x][z] == Gate && !gateflag) {//”à
 					glPushMatrix();
 					glColor3f(0, 1, 0);
 					glTranslated(2 * x - 36, 1.0, 2 * z - 36);
@@ -271,7 +307,7 @@ void myDisplay() {
 					glutWireCube(1.0);
 					glPopMatrix();
 				}
-				else if (maze[x][z] == Gate && gateflag) {
+				else if (maze[x][z] == Gate && gateflag) {//ƒS[ƒ‹
 					glPushMatrix();
 					center = { 2.0f * x - 34, 1.0, 2.0f * z - 36 };
 					GOAL = GetCubeAABB(center, 2.0);
@@ -284,6 +320,8 @@ void myDisplay() {
 	}
 	//ƒŠƒUƒ‹ƒg‰æ–Ê
 	if (scene == result) {
+		glDisable(GL_LIGHT0);
+		glDisable(GL_LIGHTING);
 		glPushMatrix();
 		glColor3f(1, 1, 1);
 		glMatrixMode(GL_PROJECTION);
@@ -349,6 +387,7 @@ void myInit(char* progname) {
 	glLoadIdentity();
 	gluPerspective(90.0, (double)width / (double)height, 0.1, 20.0);
 	glMatrixMode(GL_MODELVIEW);
+	glShadeModel(GL_SMOOTH);
 	glLoadIdentity();
 }
 
