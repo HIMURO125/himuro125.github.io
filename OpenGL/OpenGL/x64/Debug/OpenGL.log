@@ -1,16 +1,26 @@
 ﻿  Game.cpp
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(94,24): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(97,24): warning C4305: '+=': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(233,30): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(234,27): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(234,35): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(234,42): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(235,27): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(235,35): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(235,43): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(236,28): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(236,37): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(236,46): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(237,29): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(412,12): warning C4244: '引数': 'time_t' から 'unsigned int' への変換です。データが失われる可能性があります。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(138,24): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(141,24): warning C4305: '+=': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(304,30): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(305,27): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(305,35): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(305,42): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(306,27): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(306,35): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(306,43): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(307,28): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(307,37): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(307,46): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(308,29): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(309,28): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(309,36): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(309,43): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(310,28): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(310,35): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(310,43): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(311,29): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(311,38): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(311,48): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(312,30): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(574,12): warning C4244: '引数': 'time_t' から 'unsigned int' への変換です。データが失われる可能性があります。
   OpenGL.vcxproj -> C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\x64\Debug\OpenGL.exe

@@ -21,6 +21,10 @@ struct AABB {//AABB\‘¢‘Ì
 	Vector3 max;
 };
 
+struct Square {
+	float x, z; // ‘«Œ³‚ÌˆÊ’u
+};
+
 AABB GetCameraAABB(const Vector3& cameraPosition);//ƒJƒƒ‰‚ÌAABBæ“¾
 AABB GetCubeAABB(const Vector3& CubeCenter, float size);//•Ç‚ÌAABBæ“¾
 AABB GetKeyAABB(const Vector3& KeyCenter, float size);//Œ®‚ÌAABBæ“¾

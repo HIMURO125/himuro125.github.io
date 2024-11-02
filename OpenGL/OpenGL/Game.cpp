@@ -14,16 +14,18 @@ const int Gate = 3;
 std::vector<std::vector<int>> maze;
 bool keyflag = false;
 bool gateflag = false;
+bool support = true;
 int scene = 0;
 const int title = 0;
 const int play = 1;
 const int result = 2;
+const int option = 3;
 int WindowW = 0;
 int WindowH = 0;
 int currentItem = 0;
+int currentOpItem = 0;
 std::chrono::time_point<std::chrono::steady_clock> start_time;
 char Goal_char[50];
-
 
 AABB cameraBox;
 std::vector<AABB> cubes;
@@ -31,31 +33,62 @@ AABB KEY;
 AABB GATE;
 AABB GOAL;
 
+std::vector<Square> squares;
+
 //ŠJn(Enter)‚ÆI—¹(Esc)
 void myKeyboard(unsigned char key, int x, int y) {
 	if (scene == title) {//ƒ^ƒCƒgƒ‹‰æ–Ê
 		if (key == 13) {
 			if (currentItem == 0) {//ƒŒƒxƒ‹‚P
 				size = 9;
+				maze = InitMaze(size);//ƒTƒCƒY‚ğw’è‚µ‚Ä–À˜Hì¬
+				start_time = std::chrono::steady_clock::now();
+				keyflag = false;//ƒtƒ‰ƒO“™‚ÌƒŠƒZƒbƒg
+				gateflag = false;
+				scene = play;
+				cameraX = -34.0f;
+				cameraZ = -34.0f;
 			}
 			else if (currentItem == 1) {//ƒŒƒxƒ‹‚Q
 				size = 15;
+				maze = InitMaze(size);//ƒTƒCƒY‚ğw’è‚µ‚Ä–À˜Hì¬
+				start_time = std::chrono::steady_clock::now();
+				keyflag = false;//ƒtƒ‰ƒO“™‚ÌƒŠƒZƒbƒg
+				gateflag = false;
+				scene = play;
+				cameraX = -34.0f;
+				cameraZ = -34.0f;
 			}
 			else if (currentItem == 2) {//ƒŒƒxƒ‹‚R
 				size = 21;
+				maze = InitMaze(size);//ƒTƒCƒY‚ğw’è‚µ‚Ä–À˜Hì¬
+				start_time = std::chrono::steady_clock::now();
+				keyflag = false;//ƒtƒ‰ƒO“™‚ÌƒŠƒZƒbƒg
+				gateflag = false;
+				scene = play;
+				cameraX = -34.0f;
+				cameraZ = -34.0f;
 			}
-			maze = InitMaze(size);//ƒTƒCƒY‚ğw’è‚µ‚Ä–À˜Hì¬
-			start_time = std::chrono::steady_clock::now();
-			keyflag = false;//ƒtƒ‰ƒO“™‚ÌƒŠƒZƒbƒg
-			gateflag = false;
-			scene = play;
-			cameraX = -34.0f;
-			cameraZ = -34.0f;
+			else if (currentItem == 3) {
+				scene = option;
+			}
 			glutPostRedisplay();
 		}
 	}
-	if (scene == result) {//ƒŠƒUƒ‹ƒg‰æ–Ê
+	else if (scene == result) {//ƒŠƒUƒ‹ƒg‰æ–Ê
 		if (key == 13) {
+			scene = title;
+			glutPostRedisplay();
+		}
+	}
+	else if (scene == option) {
+		if (key == 13) {
+			if (currentOpItem == 0) {
+				support = true;
+			}
+			else if (currentOpItem == 1) {
+				support = false;
+			}
 			scene = title;
 			glutPostRedisplay();
 		}
@@ -64,20 +97,31 @@ void myKeyboard(unsigned char key, int x, int y) {
 		exit(0);
 }
 
-//©‹@‘€ì
+//©‹@A€–Ú‘€ì
 void mySpecialKeys(int key, int x, int y) {
 	if (scene == title) {
 		switch (key) {
 		case GLUT_KEY_UP:
-			currentItem = (currentItem + 2) % 3; // €–Ú‚ğã‚ÉˆÚ“®
+			currentItem = (currentItem + 3) % 4; // €–Ú‚ğã‚ÉˆÚ“®
 			break;
 		case GLUT_KEY_DOWN:
-			currentItem = (currentItem + 1) % 3; // €–Ú‚ğ‰º‚ÉˆÚ“®
+			currentItem = (currentItem + 1) % 4; // €–Ú‚ğ‰º‚ÉˆÚ“®
 			break;
 		}
 		glutPostRedisplay(); // Ä•`‰æ‚ğw¦
 	}
-	if (scene == play) {
+	else if (scene == option) {
+		switch (key) {
+		case GLUT_KEY_LEFT:
+			currentOpItem = (currentOpItem + 1) % 2; // €–Ú‚ğ¶‚ÉˆÚ“®
+			break;
+		case GLUT_KEY_RIGHT:
+			currentOpItem = (currentOpItem + 1) % 2; // €–Ú‚ğ‰E‚ÉˆÚ“®
+			break;
+		}
+		glutPostRedisplay(); // Ä•`‰æ‚ğw¦
+	}
+	else if (scene == play) {
 		float speed = 0.1f; // ƒJƒƒ‰‚ÌˆÚ“®‘¬“x
 		Vector3 preCameraPos = { cameraX, cameraY, cameraZ };
 
@@ -130,6 +174,15 @@ void mySpecialKeys(int key, int x, int y) {
 	}
 }
 
+void drawSquare(float x, float z) {
+	glBegin(GL_QUADS);
+	glVertex3f(x - 0.1f, 0.0f, z - 0.1f);
+	glVertex3f(x + 0.1f, 0.0f, z - 0.1f);
+	glVertex3f(x + 0.1f, 0.0f, z + 0.1f);
+	glVertex3f(x - 0.1f, 0.0f, z + 0.1f);
+	glEnd();
+}
+
 //•`‰æˆ—
 void myDisplay() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -147,6 +200,7 @@ void myDisplay() {
 		char Level1[7] = "LEVEL1";
 		char Level2[7] = "LEVEL2";
 		char Level3[7] = "LEVEL3";
+		char Option[7] = "OPTION";
 		char* p;
 		int textWidth = 0;
 		glColor3d(1.0, 1.0, 1.0);
@@ -204,6 +258,21 @@ void myDisplay() {
 		for (p = Level3; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 		}
+		textWidth = 0;
+		if (currentItem == 3) {//‘I‘ğ’†‚Í•¶š‚ÌF‚ğ•Ï‚¦‚é
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		for (p = Option; *p; p++) {
+			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		xPos = (WindowW - textWidth) / 2;
+		glRasterPos2i(xPos, yPos - 150);
+		for (p = Option; *p; p++) {
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
 
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
@@ -212,7 +281,7 @@ void myDisplay() {
 		glPopMatrix();
 	}
 	//ƒQ[ƒ€‰æ–Ê
-	if (scene == play) {
+	else if (scene == play) {
 		glEnable(GL_DEPTH_TEST);
 		glPushMatrix();
 		glLoadIdentity();
@@ -227,6 +296,8 @@ void myDisplay() {
 		glPopMatrix();
 		float line_diffuse[] = { 1.0,1.0,1.0,1.0 };
 		float line_specular[] = { 1.0,1.0,1.0,1.0 };
+		float point_diffuse[] = { 0.75,0.75,0.0,1.0 };
+		float point_specular[] = { 0.75,0.75,0.0,1.0 };
 		float cube_ambient[] = { 0.5,0.5,0.5,1.0 };
 		float cube_diffuse[] = { 0.5,0.5,0.5,1.0 };
 		float cube_specular[] = { 0.5,0.5, 0.5, 1.0 };
@@ -234,7 +305,11 @@ void myDisplay() {
 		float key_ambient[] = { 0.24725,0.1995,0.0745,1.0 };
 		float key_diffuse[] = { 0.75164,0.60648,0.22648,1.0 };
 		float key_specular[] = { 0.628281,0.555802,0.366065,1.0 };
-		float key_shininess[] = { 0.4 };
+		float key_shininess[] = { 0.6 };
+		float gate_ambient[] = { 0.19125,0.0735,0.0225,1.0 };
+		float gate_diffuse[] = { 0.7038,0.27048,0.0828,1.0 };
+		float gate_specular[] = { 0.256777,0.137622, 0.086014, 1.0 };
+		float gate_shininess[] = { 0.4 };
 		float mtrl_shininess[] = { 100.0 };
 		glPushMatrix();
 		cameraDirX = cos(cameraAngle);
@@ -247,20 +322,26 @@ void myDisplay() {
 		glEnable(GL_LIGHTING);
 		glBegin(GL_LINES);
 		for (int i = -35; i < 36; i += 2) {//°•`‰æ
-			glColor3f(1, 1, 1);
 			glVertex3i(i, 0, -35);
 			glVertex3i(i, 0, 35);
 			glVertex3i(-50, 0, i);
 			glVertex3i(50, 0, i);
 		}
 		glEnd();
+		if (support) {
+			for (const auto& square : squares) {
+				glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, point_diffuse);
+				glMaterialfv(GL_FRONT, GL_SPECULAR, point_specular);
+				glMaterialfv(GL_FRONT, GL_SHININESS, mtrl_shininess);
+				drawSquare(square.x, square.z);
+			}
+		}
 		Vector3 center;
 		cubes.clear();
 		for (int x = 0; x < size; x++) {//•ÇAŒ®AƒS[ƒ‹•`‰æ
 			for (int z = 0; z < size; z++) {
 				if (maze[x][z] == Wall) {//•Ç
 					glPushMatrix();
-					glColor3f(0, 0, 1);
 					glTranslated(2 * x - 36, 7.5, 2 * z - 36);
 					glScaled(2.0, 15.0, 2.0);
 					center = { 2.0f * x - 36, 2.0f, 2.0f * z - 36 };
@@ -274,7 +355,6 @@ void myDisplay() {
 				}
 				else if (maze[x][z] == Key && !keyflag) {//Œ®
 					glPushMatrix();
-					glColor3f(1, 1, 0);
 					glTranslated(2 * x - 36, 1.0, 2 * z - 36);
 					center = { 2.0f * x - 36, 1.0, 2.0f * z - 36 };
 					KEY = GetKeyAABB(center, 0.5);
@@ -299,12 +379,15 @@ void myDisplay() {
 				}
 				else if (maze[x][z] == Gate && !gateflag) {//”à
 					glPushMatrix();
-					glColor3f(0, 1, 0);
 					glTranslated(2 * x - 36, 1.0, 2 * z - 36);
 					center = { 2.0f * x - 36, 1.0, 2.0f * z - 36 };
 					GATE = GetCubeAABB(center, 2.0);
 					glScaled(2.0, 2.0, 2.0);
-					glutWireCube(1.0);
+					glMaterialfv(GL_FRONT, GL_AMBIENT, gate_ambient);
+					glMaterialfv(GL_FRONT, GL_DIFFUSE, gate_diffuse);
+					glMaterialfv(GL_FRONT, GL_SPECULAR, gate_specular);
+					glMaterialfv(GL_FRONT, GL_SHININESS, gate_shininess);
+					glutSolidCube(1.0);
 					glPopMatrix();
 				}
 				else if (maze[x][z] == Gate && gateflag) {//ƒS[ƒ‹
@@ -319,7 +402,7 @@ void myDisplay() {
 		glDisable(GL_DEPTH_TEST);
 	}
 	//ƒŠƒUƒ‹ƒg‰æ–Ê
-	if (scene == result) {
+	else if (scene == result) {
 		glDisable(GL_LIGHT0);
 		glDisable(GL_LIGHTING);
 		glPushMatrix();
@@ -370,6 +453,80 @@ void myDisplay() {
 		glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
 	}
+	//ƒIƒvƒVƒ‡ƒ“‰æ–Ê
+	else if (scene == option) {
+		glPushMatrix();
+		glColor3f(1, 1, 1);
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		gluOrtho2D(0, WindowW, 0, WindowH);
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		char Optiontext[7] = "OPTION";
+		char Foot[11] = "FOOTPRINTS";
+		char On[3] = "ON";
+		char Off[4] = "OFF";
+		char* p;
+		int textWidth = 0;
+		for (p = Optiontext; *p; p++) {
+			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		int xPos = (WindowW - textWidth) / 2;
+		int yPos = WindowH / 2;
+		glRasterPos2i(xPos, yPos + 100);
+		for (p = Optiontext; *p; p++) {
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		textWidth = 0;
+		for (p = Foot; *p; p++) {
+			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		xPos = (WindowW - textWidth) / 2;
+		yPos = WindowH / 2;
+		glRasterPos2i(xPos, yPos + 50);
+		for (p = Foot; *p; p++) {
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		textWidth = 0;
+		if (currentOpItem == 0) {//‘I‘ğ’†‚Í•¶š‚ÌF‚ğ•Ï‚¦‚é
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		for (p = On; *p; p++) {
+			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		xPos = (WindowW - textWidth) / 2;
+		yPos = WindowH / 2;
+		glRasterPos2i(xPos - 50, yPos - 50);
+		for (p = On; *p; p++) {
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		textWidth = 0;
+		if (currentOpItem == 1) {//‘I‘ğ’†‚Í•¶š‚ÌF‚ğ•Ï‚¦‚é
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		for (p = Off; *p; p++) {
+			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		xPos = (WindowW - textWidth) / 2;
+		yPos = WindowH / 2;
+		glRasterPos2i(xPos + 50, yPos - 50);
+		for (p = Off; *p; p++) {
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+	}
 	glutSwapBuffers();
 }
 
@@ -403,9 +560,14 @@ void myReshape(int width, int height) {//V‚µ‚¢ƒEƒBƒ“ƒhƒE‚Ì‰¡•‚Æc•@ƒsƒNƒZƒ‹
 	glLoadIdentity();
 }
 
-/*void Idle() {
-	glutPostRedisplay();
-}*/
+void onTimer(int value) {
+	if (support) {
+		// V‚µ‚¢lŠpŒ`‚ğ‘«Œ³‚ÌˆÊ’u‚É’Ç‰Á
+		squares.push_back(Square{ cameraX, cameraZ });
+		//0.5•bŠÔŠu
+		glutTimerFunc(500, onTimer, 0);
+	}
+}
 
 //ƒƒCƒ“ŠÖ”
 int main(int argc, char** argv) {
@@ -416,7 +578,7 @@ int main(int argc, char** argv) {
 	glutSpecialFunc(mySpecialKeys);
 	glutReshapeFunc(myReshape);
 	glutDisplayFunc(myDisplay);
-	//glutIdleFunc(Idle);
+	glutTimerFunc(1000, onTimer, 0);
 	glutMainLoop();
 	return 0;
 }
