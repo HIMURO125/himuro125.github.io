@@ -1,6 +1,7 @@
 #pragma once
 #include <stdlib.h>
 #include <GL/glut.h>
+#include <SDL.h>
 #include <math.h>
 #include <time.h>
 #include <vector>
