@@ -1,4 +1,5 @@
-﻿  Game.cpp
+﻿  AABB.cpp
+  Game.cpp
 C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(138,24): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
 C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(141,24): warning C4305: '+=': 'double' から 'float' へ切り詰めます。
 C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(304,30): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
@@ -23,4 +24,7 @@ C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(311,38): warnin
 C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(311,48): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(312,30): warning C4305: '初期化中': 'double' から 'float' へ切り詰めます。
 C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(574,12): warning C4244: '引数': 'time_t' から 'unsigned int' への変換です。データが失われる可能性があります。
+  Maze.cpp
+  sound.cpp
+  コードを生成中...
   OpenGL.vcxproj -> C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\x64\Debug\OpenGL.exe
