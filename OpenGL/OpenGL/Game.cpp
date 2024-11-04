@@ -15,6 +15,10 @@ std::vector<std::vector<int>> maze;
 bool keyflag = false;
 bool gateflag = false;
 bool support = true;
+bool TitleSound = false;
+bool PlaySound = false;
+bool ResultSound = false;
+bool move = false;
 int scene = 0;
 const int title = 0;
 const int play = 1;
@@ -95,18 +99,6 @@ void myKeyboard(unsigned char key, int x, int y) {
 	}
 	if (key == 27)
 		exit(0);
-	if (key == 'p') {  // 'p'キーでBGMを再生
-		if (scene == title || scene == option) {
-			initFMODTitle();
-		}
-		else if (scene == play) {
-			initFMODPlay();
-		}
-		else if (scene == result) {
-			initFMODResult();
-		}
-		playBGM();
-	}
 	else if (key == 'q') {  // 'q'キーで終了
 		cleanupFMOD();
 	}
@@ -144,10 +136,18 @@ void mySpecialKeys(int key, int x, int y) {
 		case GLUT_KEY_UP: // 上矢印キーで前進
 			cameraX += cameraDirX * speed;
 			cameraZ += cameraDirZ * speed;
+			if (!move) {
+				playSE(0);
+				move = true;
+			}
 			break;
 		case GLUT_KEY_DOWN: // 下矢印キーで後退
 			cameraX -= cameraDirX * speed;
 			cameraZ -= cameraDirZ * speed;
+			if (!move) {
+				playSE(0);
+				move = true;
+			}
 			break;
 		case GLUT_KEY_LEFT: //左矢印キーで左を向く
 			cameraAngle -= M_PI / 2;
@@ -189,13 +189,13 @@ void mySpecialKeys(int key, int x, int y) {
 	}
 }
 
-void drawSquare(float x, float z) {
-	glBegin(GL_QUADS);
-	glVertex3f(x - 0.1f, 0.0f, z - 0.1f);
-	glVertex3f(x + 0.1f, 0.0f, z - 0.1f);
-	glVertex3f(x + 0.1f, 0.0f, z + 0.1f);
-	glVertex3f(x - 0.1f, 0.0f, z + 0.1f);
-	glEnd();
+void mySpecialKeysUp(int key, int x, int y) {
+	if (key == GLUT_KEY_UP || key == GLUT_KEY_DOWN) {
+		if (move) {
+			stopSE(0);
+			move = false;
+		}
+	}
 }
 
 //描画処理
@@ -203,6 +203,12 @@ void myDisplay() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//タイトル画面
 	if (scene == title) {
+		PlaySound = false;
+		ResultSound = false;
+		if (!TitleSound) {
+			//playBGM(0);
+			TitleSound = true;
+		}
 		glPushMatrix();
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
@@ -297,6 +303,12 @@ void myDisplay() {
 	}
 	//ゲーム画面
 	else if (scene == play) {
+		TitleSound = false;
+		ResultSound = false;
+		if (!PlaySound) {
+			//playBGM(1);
+			PlaySound = true;
+		}
 		glEnable(GL_DEPTH_TEST);
 		glPushMatrix();
 		glLoadIdentity();
@@ -418,6 +430,12 @@ void myDisplay() {
 	}
 	//リザルト画面
 	else if (scene == result) {
+		TitleSound = false;
+		PlaySound = false;
+		if (!ResultSound) {
+			//playBGM(2);
+			ResultSound = true;
+		}
 		glDisable(GL_LIGHT0);
 		glDisable(GL_LIGHTING);
 		glPushMatrix();
@@ -542,6 +560,7 @@ void myDisplay() {
 		glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
 	}
+	UpdateFMOD();
 	glutSwapBuffers();
 }
 
@@ -591,9 +610,11 @@ int main(int argc, char** argv) {
 	myInit(argv[0]);
 	glutKeyboardFunc(myKeyboard);
 	glutSpecialFunc(mySpecialKeys);
+	glutSpecialUpFunc(mySpecialKeysUp);
 	glutReshapeFunc(myReshape);
 	glutDisplayFunc(myDisplay);
 	glutTimerFunc(1000, onTimer, 0);
+	initFMOD();
 	glutMainLoop();
 	cleanupFMOD();
 	return 0;

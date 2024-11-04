@@ -25,9 +25,6 @@
     <ClCompile Include="sound.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="bgm.mp3" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="header.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

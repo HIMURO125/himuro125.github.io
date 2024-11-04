@@ -29,9 +29,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="bgm.mp3" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="header.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
