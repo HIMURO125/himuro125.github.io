@@ -95,6 +95,21 @@ void myKeyboard(unsigned char key, int x, int y) {
 	}
 	if (key == 27)
 		exit(0);
+	if (key == 'p') {  // 'p'キーでBGMを再生
+		if (scene == title || scene == option) {
+			initFMODTitle();
+		}
+		else if (scene == play) {
+			initFMODPlay();
+		}
+		else if (scene == result) {
+			initFMODResult();
+		}
+		playBGM();
+	}
+	else if (key == 'q') {  // 'q'キーで終了
+		cleanupFMOD();
+	}
 }
 
 //自機、項目操作
@@ -580,5 +595,6 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(myDisplay);
 	glutTimerFunc(1000, onTimer, 0);
 	glutMainLoop();
+	cleanupFMOD();
 	return 0;
 }
