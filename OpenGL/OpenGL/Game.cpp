@@ -76,13 +76,13 @@ void myKeyboard(unsigned char key, int x, int y) {
 			else if (currentItem == 3) {
 				scene = option;
 			}
-			glutPostRedisplay();
+			//glutPostRedisplay();
 		}
 	}
 	else if (scene == result) {//リザルト画面
 		if (key == 13) {
 			scene = title;
-			glutPostRedisplay();
+			//glutPostRedisplay();
 		}
 	}
 	else if (scene == option) {
@@ -94,7 +94,7 @@ void myKeyboard(unsigned char key, int x, int y) {
 				support = false;
 			}
 			scene = title;
-			glutPostRedisplay();
+			//glutPostRedisplay();
 		}
 	}
 	if (key == 27)
@@ -115,7 +115,7 @@ void mySpecialKeys(int key, int x, int y) {
 			currentItem = (currentItem + 1) % 4; // 項目を下に移動
 			break;
 		}
-		glutPostRedisplay(); // 再描画を指示
+		//glutPostRedisplay(); // 再描画を指示
 	}
 	else if (scene == option) {
 		switch (key) {
@@ -126,7 +126,7 @@ void mySpecialKeys(int key, int x, int y) {
 			currentOpItem = (currentOpItem + 1) % 2; // 項目を右に移動
 			break;
 		}
-		glutPostRedisplay(); // 再描画を指示
+		//glutPostRedisplay(); // 再描画を指示
 	}
 	else if (scene == play) {
 		float speed = 0.1f; // カメラの移動速度
@@ -185,7 +185,7 @@ void mySpecialKeys(int key, int x, int y) {
 			snprintf(Goal_char, sizeof(Goal_char), "CLEAR TIME: %lld SECONDS", Goalseconds);
 			scene = result;
 		}
-		glutPostRedisplay(); // 再描画を指示
+		//glutPostRedisplay(); // 再描画を指示
 	}
 }
 
@@ -560,7 +560,6 @@ void myDisplay() {
 		glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
 	}
-	UpdateFMOD();
 	glutSwapBuffers();
 }
 
@@ -603,6 +602,12 @@ void onTimer(int value) {
 	}
 }
 
+void Update(int value) {
+	UpdateFMOD();
+	glutPostRedisplay();
+	glutTimerFunc(16, Update, 0);
+}
+
 //メイン関数
 int main(int argc, char** argv) {
 	srand(time(NULL));
@@ -614,6 +619,7 @@ int main(int argc, char** argv) {
 	glutReshapeFunc(myReshape);
 	glutDisplayFunc(myDisplay);
 	glutTimerFunc(1000, onTimer, 0);
+	glutTimerFunc(16, Update, 0);
 	initFMOD();
 	glutMainLoop();
 	cleanupFMOD();
