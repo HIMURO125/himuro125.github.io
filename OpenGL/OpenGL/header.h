@@ -22,8 +22,8 @@ struct AABB {//AABB構造体
 	Vector3 max;
 };
 
-struct Square {
-	float x, z; // 足元の位置
+struct Square {//足跡構造体
+	float x, z;
 };
 
 AABB GetCameraAABB(const Vector3& cameraPosition);//カメラのAABB取得
@@ -33,7 +33,7 @@ bool CheckCollision(const AABB Camera, const AABB Cube);//衝突判定
 bool CheckCollisionKey(const AABB Camera, const AABB Key);//鍵の取得判定
 bool CheckCollisionGate(const AABB Camera, const AABB Gate);//扉の衝突判定
 std::vector<std::vector<int>> InitMaze(int size);//棒倒し法
-void drawSquare(float x, float z);//足跡
+void drawSquare(float x, float z);//足跡描画
 void MakeArray(int size);//配列の要素数変更
 void initFMOD();//FMODの初期化
 void playBGM(int i);//BGMの再生

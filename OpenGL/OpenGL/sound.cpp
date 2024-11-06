@@ -18,7 +18,7 @@ void initFMOD() {
     FMOD::System_Create(&soundSystem);
     soundSystem->init(32, FMOD_INIT_NORMAL, nullptr);
 
-    // BGMサウンドの読み込み
+    // サウンドの読み込み
     soundSystem->createSound("bgm.mp3", FMOD_DEFAULT, nullptr, &Titlebgm);
     soundSystem->createSound("bgm2.mp3", FMOD_DEFAULT, nullptr, &Playbgm);
     soundSystem->createSound("bgm3.mp3", FMOD_DEFAULT, nullptr, &Resultbgm);
@@ -26,13 +26,16 @@ void initFMOD() {
     soundSystem->createSound("key.mp3", FMOD_DEFAULT, nullptr, &KeySE);
     soundSystem->createChannelGroup("BGM", &bgmgroup);
     soundSystem->createChannelGroup("SE", &segroup);
-    Titlebgm->setMode(FMOD_LOOP_NORMAL);  // ループ再生に設定
+
+    // ループ再生に設定
+    Titlebgm->setMode(FMOD_LOOP_NORMAL);
     Playbgm->setMode(FMOD_LOOP_NORMAL);
     Resultbgm->setMode(FMOD_LOOP_NORMAL);
     FootSE->setMode(FMOD_LOOP_NORMAL);
     bgmgroup->setVolume(0.25f);
 }
 
+//BGMの再生
 void playBGM(int i) {
     if (i == 0) {
         bgmchannel->stop();
@@ -48,6 +51,7 @@ void playBGM(int i) {
     }
 }
 
+//SEの再生
 void playSE(int i) {
     if (i == 0) {
         soundSystem->playSound(FootSE, segroup, false, &footchannel);
@@ -57,6 +61,7 @@ void playSE(int i) {
     }
 }
 
+//SEの停止
 void stopSE(int i) {
     if (i == 0) {
         footchannel->stop();
@@ -66,14 +71,26 @@ void stopSE(int i) {
     }
 }
 
+//クリーンアップ
 void cleanupFMOD() {
     Titlebgm->release();
     Playbgm->release();
     Resultbgm->release();
+    FootSE->release();
+    KeySE->release();
     soundSystem->close();
     soundSystem->release();
 }
 
+//更新
 void UpdateFMOD() {
+    bool isPlaying = false;
+    if (keychannel) {
+        keychannel->isPlaying(&isPlaying);  // 再生中かどうか確認
+        if (!isPlaying) {
+            stopSE(1);  // 再生終了時に停止
+            keychannel = nullptr;
+        }
+    }
     soundSystem->update();
 }

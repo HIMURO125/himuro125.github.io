@@ -43,9 +43,12 @@ std::vector<Square> squares;
 
 //開始(Enter)と終了(Esc)
 void myKeyboard(unsigned char key, int x, int y) {
-	if (scene == title) {//タイトル画面
+	//タイトル画面
+	if (scene == title) {
+		//Enterキー
 		if (key == 13) {
-			if (currentItem == 0) {//レベル１
+			//レベル１
+			if (currentItem == 0) {
 				size = 9;
 				maze = InitMaze(size);//サイズを指定して迷路作成
 				start_time = std::chrono::steady_clock::now();
@@ -55,7 +58,8 @@ void myKeyboard(unsigned char key, int x, int y) {
 				cameraX = -34.0f;
 				cameraZ = -34.0f;
 			}
-			else if (currentItem == 1) {//レベル２
+			//レベル２
+			else if (currentItem == 1) {
 				size = 15;
 				maze = InitMaze(size);//サイズを指定して迷路作成
 				start_time = std::chrono::steady_clock::now();
@@ -65,7 +69,8 @@ void myKeyboard(unsigned char key, int x, int y) {
 				cameraX = -34.0f;
 				cameraZ = -34.0f;
 			}
-			else if (currentItem == 2) {//レベル３
+			//レベル３
+			else if (currentItem == 2) {
 				size = 21;
 				maze = InitMaze(size);//サイズを指定して迷路作成
 				start_time = std::chrono::steady_clock::now();
@@ -80,51 +85,58 @@ void myKeyboard(unsigned char key, int x, int y) {
 			}
 		}
 	}
-	else if (scene == result) {//リザルト画面
+	//リザルト画面
+	else if (scene == result) {
+		//Enterキー
 		if (key == 13) {
 			scene = title;
 		}
 	}
+	//オプション画面
 	else if (scene == option) {
+		//Enterキー
 		if (key == 13) {
+			//ON
 			if (currentOpItem == 0) {
 				support = true;
 			}
+			//OFF
 			else if (currentOpItem == 1) {
 				support = false;
 			}
 			scene = title;
 		}
 	}
+	//Escキー
 	if (key == 27)
 		exit(0);
-	else if (key == 'q') {  // 'q'キーで終了
-		cleanupFMOD();
-	}
 }
 
 //自機、項目操作
 void mySpecialKeys(int key, int x, int y) {
+	//タイトル画面
 	if (scene == title) {
 		switch (key) {
-		case GLUT_KEY_UP:
-			currentItem = (currentItem + 3) % 4; // 項目を上に移動
+		case GLUT_KEY_UP://上矢印キーで項目を上に移動
+			currentItem = (currentItem + 3) % 4;
 			break;
-		case GLUT_KEY_DOWN:
-			currentItem = (currentItem + 1) % 4; // 項目を下に移動
+		case GLUT_KEY_DOWN://上矢印キーで項目を下に移動
+			currentItem = (currentItem + 1) % 4;
 			break;
 		}
 	}
+	//オプション画面
 	else if (scene == option) {
 		switch (key) {
-		case GLUT_KEY_LEFT:
-			currentOpItem = (currentOpItem + 1) % 2; // 項目を左に移動
+		case GLUT_KEY_LEFT://左矢印キーで項目を左に移動
+			currentOpItem = (currentOpItem + 1) % 2; 
 			break;
-		case GLUT_KEY_RIGHT:
-			currentOpItem = (currentOpItem + 1) % 2; // 項目を右に移動
+		case GLUT_KEY_RIGHT://右矢印キーで項目を右に移動
+			currentOpItem = (currentOpItem + 1) % 2;
 			break;
 		}
 	}
+	//ゲーム画面
 	else if (scene == play) {
 		switch (key) {
 		case GLUT_KEY_UP: // 上矢印キーで前進
@@ -143,10 +155,12 @@ void mySpecialKeys(int key, int x, int y) {
 	}
 }
 
+//自機操作２
 void mySpecialKeysUp(int key, int x, int y) {
 	if (key == GLUT_KEY_UP || key == GLUT_KEY_DOWN) {
 		goForward = false;
 		goBack = false;
+		//移動時のSE停止
 		if (move) {
 			stopSE(0);
 			move = false;
@@ -161,6 +175,7 @@ void myDisplay() {
 	if (scene == title) {
 		PlaySound = false;
 		ResultSound = false;
+		//BGM再生
 		if (!TitleSound) {
 			playBGM(0);
 			TitleSound = true;
@@ -187,6 +202,7 @@ void myDisplay() {
 		int xPos = (WindowW - textWidth) / 2;
 		int yPos = WindowH / 2;
 		glRasterPos2i(xPos, yPos + 100);
+		//文字描画
 		for (p = Titletext; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 		}
@@ -202,6 +218,7 @@ void myDisplay() {
 		}
 		xPos = (WindowW - textWidth) / 2;
 		glRasterPos2i(xPos, yPos);
+		//文字描画
 		for (p = Level1; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 		}
@@ -217,6 +234,7 @@ void myDisplay() {
 		}
 		xPos = (WindowW - textWidth) / 2;
 		glRasterPos2i(xPos, yPos - 50);
+		//文字描画
 		for (p = Level2; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 		}
@@ -232,6 +250,7 @@ void myDisplay() {
 		}
 		xPos = (WindowW - textWidth) / 2;
 		glRasterPos2i(xPos, yPos - 100);
+		//文字描画
 		for (p = Level3; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 		}
@@ -247,6 +266,7 @@ void myDisplay() {
 		}
 		xPos = (WindowW - textWidth) / 2;
 		glRasterPos2i(xPos, yPos - 150);
+		//文字描画
 		for (p = Option; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 		}
@@ -261,6 +281,7 @@ void myDisplay() {
 	else if (scene == play) {
 		TitleSound = false;
 		ResultSound = false;
+		//BGM再生
 		if (!PlaySound) {
 			playBGM(1);
 			PlaySound = true;
@@ -268,7 +289,7 @@ void myDisplay() {
 		glEnable(GL_DEPTH_TEST);
 		glPushMatrix();
 		glLoadIdentity();
-		float light_pos[] = { -34 ,5,-34 ,0 };
+		float light_pos[] = { -34 ,5,-34 ,0 };//照明の設定
 		float light_ambient[] = { 1.0,1.0,1.0,1.0 };
 		float light_diffuse[] = { 1.0,1.0,1.0,1.0 };
 		float light_specular[] = { 1.0,1.0,1.0,1.0 };
@@ -277,19 +298,19 @@ void myDisplay() {
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 		glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 		glPopMatrix();
-		float line_diffuse[] = { 1.0,1.0,1.0,1.0 };
+		float line_diffuse[] = { 1.0,1.0,1.0,1.0 };//床の設定
 		float line_specular[] = { 1.0,1.0,1.0,1.0 };
-		float point_diffuse[] = { 0.75,0.75,0.0,1.0 };
+		float point_diffuse[] = { 0.75,0.75,0.0,1.0 };//足跡の設定
 		float point_specular[] = { 0.75,0.75,0.0,1.0 };
-		float cube_ambient[] = { 0.5,0.5,0.5,1.0 };
+		float cube_ambient[] = { 0.5,0.5,0.5,1.0 };//壁の設定
 		float cube_diffuse[] = { 0.5,0.5,0.5,1.0 };
 		float cube_specular[] = { 0.5,0.5, 0.5, 1.0 };
 		float cube_shininess[] = { 0.6 };
-		float key_ambient[] = { 0.24725,0.1995,0.0745,1.0 };
+		float key_ambient[] = { 0.24725,0.1995,0.0745,1.0 };//鍵の設定
 		float key_diffuse[] = { 0.75164,0.60648,0.22648,1.0 };
 		float key_specular[] = { 0.628281,0.555802,0.366065,1.0 };
 		float key_shininess[] = { 0.6 };
-		float gate_ambient[] = { 0.19125,0.0735,0.0225,1.0 };
+		float gate_ambient[] = { 0.19125,0.0735,0.0225,1.0 };//扉の設定
 		float gate_diffuse[] = { 0.7038,0.27048,0.0828,1.0 };
 		float gate_specular[] = { 0.256777,0.137622, 0.086014, 1.0 };
 		float gate_shininess[] = { 0.4 };
@@ -297,20 +318,22 @@ void myDisplay() {
 		glPushMatrix();
 		cameraDirX = cos(cameraAngle);
 		cameraDirZ = sin(cameraAngle);
-		gluLookAt(cameraX, cameraY, cameraZ, cameraX + cameraDirX, 1, cameraZ + cameraDirZ, 0, 1, 0);
+		gluLookAt(cameraX, cameraY, cameraZ, cameraX + cameraDirX, 1, cameraZ + cameraDirZ, 0, 1, 0);//視点
 		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, line_diffuse);
 		glMaterialfv(GL_FRONT, GL_SPECULAR, line_specular);
 		glMaterialfv(GL_FRONT, GL_SHININESS, mtrl_shininess);
 		glEnable(GL_LIGHT0);
 		glEnable(GL_LIGHTING);
 		glBegin(GL_LINES);
-		for (int i = -35; i < 36; i += 2) {//床描画
+		//床描画
+		for (int i = -35; i < 36; i += 2) {
 			glVertex3i(i, 0, -35);
 			glVertex3i(i, 0, 35);
 			glVertex3i(-50, 0, i);
 			glVertex3i(50, 0, i);
 		}
 		glEnd();
+		//足跡描画
 		if (support) {
 			for (const auto& square : squares) {
 				glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, point_diffuse);
@@ -321,9 +344,11 @@ void myDisplay() {
 		}
 		Vector3 center;
 		cubes.clear();
-		for (int x = 0; x < size; x++) {//壁、鍵、ゴール描画
+		//壁、鍵、ゴール描画
+		for (int x = 0; x < size; x++) {
 			for (int z = 0; z < size; z++) {
-				if (maze[x][z] == Wall) {//壁
+				//壁
+				if (maze[x][z] == Wall) {
 					glPushMatrix();
 					glTranslated(2 * x - 36, 7.5, 2 * z - 36);
 					glScaled(2.0, 15.0, 2.0);
@@ -336,7 +361,8 @@ void myDisplay() {
 					glutSolidCube(1.0);
 					glPopMatrix();
 				}
-				else if (maze[x][z] == Key && !keyflag) {//鍵
+				//鍵
+				else if (maze[x][z] == Key && !keyflag) {
 					glPushMatrix();
 					glTranslated(2 * x - 36, 1.0, 2 * z - 36);
 					center = { 2.0f * x - 36, 1.0, 2.0f * z - 36 };
@@ -360,7 +386,8 @@ void myDisplay() {
 					}
 					glPopMatrix();
 				}
-				else if (maze[x][z] == Gate && !gateflag) {//扉
+				//扉
+				else if (maze[x][z] == Gate && !gateflag) {
 					glPushMatrix();
 					glTranslated(2 * x - 36, 1.0, 2 * z - 36);
 					center = { 2.0f * x - 36, 1.0, 2.0f * z - 36 };
@@ -373,7 +400,8 @@ void myDisplay() {
 					glutSolidCube(1.0);
 					glPopMatrix();
 				}
-				else if (maze[x][z] == Gate && gateflag) {//ゴール
+				//ゴール
+				else if (maze[x][z] == Gate && gateflag) {
 					glPushMatrix();
 					center = { 2.0f * x - 34, 1.0, 2.0f * z - 36 };
 					GOAL = GetCubeAABB(center, 2.0);
@@ -389,6 +417,7 @@ void myDisplay() {
 		squares.clear();
 		TitleSound = false;
 		PlaySound = false;
+		//BGM再生
 		if (!ResultSound) {
 			playBGM(2);
 			ResultSound = true;
@@ -414,6 +443,7 @@ void myDisplay() {
 		int xPos = (WindowW - textWidth) / 2;
 		int yPos = WindowH / 2;
 		glRasterPos2i(xPos, yPos + 50);
+		//文字描画
 		for (p = Titletext; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 		}
@@ -424,6 +454,7 @@ void myDisplay() {
 		xPos = (WindowW - textWidth) / 2;
 		yPos = WindowH / 2;
 		glRasterPos2i(xPos, yPos);
+		//文字描画
 		for (p = Goal_char; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 		}
@@ -434,6 +465,7 @@ void myDisplay() {
 		xPos = (WindowW - textWidth) / 2;
 		yPos = WindowH / 2;
 		glRasterPos2i(xPos, yPos - 50);
+		//文字描画
 		for (p = Starttext; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 		}
@@ -466,6 +498,7 @@ void myDisplay() {
 		int xPos = (WindowW - textWidth) / 2;
 		int yPos = WindowH / 2;
 		glRasterPos2i(xPos, yPos + 100);
+		//文字描画
 		for (p = Optiontext; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 		}
@@ -476,6 +509,7 @@ void myDisplay() {
 		xPos = (WindowW - textWidth) / 2;
 		yPos = WindowH / 2;
 		glRasterPos2i(xPos, yPos + 50);
+		//文字描画
 		for (p = Foot; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 		}
@@ -492,6 +526,7 @@ void myDisplay() {
 		xPos = (WindowW - textWidth) / 2;
 		yPos = WindowH / 2;
 		glRasterPos2i(xPos - 50, yPos - 50);
+		//文字描画
 		for (p = On; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 		}
@@ -508,6 +543,7 @@ void myDisplay() {
 		xPos = (WindowW - textWidth) / 2;
 		yPos = WindowH / 2;
 		glRasterPos2i(xPos + 50, yPos - 50);
+		//文字描画
 		for (p = Off; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 		}
@@ -539,12 +575,12 @@ void myInit(char* progname) {
 }
 
 //ウィンドウサイズ変更
-void myReshape(int width, int height) {//新しいウィンドウの横幅と縦幅　ピクセル数で表す
+void myReshape(int width, int height) {
 	glViewport(0, 0, width, height);
 	WindowW = width;
 	WindowH = height;
 	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();//単位行列格納
+	glLoadIdentity();
 	gluPerspective(60.0, (double)width / (double)height, 0.1, 20.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -562,7 +598,9 @@ void onTimer(int value) {
 void Update(int value) {
 	Vector3 preCameraPos = { cameraX, cameraY, cameraZ };
 	float speed = 0.1f; // カメラの移動速度
+	//ゲーム画面
 	if (scene == play) {
+		//前進
 		if (goForward) {
 			cameraX += cameraDirX * speed;
 			cameraZ += cameraDirZ * speed;
@@ -571,6 +609,7 @@ void Update(int value) {
 				move = true;
 			}
 		}
+		//後退
 		else if (goBack) {
 			cameraX -= cameraDirX * speed;
 			cameraZ -= cameraDirZ * speed;
@@ -605,6 +644,7 @@ void Update(int value) {
 			}
 		}
 		if (CheckCollision(cameraBox, GOAL) && gateflag) {//ゴールの当たり判定
+			//クリアタイム計算
 			auto current_time = std::chrono::steady_clock::now();
 			auto Goalseconds = std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time).count();
 			snprintf(Goal_char, sizeof(Goal_char), "CLEAR TIME: %lld SECONDS", Goalseconds);

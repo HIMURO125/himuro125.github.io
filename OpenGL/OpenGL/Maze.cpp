@@ -90,7 +90,8 @@ std::vector<std::vector<int>> InitMaze(int size) {
 	return matrix;
 }
 
-void drawSquare(float x, float z) {//‘«Õ•`‰æ
+//‘«Õ•`‰æ
+void drawSquare(float x, float z) {
 	glBegin(GL_QUADS);
 	glVertex3f(x - 0.1f, 0.0f, z - 0.1f);
 	glVertex3f(x + 0.1f, 0.0f, z - 0.1f);
