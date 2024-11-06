@@ -168,6 +168,21 @@ void mySpecialKeysUp(int key, int x, int y) {
 	}
 }
 
+void SetLight() {
+	glPushMatrix();
+	glLoadIdentity();
+	float light_pos[] = { size - 35.0f ,20.0f,size - 35.0f ,1.0f };//è∆ñæÇÃê›íË
+	float light_ambient[] = { 1.0f,1.0f,1.0f,1.0f };
+	float light_diffuse[] = { 1.0f,1.0f,1.0f,1.0f };
+	float light_specular[] = { 1.0f,1.0f,1.0f,1.0f };
+	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+	glPopMatrix();
+	glEnable(GL_LIGHT0);
+}
+
 //ï`âÊèàóù
 void myDisplay() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -180,12 +195,13 @@ void myDisplay() {
 			playBGM(0);
 			TitleSound = true;
 		}
+
 		glPushMatrix();
 		glMatrixMode(GL_PROJECTION);
+
 		glPushMatrix();
 		glLoadIdentity();
 		gluOrtho2D(0, WindowW, 0, WindowH);
-
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		char Titletext[10] = "MAZE GAME";
@@ -270,7 +286,6 @@ void myDisplay() {
 		for (p = Option; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 		}
-
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 
@@ -287,43 +302,32 @@ void myDisplay() {
 			PlaySound = true;
 		}
 		glEnable(GL_DEPTH_TEST);
-		glPushMatrix();
-		glLoadIdentity();
-		float light_pos[] = { -34 ,5,-34 ,0 };//è∆ñæÇÃê›íË
-		float light_ambient[] = { 1.0,1.0,1.0,1.0 };
-		float light_diffuse[] = { 1.0,1.0,1.0,1.0 };
-		float light_specular[] = { 1.0,1.0,1.0,1.0 };
-		glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-		glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-		glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-		glPopMatrix();
-		float line_diffuse[] = { 1.0,1.0,1.0,1.0 };//è∞ÇÃê›íË
-		float line_specular[] = { 1.0,1.0,1.0,1.0 };
-		float point_diffuse[] = { 0.75,0.75,0.0,1.0 };//ë´ê’ÇÃê›íË
-		float point_specular[] = { 0.75,0.75,0.0,1.0 };
-		float cube_ambient[] = { 0.5,0.5,0.5,1.0 };//ï«ÇÃê›íË
-		float cube_diffuse[] = { 0.5,0.5,0.5,1.0 };
-		float cube_specular[] = { 0.5,0.5, 0.5, 1.0 };
-		float cube_shininess[] = { 0.6 };
-		float key_ambient[] = { 0.24725,0.1995,0.0745,1.0 };//åÆÇÃê›íË
-		float key_diffuse[] = { 0.75164,0.60648,0.22648,1.0 };
-		float key_specular[] = { 0.628281,0.555802,0.366065,1.0 };
-		float key_shininess[] = { 0.6 };
-		float gate_ambient[] = { 0.19125,0.0735,0.0225,1.0 };//î‡ÇÃê›íË
-		float gate_diffuse[] = { 0.7038,0.27048,0.0828,1.0 };
-		float gate_specular[] = { 0.256777,0.137622, 0.086014, 1.0 };
-		float gate_shininess[] = { 0.4 };
-		float mtrl_shininess[] = { 100.0 };
+		glEnable(GL_LIGHTING);
+
 		glPushMatrix();
 		cameraDirX = cos(cameraAngle);
 		cameraDirZ = sin(cameraAngle);
 		gluLookAt(cameraX, cameraY, cameraZ, cameraX + cameraDirX, 1, cameraZ + cameraDirZ, 0, 1, 0);//éãì_
+		float line_diffuse[] = { 1.0f,1.0f,1.0f,1.0f };//è∞ÇÃê›íË
+		float line_specular[] = { 1.0f,1.0f,1.0f,1.0f };
+		float point_diffuse[] = { 0.75f,0.75f,0.0f,1.0f };//ë´ê’ÇÃê›íË
+		float point_specular[] = { 0.75f,0.75f,0.0f,1.0f };
+		float cube_ambient[] = { 0.5f,0.5f,0.5f,1.0f };//ï«ÇÃê›íË
+		float cube_diffuse[] = { 0.5f,0.5f,0.5f,1.0f };
+		float cube_specular[] = { 0.5f,0.5f, 0.5f, 1.0f };
+		float cube_shininess[] = { 0.6f };
+		float key_ambient[] = { 0.24725f,0.1995f,0.0745f,1.0f };//åÆÇÃê›íË
+		float key_diffuse[] = { 0.75164f,0.60648f,0.22648f,1.0f };
+		float key_specular[] = { 0.628281f,0.555802f,0.366065f,1.0f };
+		float key_shininess[] = { 0.6f };
+		float gate_ambient[] = { 0.19125f,0.0735f,0.0225f,1.0f };//î‡ÇÃê›íË
+		float gate_diffuse[] = { 0.7038f,0.27048f,0.0828f,1.0f };
+		float gate_specular[] = { 0.256777f,0.137622f, 0.086014f, 1.0f };
+		float gate_shininess[] = { 0.4f };
+		float mtrl_shininess[] = { 50.0f };
 		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, line_diffuse);
 		glMaterialfv(GL_FRONT, GL_SPECULAR, line_specular);
 		glMaterialfv(GL_FRONT, GL_SHININESS, mtrl_shininess);
-		glEnable(GL_LIGHT0);
-		glEnable(GL_LIGHTING);
 		glBegin(GL_LINES);
 		//è∞ï`âÊ
 		for (int i = -35; i < 36; i += 2) {
@@ -410,6 +414,7 @@ void myDisplay() {
 			}
 		}
 		glPopMatrix();
+
 		glDisable(GL_DEPTH_TEST);
 	}
 	//ÉäÉUÉãÉgâÊñ 
@@ -422,15 +427,15 @@ void myDisplay() {
 			playBGM(2);
 			ResultSound = true;
 		}
-		glDisable(GL_LIGHT0);
 		glDisable(GL_LIGHTING);
+
 		glPushMatrix();
 		glColor3f(1, 1, 1);
 		glMatrixMode(GL_PROJECTION);
+
 		glPushMatrix();
 		glLoadIdentity();
 		gluOrtho2D(0, WindowW, 0, WindowH);
-
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		char Titletext[12] = "GAME CLEAR!";
@@ -669,6 +674,7 @@ int main(int argc, char** argv) {
 	glutTimerFunc(1000, onTimer, 0);
 	glutTimerFunc(16, Update, 0);
 	initFMOD();
+	SetLight();
 	glutMainLoop();
 	cleanupFMOD();
 	return 0;
