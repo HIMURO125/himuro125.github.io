@@ -19,6 +19,8 @@ bool TitleSound = false;
 bool PlaySound = false;
 bool ResultSound = false;
 bool move = false;
+bool goForward = false;
+bool goBack = false;
 int scene = 0;
 const int title = 0;
 const int play = 1;
@@ -76,13 +78,11 @@ void myKeyboard(unsigned char key, int x, int y) {
 			else if (currentItem == 3) {
 				scene = option;
 			}
-			//glutPostRedisplay();
 		}
 	}
 	else if (scene == result) {//リザルト画面
 		if (key == 13) {
 			scene = title;
-			//glutPostRedisplay();
 		}
 	}
 	else if (scene == option) {
@@ -94,7 +94,6 @@ void myKeyboard(unsigned char key, int x, int y) {
 				support = false;
 			}
 			scene = title;
-			//glutPostRedisplay();
 		}
 	}
 	if (key == 27)
@@ -115,7 +114,6 @@ void mySpecialKeys(int key, int x, int y) {
 			currentItem = (currentItem + 1) % 4; // 項目を下に移動
 			break;
 		}
-		//glutPostRedisplay(); // 再描画を指示
 	}
 	else if (scene == option) {
 		switch (key) {
@@ -126,28 +124,14 @@ void mySpecialKeys(int key, int x, int y) {
 			currentOpItem = (currentOpItem + 1) % 2; // 項目を右に移動
 			break;
 		}
-		//glutPostRedisplay(); // 再描画を指示
 	}
 	else if (scene == play) {
-		float speed = 0.1f; // カメラの移動速度
-		Vector3 preCameraPos = { cameraX, cameraY, cameraZ };
-
 		switch (key) {
 		case GLUT_KEY_UP: // 上矢印キーで前進
-			cameraX += cameraDirX * speed;
-			cameraZ += cameraDirZ * speed;
-			if (!move) {
-				playSE(0);
-				move = true;
-			}
+			goForward = true;
 			break;
 		case GLUT_KEY_DOWN: // 下矢印キーで後退
-			cameraX -= cameraDirX * speed;
-			cameraZ -= cameraDirZ * speed;
-			if (!move) {
-				playSE(0);
-				move = true;
-			}
+			goBack = true;
 			break;
 		case GLUT_KEY_LEFT: //左矢印キーで左を向く
 			cameraAngle -= M_PI / 2;
@@ -156,41 +140,13 @@ void mySpecialKeys(int key, int x, int y) {
 			cameraAngle += M_PI / 2;
 			break;
 		}
-
-		Vector3 cameraPosition = { cameraX, cameraY, cameraZ };
-		cameraBox = GetCameraAABB(cameraPosition);//壁の当たり判定
-		for (int i = 0; i < cubes.size(); i++) {
-			if (CheckCollision(cameraBox, cubes[i])) {
-				cameraX = preCameraPos.x;
-				cameraZ = preCameraPos.z;
-				break;
-			}
-		}
-		if (CheckCollisionKey(cameraBox, KEY)) {//鍵の当たり判定
-			if (!keyflag)
-				keyflag = true;
-		}
-		if (CheckCollisionGate(cameraBox, GATE)) {//扉の当たり判定
-			if (!keyflag) {
-				cameraX = preCameraPos.x;
-				cameraZ = preCameraPos.z;
-			}
-			else if (keyflag) {
-				gateflag = true;
-			}
-		}
-		if (CheckCollision(cameraBox, GOAL) && gateflag) {//ゴールの当たり判定
-			auto current_time = std::chrono::steady_clock::now();
-			auto Goalseconds = std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time).count();
-			snprintf(Goal_char, sizeof(Goal_char), "CLEAR TIME: %lld SECONDS", Goalseconds);
-			scene = result;
-		}
-		//glutPostRedisplay(); // 再描画を指示
 	}
 }
 
 void mySpecialKeysUp(int key, int x, int y) {
 	if (key == GLUT_KEY_UP || key == GLUT_KEY_DOWN) {
+		goForward = false;
+		goBack = false;
 		if (move) {
 			stopSE(0);
 			move = false;
@@ -206,7 +162,7 @@ void myDisplay() {
 		PlaySound = false;
 		ResultSound = false;
 		if (!TitleSound) {
-			//playBGM(0);
+			playBGM(0);
 			TitleSound = true;
 		}
 		glPushMatrix();
@@ -306,7 +262,7 @@ void myDisplay() {
 		TitleSound = false;
 		ResultSound = false;
 		if (!PlaySound) {
-			//playBGM(1);
+			playBGM(1);
 			PlaySound = true;
 		}
 		glEnable(GL_DEPTH_TEST);
@@ -430,10 +386,11 @@ void myDisplay() {
 	}
 	//リザルト画面
 	else if (scene == result) {
+		squares.clear();
 		TitleSound = false;
 		PlaySound = false;
 		if (!ResultSound) {
-			//playBGM(2);
+			playBGM(2);
 			ResultSound = true;
 		}
 		glDisable(GL_LIGHT0);
@@ -603,6 +560,57 @@ void onTimer(int value) {
 }
 
 void Update(int value) {
+	Vector3 preCameraPos = { cameraX, cameraY, cameraZ };
+	float speed = 0.1f; // カメラの移動速度
+	if (scene == play) {
+		if (goForward) {
+			cameraX += cameraDirX * speed;
+			cameraZ += cameraDirZ * speed;
+			if (!move) {
+				playSE(0);
+				move = true;
+			}
+		}
+		else if (goBack) {
+			cameraX -= cameraDirX * speed;
+			cameraZ -= cameraDirZ * speed;
+			if (!move) {
+				playSE(0);
+				move = true;
+			}
+		}
+		Vector3 cameraPosition = { cameraX, cameraY, cameraZ };
+		cameraBox = GetCameraAABB(cameraPosition);//壁の当たり判定
+		for (int i = 0; i < cubes.size(); i++) {
+			if (CheckCollision(cameraBox, cubes[i])) {
+				cameraX = preCameraPos.x;
+				cameraZ = preCameraPos.z;
+				break;
+			}
+		}
+		if (CheckCollisionKey(cameraBox, KEY)) {//鍵の当たり判定
+			if (!keyflag) {
+				keyflag = true;
+				playSE(1);
+			}
+				
+		}
+		if (CheckCollisionGate(cameraBox, GATE)) {//扉の当たり判定
+			if (!keyflag) {
+				cameraX = preCameraPos.x;
+				cameraZ = preCameraPos.z;
+			}
+			else if (keyflag) {
+				gateflag = true;
+			}
+		}
+		if (CheckCollision(cameraBox, GOAL) && gateflag) {//ゴールの当たり判定
+			auto current_time = std::chrono::steady_clock::now();
+			auto Goalseconds = std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time).count();
+			snprintf(Goal_char, sizeof(Goal_char), "CLEAR TIME: %lld SECONDS", Goalseconds);
+			scene = result;
+		}
+	}
 	UpdateFMOD();
 	glutPostRedisplay();
 	glutTimerFunc(16, Update, 0);
