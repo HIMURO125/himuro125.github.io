@@ -397,8 +397,8 @@ void myDisplay() {
 				//”à
 				else if (maze[x][z] == Gate && !gateflag) {
 					glPushMatrix();
-					glTranslated(2 * x - 36, 1.0, 2 * z - 36);
-					center = { 2.0f * x - 36, 1.0, 2.0f * z - 36 };
+					glTranslated(2 * x - 35, 1.0, 2 * z - 36);
+					center = { 2.0f * x - 35, 1.0, 2.0f * z - 36 };
 					GATE = GetCubeAABB(center, 2.0);
 					glScaled(2.0, 2.0, 2.0);
 					glMaterialfv(GL_FRONT, GL_AMBIENT, gate_ambient);

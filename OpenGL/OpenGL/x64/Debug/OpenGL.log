@@ -2,6 +2,4 @@
 C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(153,24): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
 C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(156,24): warning C4305: '+=': 'double' から 'float' へ切り詰めます。
 C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(675,12): warning C4244: '引数': 'time_t' から 'unsigned int' への変換です。データが失われる可能性があります。
-  sound.cpp
-  コードを生成中...
   OpenGL.vcxproj -> C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\x64\Debug\OpenGL.exe
