@@ -7,9 +7,11 @@ FMOD::Sound* Playbgm = nullptr;
 FMOD::Sound* Resultbgm = nullptr;
 FMOD::Sound* FootSE = nullptr;
 FMOD::Sound* KeySE = nullptr;
+FMOD::Sound* GateSE = nullptr;
 FMOD::Channel* bgmchannel = nullptr;
 FMOD::Channel* footchannel = nullptr;
 FMOD::Channel* keychannel = nullptr;
+FMOD::Channel* gatechannel = nullptr;
 FMOD::ChannelGroup* bgmgroup = nullptr;
 FMOD::ChannelGroup* segroup = nullptr;
 
@@ -24,6 +26,7 @@ void initFMOD() {
     soundSystem->createSound("bgm3.mp3", FMOD_DEFAULT, nullptr, &Resultbgm);
     soundSystem->createSound("foot.mp3", FMOD_DEFAULT, nullptr, &FootSE);
     soundSystem->createSound("key.mp3", FMOD_DEFAULT, nullptr, &KeySE);
+    soundSystem->createSound("gate.mp3", FMOD_DEFAULT, nullptr, &GateSE);
     soundSystem->createChannelGroup("BGM", &bgmgroup);
     soundSystem->createChannelGroup("SE", &segroup);
 
@@ -59,6 +62,9 @@ void playSE(int i) {
     else if (i == 1) {
         soundSystem->playSound(KeySE, segroup, false, &keychannel);
     }
+    else if (i == 2) {
+        soundSystem->playSound(GateSE, segroup, false, &gatechannel);
+    }
 }
 
 //SEの停止
@@ -69,6 +75,9 @@ void stopSE(int i) {
     else if (i == 1) {
         keychannel->stop();
     }
+    else if (i == 2) {
+        gatechannel->stop();
+    }
 }
 
 //クリーンアップ
@@ -78,6 +87,7 @@ void cleanupFMOD() {
     Resultbgm->release();
     FootSE->release();
     KeySE->release();
+    GateSE->release();
     soundSystem->close();
     soundSystem->release();
 }
@@ -90,6 +100,13 @@ void UpdateFMOD() {
         if (!isPlaying) {
             stopSE(1);  // 再生終了時に停止
             keychannel = nullptr;
+        }
+    }
+    if (gatechannel) {
+        gatechannel->isPlaying(&isPlaying);
+        if (!isPlaying) {
+            stopSE(2);
+            gatechannel = nullptr;
         }
     }
     soundSystem->update();

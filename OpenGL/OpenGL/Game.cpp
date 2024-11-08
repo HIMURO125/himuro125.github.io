@@ -21,6 +21,7 @@ bool ResultSound = false;
 bool move = false;
 bool goForward = false;
 bool goBack = false;
+bool flag = false;
 int scene = 0;
 const int title = 0;
 const int play = 1;
@@ -54,6 +55,7 @@ void myKeyboard(unsigned char key, int x, int y) {
 				start_time = std::chrono::steady_clock::now();
 				keyflag = false;//フラグ等のリセット
 				gateflag = false;
+				flag = false;
 				scene = play;
 				cameraX = -34.0f;
 				cameraZ = -34.0f;
@@ -65,6 +67,7 @@ void myKeyboard(unsigned char key, int x, int y) {
 				start_time = std::chrono::steady_clock::now();
 				keyflag = false;//フラグ等のリセット
 				gateflag = false;
+				flag = false;
 				scene = play;
 				cameraX = -34.0f;
 				cameraZ = -34.0f;
@@ -76,6 +79,7 @@ void myKeyboard(unsigned char key, int x, int y) {
 				start_time = std::chrono::steady_clock::now();
 				keyflag = false;//フラグ等のリセット
 				gateflag = false;
+				flag = false;
 				scene = play;
 				cameraX = -34.0f;
 				cameraZ = -34.0f;
@@ -420,6 +424,7 @@ void myDisplay() {
 	//リザルト画面
 	else if (scene == result) {
 		squares.clear();
+		stopSE(2);
 		TitleSound = false;
 		PlaySound = false;
 		//BGM再生
@@ -646,6 +651,10 @@ void Update(int value) {
 			}
 			else if (keyflag) {
 				gateflag = true;
+				if (!flag) {
+					playSE(2);
+					flag = true;
+				}
 			}
 		}
 		if (CheckCollision(cameraBox, GOAL) && gateflag) {//ゴールの当たり判定
