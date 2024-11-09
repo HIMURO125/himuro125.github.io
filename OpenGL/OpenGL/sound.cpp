@@ -1,113 +1,86 @@
 #include "header.h"
 
-// FMODシステムとサウンド
-FMOD::System* soundSystem = nullptr;
-FMOD::Sound* Titlebgm = nullptr;
-FMOD::Sound* Playbgm = nullptr;
-FMOD::Sound* Resultbgm = nullptr;
-FMOD::Sound* FootSE = nullptr;
-FMOD::Sound* KeySE = nullptr;
-FMOD::Sound* GateSE = nullptr;
-FMOD::Channel* bgmchannel = nullptr;
-FMOD::Channel* footchannel = nullptr;
-FMOD::Channel* keychannel = nullptr;
-FMOD::Channel* gatechannel = nullptr;
-FMOD::ChannelGroup* bgmgroup = nullptr;
-FMOD::ChannelGroup* segroup = nullptr;
+Mix_Music* bgm1 = nullptr;
+Mix_Music* bgm2 = nullptr;
+Mix_Music* bgm3 = nullptr;
+Mix_Chunk* foot = nullptr;
+Mix_Chunk* key = nullptr;
+Mix_Chunk* gate = nullptr;
 
-void initFMOD() {
-    // FMODシステムの初期化
-    FMOD::System_Create(&soundSystem);
-    soundSystem->init(32, FMOD_INIT_NORMAL, nullptr);
-
-    // サウンドの読み込み
-    soundSystem->createSound("bgm.mp3", FMOD_DEFAULT, nullptr, &Titlebgm);
-    soundSystem->createSound("bgm2.mp3", FMOD_DEFAULT, nullptr, &Playbgm);
-    soundSystem->createSound("bgm3.mp3", FMOD_DEFAULT, nullptr, &Resultbgm);
-    soundSystem->createSound("foot.mp3", FMOD_DEFAULT, nullptr, &FootSE);
-    soundSystem->createSound("key.mp3", FMOD_DEFAULT, nullptr, &KeySE);
-    soundSystem->createSound("gate.mp3", FMOD_DEFAULT, nullptr, &GateSE);
-    soundSystem->createChannelGroup("BGM", &bgmgroup);
-    soundSystem->createChannelGroup("SE", &segroup);
-
-    // ループ再生に設定
-    Titlebgm->setMode(FMOD_LOOP_NORMAL);
-    Playbgm->setMode(FMOD_LOOP_NORMAL);
-    Resultbgm->setMode(FMOD_LOOP_NORMAL);
-    FootSE->setMode(FMOD_LOOP_NORMAL);
-    bgmgroup->setVolume(0.25f);
+bool initSDL() {
+    if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+        return false;
+    }
+    if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) < 0) {
+        return false;
+    }
+    return true;
 }
 
-//BGMの再生
-void playBGM(int i) {
+void closeSDL() {
+    Mix_FreeMusic(bgm1);
+    Mix_FreeMusic(bgm2);
+    Mix_FreeMusic(bgm3);
+    Mix_FreeChunk(foot);
+    Mix_FreeChunk(key);
+    Mix_FreeChunk(gate);
+    Mix_CloseAudio();
+    SDL_Quit();
+}
+
+
+void LoadSound() {
+    bgm1 = Mix_LoadMUS("bgm.mp3");
+    bgm2 = Mix_LoadMUS("bgm2.mp3");
+    bgm3 = Mix_LoadMUS("bgm3.mp3");
+    foot = Mix_LoadWAV("foot.wav");
+    key = Mix_LoadWAV("key.wav");
+    gate = Mix_LoadWAV("gate.wav");
+    if (!bgm1 || !bgm2 || !bgm3 || !foot || !key || !gate) {
+        closeSDL();
+        exit(0);
+    }
+}
+
+void PlayBGM(int i) {
+    Mix_VolumeMusic(32);
     if (i == 0) {
-        bgmchannel->stop();
-        soundSystem->playSound(Titlebgm, bgmgroup, false, &bgmchannel);
+        Mix_HaltMusic();
+        Mix_PlayMusic(bgm1, -1);
     }
     else if (i == 1) {
-        bgmchannel->stop();
-        soundSystem->playSound(Playbgm, bgmgroup, false, &bgmchannel);
+        Mix_HaltMusic();
+        Mix_PlayMusic(bgm2, -1);
     }
     else if (i == 2) {
-        bgmchannel->stop();
-        soundSystem->playSound(Resultbgm, bgmgroup, false, &bgmchannel);
+        Mix_HaltMusic();
+        Mix_PlayMusic(bgm3, -1);
     }
 }
 
-//SEの再生
-void playSE(int i) {
+void PlaySE(int i) {
     if (i == 0) {
-        soundSystem->playSound(FootSE, segroup, false, &footchannel);
+        Mix_PlayChannel(0, foot, -1);
     }
     else if (i == 1) {
-        soundSystem->playSound(KeySE, segroup, false, &keychannel);
+        Mix_PlayChannel(1, key, 0);
     }
     else if (i == 2) {
-        soundSystem->playSound(GateSE, segroup, false, &gatechannel);
+        Mix_PlayChannel(2, gate, 0);
     }
+    Mix_VolumeChunk(foot, 128);
+    Mix_VolumeChunk(key, 128);
+    Mix_VolumeChunk(gate, 128);
 }
 
-//SEの停止
-void stopSE(int i) {
+void StopSE(int i) {
     if (i == 0) {
-        footchannel->stop();
+        Mix_HaltChannel(0);
     }
     else if (i == 1) {
-        keychannel->stop();
+        Mix_HaltChannel(1);
     }
     else if (i == 2) {
-        gatechannel->stop();
+        Mix_HaltChannel(2);
     }
-}
-
-//クリーンアップ
-void cleanupFMOD() {
-    Titlebgm->release();
-    Playbgm->release();
-    Resultbgm->release();
-    FootSE->release();
-    KeySE->release();
-    GateSE->release();
-    soundSystem->close();
-    soundSystem->release();
-}
-
-//更新
-void UpdateFMOD() {
-    bool isPlaying = false;
-    if (keychannel) {
-        keychannel->isPlaying(&isPlaying);  // 再生中かどうか確認
-        if (!isPlaying) {
-            stopSE(1);  // 再生終了時に停止
-            keychannel = nullptr;
-        }
-    }
-    if (gatechannel) {
-        gatechannel->isPlaying(&isPlaying);
-        if (!isPlaying) {
-            stopSE(2);
-            gatechannel = nullptr;
-        }
-    }
-    soundSystem->update();
 }

@@ -166,7 +166,7 @@ void mySpecialKeysUp(int key, int x, int y) {
 		goBack = false;
 		//à⁄ìÆéûÇÃSEí‚é~
 		if (move) {
-			stopSE(0);
+			StopSE(0);
 			move = false;
 		}
 	}
@@ -196,7 +196,7 @@ void myDisplay() {
 		ResultSound = false;
 		//BGMçƒê∂
 		if (!TitleSound) {
-			playBGM(0);
+			PlayBGM(0);
 			TitleSound = true;
 		}
 
@@ -302,7 +302,7 @@ void myDisplay() {
 		ResultSound = false;
 		//BGMçƒê∂
 		if (!PlaySound) {
-			playBGM(1);
+			PlayBGM(1);
 			PlaySound = true;
 		}
 		glEnable(GL_DEPTH_TEST);
@@ -424,12 +424,12 @@ void myDisplay() {
 	//ÉäÉUÉãÉgâÊñ 
 	else if (scene == result) {
 		squares.clear();
-		stopSE(2);
+		StopSE(2);
 		TitleSound = false;
 		PlaySound = false;
 		//BGMçƒê∂
 		if (!ResultSound) {
-			playBGM(2);
+			PlayBGM(2);
 			ResultSound = true;
 		}
 		glDisable(GL_LIGHTING);
@@ -615,7 +615,7 @@ void Update(int value) {
 			cameraX += cameraDirX * speed;
 			cameraZ += cameraDirZ * speed;
 			if (!move) {
-				playSE(0);
+				PlaySE(0);
 				move = true;
 			}
 		}
@@ -624,7 +624,7 @@ void Update(int value) {
 			cameraX -= cameraDirX * speed;
 			cameraZ -= cameraDirZ * speed;
 			if (!move) {
-				playSE(0);
+				PlaySE(0);
 				move = true;
 			}
 		}
@@ -640,7 +640,7 @@ void Update(int value) {
 		if (CheckCollisionKey(cameraBox, KEY)) {//åÆÇÃìñÇΩÇËîªíË
 			if (!keyflag) {
 				keyflag = true;
-				playSE(1);
+				PlaySE(1);
 			}
 				
 		}
@@ -652,7 +652,7 @@ void Update(int value) {
 			else if (keyflag) {
 				gateflag = true;
 				if (!flag) {
-					playSE(2);
+					PlaySE(2);
 					flag = true;
 				}
 			}
@@ -665,7 +665,6 @@ void Update(int value) {
 			scene = result;
 		}
 	}
-	UpdateFMOD();
 	glutPostRedisplay();
 	glutTimerFunc(16, Update, 0);
 }
@@ -682,9 +681,12 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(myDisplay);
 	glutTimerFunc(1000, onTimer, 0);
 	glutTimerFunc(16, Update, 0);
-	initFMOD();
+	if (!initSDL()) {
+		return -1;
+	}
+	LoadSound();
 	SetLight();
 	glutMainLoop();
-	cleanupFMOD();
+	closeSDL();
 	return 0;
 }

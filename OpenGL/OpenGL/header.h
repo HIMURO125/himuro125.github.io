@@ -1,7 +1,8 @@
 #pragma once
 #include <stdlib.h>
 #include <GL/glut.h>
-#include <fmod.hpp>
+#include <SDL.h>
+#include <SDL_mixer.h>
 #include <math.h>
 #include <time.h>
 #include <vector>
@@ -35,9 +36,9 @@ bool CheckCollisionGate(const AABB Camera, const AABB Gate);//扉の衝突判定
 std::vector<std::vector<int>> InitMaze(int size);//棒倒し法
 void drawSquare(float x, float z);//足跡描画
 void MakeArray(int size);//配列の要素数変更
-void initFMOD();//FMODの初期化
-void playBGM(int i);//BGMの再生
-void playSE(int i);//SEの再生
-void stopSE(int i);//SEの停止
-void cleanupFMOD();//FMODのクリーンアップ
-void UpdateFMOD();//FMODの更新
+bool initSDL();
+void closeSDL();
+void LoadSound();
+void PlayBGM(int i);
+void PlaySE(int i);
+void StopSE(int i);
