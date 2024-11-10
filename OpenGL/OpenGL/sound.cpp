@@ -30,7 +30,7 @@ void closeSDL() {
 
 
 void LoadSound() {
-    bgm1 = Mix_LoadMUS("bgm.mp3");
+    bgm1 = Mix_LoadMUS("bgm1.mp3");
     bgm2 = Mix_LoadMUS("bgm2.mp3");
     bgm3 = Mix_LoadMUS("bgm3.mp3");
     foot = Mix_LoadWAV("foot.wav");
@@ -54,7 +54,7 @@ void PlayBGM(int i) {
     }
     else if (i == 2) {
         Mix_HaltMusic();
-        Mix_PlayMusic(bgm3, -1);
+        Mix_PlayMusic(bgm3, 1);
     }
 }
 

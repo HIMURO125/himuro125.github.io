@@ -1,12 +1,9 @@
-﻿  Game.cpp
+﻿  sound.cpp
 C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\header.h(13,9): warning C4005: 'M_PI': マクロが再定義されました。
-  (ソース ファイル 'Game.cpp' をコンパイルしています)
+  (ソース ファイル 'sound.cpp' をコンパイルしています)
       C:\Users\0sx6r\GitHub\himuro125.github.io\bin\SDL2-2.30.9\include\SDL_stdinc.h(623,9):
       'M_PI' の以前の定義を確認してください
   
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(153,24): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(156,24): warning C4305: '+=': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\OpenGL\Game.cpp(674,12): warning C4244: '引数': 'time_t' から 'unsigned int' への変換です。データが失われる可能性があります。
   OpenGL.vcxproj -> C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\x64\Debug\OpenGL.exe
   ..\..\bin\SDL2-2.30.9\lib\x64\SDL2.dll
   1 個のファイルをコピーしました
