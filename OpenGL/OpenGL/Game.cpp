@@ -27,12 +27,33 @@ const int title = 0;
 const int play = 1;
 const int result = 2;
 const int option = 3;
+const int pause = 4;
 int WindowW = 0;
 int WindowH = 0;
 int currentItem = 0;
 int currentOpItem = 0;
+int currentPaItem = 0;
 std::chrono::time_point<std::chrono::steady_clock> start_time;
+std::chrono::time_point<std::chrono::steady_clock> pause_start_time;
+std::chrono::time_point<std::chrono::steady_clock> pause_end_time;
 char Goal_char[50];
+float line_diffuse[] = { 1.0f,1.0f,1.0f,1.0f };//床の設定
+float line_specular[] = { 1.0f,1.0f,1.0f,1.0f };
+float point_diffuse[] = { 0.75f,0.75f,0.0f,1.0f };//足跡の設定
+float point_specular[] = { 0.75f,0.75f,0.0f,1.0f };
+float cube_ambient[] = { 0.5f,0.5f,0.5f,1.0f };//壁の設定
+float cube_diffuse[] = { 0.75f,0.75f,0.75f,1.0f };
+float cube_specular[] = { 0.9f,0.9f, 0.9f, 1.0f };
+float cube_shininess[] = { 1.0f };
+float key_ambient[] = { 0.24725f,0.1995f,0.0745f,1.0f };//鍵の設定
+float key_diffuse[] = { 0.75164f,0.60648f,0.22648f,1.0f };
+float key_specular[] = { 0.628281f,0.555802f,0.366065f,1.0f };
+float key_shininess[] = { 0.4f };
+float gate_ambient[] = { 0.19125f,0.0735f,0.0225f,1.0f };//扉の設定
+float gate_diffuse[] = { 0.7038f,0.27048f,0.0828f,1.0f };
+float gate_specular[] = { 0.256777f,0.137622f, 0.086014f, 1.0f };
+float gate_shininess[] = { 0.4f };
+float mtrl_shininess[] = { 1.0f };
 
 AABB cameraBox;
 std::vector<AABB> cubes;
@@ -50,6 +71,7 @@ void myKeyboard(unsigned char key, int x, int y) {
 		if (key == 13) {
 			//レベル１
 			if (currentItem == 0) {
+				currentPaItem = 0;
 				size = 9;
 				maze = InitMaze(size);//サイズを指定して迷路作成
 				start_time = std::chrono::steady_clock::now();
@@ -62,6 +84,7 @@ void myKeyboard(unsigned char key, int x, int y) {
 			}
 			//レベル２
 			else if (currentItem == 1) {
+				currentPaItem = 0;
 				size = 15;
 				maze = InitMaze(size);//サイズを指定して迷路作成
 				start_time = std::chrono::steady_clock::now();
@@ -74,6 +97,7 @@ void myKeyboard(unsigned char key, int x, int y) {
 			}
 			//レベル３
 			else if (currentItem == 2) {
+				currentPaItem = 0;
 				size = 21;
 				maze = InitMaze(size);//サイズを指定して迷路作成
 				start_time = std::chrono::steady_clock::now();
@@ -109,6 +133,25 @@ void myKeyboard(unsigned char key, int x, int y) {
 				support = false;
 			}
 			scene = title;
+		}
+	}
+	//ゲーム画面
+	else if (scene == play) {
+		if (key == 'p') {
+			scene = pause;
+			pause_start_time = std::chrono::steady_clock::now();
+		}
+	}
+	//ポーズ画面
+	else if (scene == pause) {
+		if (key == 13) {
+			if (currentPaItem == 0) {
+				pause_end_time = std::chrono::steady_clock::now();
+				scene = play;
+			}
+			else if (currentPaItem == 1) {
+				scene = title;
+			}
 		}
 	}
 	//Escキー
@@ -157,6 +200,17 @@ void mySpecialKeys(int key, int x, int y) {
 			break;
 		}
 	}
+	//ポーズ画面
+	else if (scene == pause) {
+		switch (key) {
+		case GLUT_KEY_LEFT://左矢印キーで項目を左に移動
+			currentPaItem = (currentPaItem + 1) % 2;
+			break;
+		case GLUT_KEY_RIGHT://右矢印キーで項目を右に移動
+			currentPaItem = (currentPaItem + 1) % 2;
+			break;
+		}
+	}
 }
 
 //自機操作２
@@ -173,17 +227,14 @@ void mySpecialKeysUp(int key, int x, int y) {
 }
 
 void SetLight() {
-	glPushMatrix();
-	glLoadIdentity();
-	float light_pos[] = { size - 35.0f ,20.0f,size - 35.0f ,1.0f };//照明の設定
-	float light_ambient[] = { 1.0f,1.0f,1.0f,1.0f };
-	float light_diffuse[] = { 1.0f,1.0f,1.0f,1.0f };
+	float light_pos[] = { cameraX ,1.0f,cameraZ ,1.0f };//照明の設定
+	float light_ambient[] = { 0.25f,0.25f,0.25f,1.0f };
+	float light_diffuse[] = { 0.5f,0.5f,0.5f,1.0f };
 	float light_specular[] = { 1.0f,1.0f,1.0f,1.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-	glPopMatrix();
 	glEnable(GL_LIGHT0);
 }
 
@@ -192,6 +243,7 @@ void myDisplay() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//タイトル画面
 	if (scene == title) {
+		squares.clear();
 		PlaySound = false;
 		ResultSound = false;
 		//BGM再生
@@ -209,10 +261,10 @@ void myDisplay() {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		char Titletext[10] = "MAZE GAME";
-		char Level1[7] = "LEVEL1";
-		char Level2[7] = "LEVEL2";
-		char Level3[7] = "LEVEL3";
-		char Option[7] = "OPTION";
+		char Level1[7] = "Level1";
+		char Level2[7] = "Level2";
+		char Level3[7] = "Level3";
+		char Option[7] = "Option";
 		char* p;
 		int textWidth = 0;
 		glColor3d(1.0, 1.0, 1.0);
@@ -312,23 +364,7 @@ void myDisplay() {
 		cameraDirX = cos(cameraAngle);
 		cameraDirZ = sin(cameraAngle);
 		gluLookAt(cameraX, cameraY, cameraZ, cameraX + cameraDirX, 1, cameraZ + cameraDirZ, 0, 1, 0);//視点
-		float line_diffuse[] = { 1.0f,1.0f,1.0f,1.0f };//床の設定
-		float line_specular[] = { 1.0f,1.0f,1.0f,1.0f };
-		float point_diffuse[] = { 0.75f,0.75f,0.0f,1.0f };//足跡の設定
-		float point_specular[] = { 0.75f,0.75f,0.0f,1.0f };
-		float cube_ambient[] = { 0.5f,0.5f,0.5f,1.0f };//壁の設定
-		float cube_diffuse[] = { 0.5f,0.5f,0.5f,1.0f };
-		float cube_specular[] = { 0.5f,0.5f, 0.5f, 1.0f };
-		float cube_shininess[] = { 0.6f };
-		float key_ambient[] = { 0.24725f,0.1995f,0.0745f,1.0f };//鍵の設定
-		float key_diffuse[] = { 0.75164f,0.60648f,0.22648f,1.0f };
-		float key_specular[] = { 0.628281f,0.555802f,0.366065f,1.0f };
-		float key_shininess[] = { 0.6f };
-		float gate_ambient[] = { 0.19125f,0.0735f,0.0225f,1.0f };//扉の設定
-		float gate_diffuse[] = { 0.7038f,0.27048f,0.0828f,1.0f };
-		float gate_specular[] = { 0.256777f,0.137622f, 0.086014f, 1.0f };
-		float gate_shininess[] = { 0.4f };
-		float mtrl_shininess[] = { 50.0f };
+		SetLight();
 		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, line_diffuse);
 		glMaterialfv(GL_FRONT, GL_SPECULAR, line_specular);
 		glMaterialfv(GL_FRONT, GL_SHININESS, mtrl_shininess);
@@ -443,8 +479,8 @@ void myDisplay() {
 		gluOrtho2D(0, WindowW, 0, WindowH);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		char Titletext[12] = "GAME CLEAR!";
-		char Starttext[12] = "PRESS ENTER";
+		char Titletext[12] = "Game Clear!";
+		char Starttext[12] = "Press Enter";
 		char* p;
 		int textWidth = 0;
 		for (p = Titletext; *p; p++) {
@@ -496,8 +532,8 @@ void myDisplay() {
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		char Optiontext[7] = "OPTION";
-		char Foot[11] = "FOOTPRINTS";
+		char Optiontext[7] = "Option";
+		char Foot[11] = "Footprints";
 		char On[3] = "ON";
 		char Off[4] = "OFF";
 		char* p;
@@ -518,7 +554,7 @@ void myDisplay() {
 		}
 		xPos = (WindowW - textWidth) / 2;
 		yPos = WindowH / 2;
-		glRasterPos2i(xPos, yPos + 50);
+		glRasterPos2i(xPos, yPos);
 		//文字描画
 		for (p = Foot; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
@@ -555,6 +591,85 @@ void myDisplay() {
 		glRasterPos2i(xPos + 50, yPos - 50);
 		//文字描画
 		for (p = Off; *p; p++) {
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+	}
+	//ポーズ画面
+	else if (scene == pause) {
+		glDisable(GL_LIGHTING);
+		glPushMatrix();
+		glColor3f(1, 1, 1);
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		gluOrtho2D(0, WindowW, 0, WindowH);
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		char Pausetext[6] = "Pause";
+		char Continue[10] = "Continue?";
+		char Yes[4] = "Yes";
+		char No[3] = "No";
+		char* p;
+		int textWidth = 0;
+		for (p = Pausetext; *p; p++) {
+			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		int xPos = (WindowW - textWidth) / 2;
+		int yPos = WindowH / 2;
+		glRasterPos2i(xPos, yPos + 100);
+		//文字描画
+		for (p = Pausetext; *p; p++) {
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		textWidth = 0;
+		for (p = Continue; *p; p++) {
+			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		xPos = (WindowW - textWidth) / 2;
+		yPos = WindowH / 2;
+		glRasterPos2i(xPos, yPos);
+		//文字描画
+		for (p = Continue; *p; p++) {
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		textWidth = 0;
+		if (currentPaItem == 0) {//選択中は文字の色を変える
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		for (p = Yes; *p; p++) {
+			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		xPos = (WindowW - textWidth) / 2;
+		yPos = WindowH / 2;
+		glRasterPos2i(xPos - 50, yPos - 50);
+		//文字描画
+		for (p = Yes; *p; p++) {
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		textWidth = 0;
+		if (currentPaItem == 1) {//選択中は文字の色を変える
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		for (p = No; *p; p++) {
+			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
+		}
+		xPos = (WindowW - textWidth) / 2;
+		yPos = WindowH / 2;
+		glRasterPos2i(xPos + 50, yPos - 50);
+		//文字描画
+		for (p = No; *p; p++) {
 			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
 		}
 		glMatrixMode(GL_PROJECTION);
@@ -659,9 +774,10 @@ void Update(int value) {
 		}
 		if (CheckCollision(cameraBox, GOAL) && gateflag) {//ゴールの当たり判定
 			//クリアタイム計算
+			auto pause_time = pause_end_time - pause_start_time;
 			auto current_time = std::chrono::steady_clock::now();
-			auto Goalseconds = std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time).count();
-			snprintf(Goal_char, sizeof(Goal_char), "CLEAR TIME: %lld SECONDS", Goalseconds);
+			auto Goalseconds = std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time - pause_time).count();
+			snprintf(Goal_char, sizeof(Goal_char), "Clear Time: %lld Seconds", Goalseconds);
 			scene = result;
 		}
 	}
@@ -685,7 +801,6 @@ int main(int argc, char** argv) {
 		return -1;
 	}
 	LoadSound();
-	SetLight();
 	glutMainLoop();
 	closeSDL();
 	return 0;
