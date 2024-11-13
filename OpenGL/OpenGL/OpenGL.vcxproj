@@ -123,7 +123,13 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy "..\..\bin\SDL2-2.30.9\lib\x64\SDL2.dll" "$(OutDir)" /i /s /y
-xcopy "..\..\bin\SDL2_mixer-2.8.0\lib\x64\SDL2_mixer.dll" "$(OutDir)" /i /s /y</Command>
+xcopy "..\..\bin\SDL2_mixer-2.8.0\lib\x64\SDL2_mixer.dll" "$(OutDir)" /i /s /y
+xcopy ".\bgm1.mp3" "$(OutDir)" /i /s /y
+xcopy ".\bgm2.mp3" "$(OutDir)" /i /s /y
+xcopy ".\bgm3.mp3" "$(OutDir)" /i /s /y
+xcopy ".\foot.wav" "$(OutDir)" /i /s /y
+xcopy ".\gate.wav" "$(OutDir)" /i /s /y
+xcopy ".\key.wav" "$(OutDir)" /i /s /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -146,7 +152,13 @@ xcopy "..\..\bin\SDL2_mixer-2.8.0\lib\x64\SDL2_mixer.dll" "$(OutDir)" /i /s /y</
     </Link>
     <PostBuildEvent>
       <Command>xcopy "..\..\bin\SDL2-2.30.9\lib\x64\SDL2.dll" "$(OutDir)" /i /s /y
-xcopy "..\..\bin\SDL2_mixer-2.8.0\lib\x64\SDL2_mixer.dll" "$(OutDir)" /i /s /y</Command>
+xcopy "..\..\bin\SDL2_mixer-2.8.0\lib\x64\SDL2_mixer.dll" "$(OutDir)" /i /s /y
+xcopy ".\bgm1.mp3" "$(OutDir)" /i /s /y
+xcopy ".\bgm2.mp3" "$(OutDir)" /i /s /y
+xcopy ".\bgm3.mp3" "$(OutDir)" /i /s /y
+xcopy ".\foot.wav" "$(OutDir)" /i /s /y
+xcopy ".\gate.wav" "$(OutDir)" /i /s /y
+xcopy ".\key.wav" "$(OutDir)" /i /s /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
