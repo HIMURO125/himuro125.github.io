@@ -1,0 +1,7 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2176,5): warning : The referenced project 'C:\Users\0sx6r\Downloads\freeglut-3.6.0\freeglut-3.6.0\bulid\ZERO_CHECK.vcxproj' does not exist.
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2176,5): warning : The referenced project 'C:\Users\0sx6r\Downloads\freeglut-3.6.0\freeglut-3.6.0\bulid\freeglut.vcxproj' does not exist.
+  Building Custom Rule C:/Users/0sx6r/Downloads/freeglut-3.6.0/freeglut-3.6.0/CMakeLists.txt
+  CMake is re-running because C:/Users/0sx6r/Downloads/freeglut-3.6.0/freeglut-3.6.0/bulid/CMakeFiles/generate.stamp dependency file is missing.
+CUSTOMBUILD : CMake error : The source directory "C:/Users/0sx6r/Downloads/freeglut-3.6.0/freeglut-3.6.0" does not appear to contain CMakeLists.txt.
+  Specify --help for usage, or press the help button on the CMake GUI.
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(254,5): error MSB8066: 'C:\Users\0sx6r\Downloads\freeglut-3.6.0\freeglut-3.6.0\CMakeLists.txt' のカスタム ビルドがコード 1 で終了しました。

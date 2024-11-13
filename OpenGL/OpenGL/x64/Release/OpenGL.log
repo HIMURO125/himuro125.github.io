@@ -1,2 +1,9 @@
-﻿  main.cpp
-LINK : fatal error LNK1104: ファイル 'freeglut.lib' を開くことができません。
+﻿  コード生成しています。
+  Previous IPDB not found, fall back to full compilation.
+  All 316 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  コード生成が終了しました。
+  OpenGL.vcxproj -> C:\Users\0sx6r\GitHub\himuro125.github.io\OpenGL\x64\Release\OpenGL.exe
+  ..\..\bin\SDL2-2.30.9\lib\x64\SDL2.dll
+  1 個のファイルをコピーしました
+  ..\..\bin\SDL2_mixer-2.8.0\lib\x64\SDL2_mixer.dll
+  1 個のファイルをコピーしました

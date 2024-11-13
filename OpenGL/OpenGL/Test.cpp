@@ -1,135 +1,67 @@
-#include <iostream>
-#include <chrono>
-#include <random>
-#include <time.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include <GL/glut.h>
+#include <stb_image.h>
 
-/*int size = 15;
-const int Path = 0;
-const int Wall = 1;
-const int Key = 2;
-std::vector<std::vector<int>> maze;
-bool keyflag = false;
+// テクスチャIDをグローバル変数として宣言
+GLuint textureID;
 
-void MakeArray(int size) {
-	maze.resize(size);
-	for (int i = 0; i < size; ++i) {
-		maze[i].resize(size);
+GLuint loadTexture(const char* filename) {
+	int width, height, channels;
+	unsigned char* data = stbi_load(filename, &width, &height, &channels, 0);
+	if (data == nullptr) {
+		return 0;
 	}
+
+	GLuint texID;
+	glGenTextures(1, &texID);
+	glBindTexture(GL_TEXTURE_2D, texID);
+
+	// テクスチャのパラメータ設定
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// OpenGLテクスチャとして画像データを設定
+	GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+
+	// メモリを解放
+	stbi_image_free(data);
+	return texID;
 }
 
-void InitMaze() {
-	MakeArray(size);
-	for (int x = 0; x < size; x++) {
-		for (int z = 0; z < size; z++) {
-			maze[x][z] = Path;
-		}
-	}
-	for (int x = 0; x < size; x++) {
-		for (int z = 0; z < size; z++) {
-			if (x == 0 || z == 0 || x == size - 1 || z == size - 1) {
-				maze[x][z] = Wall;// 外周はすべて壁
-			}
-			else {
-				maze[x][z] = Path;
+void display() {
+	glClear(GL_COLOR_BUFFER_BIT);
 
-			}
-		}
-	}
-	for (int x = 2; x < size - 1; x += 2) {
-		for (int z = 2; z < size - 1; z += 2) {
-			maze[x][z] = 1;
-			while (true)
-			{
-				// 1行目のみ上に倒せる
-				int direction;
-				if (z == 2)
-					direction = rand() % 4;
-				else
-					direction = rand() % 3;
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, textureID);
 
-				// 棒を倒す方向を決める
-				int wallX = x;
-				int wallZ = z;
-				switch (direction)
-				{
-				case 0: // 右
-					wallX++;
-					break;
-				case 1: // 下
-					wallZ++;
-					break;
-				case 2: // 左
-					wallX--;
-					break;
-				case 3: // 上
-					wallZ--;
-					break;
-				}
-				// 壁じゃない場合のみ倒して終了
-				if (maze[wallX][wallZ] != Wall)
-				{
-					maze[wallX][wallZ] = Wall;
-					break;
-				}
-			}
-		}
-	}
-	maze[size - 1][size - 2] = Path;
-	while (true) {
-		int MinRamge = size / 3;
-		int MaxRange = 2 * size / 3 - 1;
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_int_distribution<int> dis(MinRamge, MaxRange);
-		int x = dis(gen);
-		int y = dis(gen);
-		if (maze[x][y] == Path) {
-			maze[x][y] = Key;
-			break;
-		}
-	}
-	
-	for (int i = size - 1; i >= 0; i--) {
-		for (int j = 0; j < size; j++) {
-			printf("%d", maze[i][j]);
-		}
-		printf("\n");
-	}
+	// テクスチャを描画
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(-0.5f, -0.5f);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(0.5f, -0.5f);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(0.5f, 0.5f);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(-0.5f, 0.5f);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glutSwapBuffers();
 }
-int main() {
-	srand(time(NULL));
-	int num[] = { 9,15,21,27 };
-	int i = 0;
-	char choice;
-	do {
-		size = num[i];
-		InitMaze();
-		if (i == sizeof(num) / sizeof(int) - 1) {
-			i = 0;
-		}
-		else {
-			i++;
-		}
-		std::cout << "別の配列サイズを定義しますか？ (y/n): ";
-		std::cin >> choice;
-	} while (choice == 'y' || choice == 'Y');
-	
-	return 0;
-}*/
-std::chrono::time_point<std::chrono::steady_clock> start_time = std::chrono::steady_clock::now();
-int main() {
-	
-	char choice;
-	do {
-		// 現在時刻を取得
-		auto current_time = std::chrono::steady_clock::now();
-		// 経過時間を秒単位で計算
-		std::chrono::duration<double> elapsed_seconds = current_time - start_time;
 
-		// 経過時間を表示（デバッグ用）
-		std::cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
-		std::cout << "別の配列サイズを定義しますか？ (y/n): ";
-		std::cin >> choice;
-	} while (choice == 'y' || choice == 'Y');
+int main(int argc, char** argv) {
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	glutInitWindowSize(800, 600);
+	glutCreateWindow("Texture Example with FreeGLUT");
+
+	// 画像を読み込んでテクスチャに設定
+	textureID = loadTexture("image.png");
+
+	glutDisplayFunc(display);
+	glutMainLoop();
+
 	return 0;
 }

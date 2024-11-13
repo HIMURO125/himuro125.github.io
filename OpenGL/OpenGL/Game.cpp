@@ -1,4 +1,5 @@
 #include "header.h"
+#define M_PI 3.1415926535897932384626433832795f
 
 float cameraX = 0.0f;
 float cameraY = 1.0f;
@@ -227,15 +228,23 @@ void mySpecialKeysUp(int key, int x, int y) {
 }
 
 void SetLight() {
-	float light_pos[] = { cameraX ,1.0f,cameraZ ,1.0f };//è∆ñæÇÃê›íË
-	float light_ambient[] = { 0.25f,0.25f,0.25f,1.0f };
-	float light_diffuse[] = { 0.5f,0.5f,0.5f,1.0f };
+	float light0_pos[] = { 1.0f ,0.0f, 1.0f ,0.0f };//è∆ñæÇÃê›íË
+	float light1_pos[] = { -1.0f ,0.0f, -1.0f ,0.0f };
+	float light0_ambient[] = { 0.25f,0.25f,0.25f,1.0f };
+	float light1_ambient[] = { 0.1f,0.1f,0.1f,1.0f };
+	float light0_diffuse[] = { 0.5f,0.5f,0.5f,1.0f };
+	float light1_diffuse[] = { 0.1f,0.1f,0.1f,1.0f };
 	float light_specular[] = { 1.0f,1.0f,1.0f,1.0f };
-	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	glLightfv(GL_LIGHT0, GL_POSITION, light0_pos);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+	glLightfv(GL_LIGHT1, GL_POSITION, light1_pos);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
 	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
 }
 
 //ï`âÊèàóù
@@ -357,6 +366,7 @@ void myDisplay() {
 			PlayBGM(1);
 			PlaySound = true;
 		}
+		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_LIGHTING);
 
@@ -456,6 +466,7 @@ void myDisplay() {
 		glPopMatrix();
 
 		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_TEXTURE_2D);
 	}
 	//ÉäÉUÉãÉgâÊñ 
 	else if (scene == result) {
