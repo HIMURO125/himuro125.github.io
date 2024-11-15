@@ -1,5 +1,4 @@
 #include "header.h"
-#define M_PI 3.1415926535897932384626433832795f
 
 float cameraX = 0.0f;
 float cameraY = 1.0f;
