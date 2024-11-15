@@ -40,12 +40,9 @@ struct Square {
 AABB GetCameraAABB(const Vector3& cameraPosition);            //カメラのAABB設定
 AABB GetCubeAABB(const Vector3& CubeCenter, float size);      //壁のAABB設定
 AABB GetKeyAABB(const Vector3& KeyCenter, float size);        //鍵のAABB設定
-bool CheckCollision(const AABB Camera, const AABB Cube);      //衝突判定
-bool CheckCollisionKey(const AABB Camera, const AABB Key);    //鍵の衝突判定
-bool CheckCollisionGate(const AABB Camera, const AABB Gate);  //扉の衝突判定
-std::vector<std::vector<int>> InitMaze(int size);             //棒倒し法の実装
+bool CheckCollision(const AABB Camera, const AABB Obj);       //衝突判定
+std::vector<std::vector<int>> InitMaze(int size);             //迷路の自動生成
 void drawSquare(float x, float z);                            //足跡描画
-void MakeArray(int size);                                     //配列の要素数変更
 bool initSDL();                                               //SDLの初期化
 void closeSDL();                                              //SDLの終了
 void LoadSound();                                             //音データのロード

@@ -1,69 +1,81 @@
+/*******************************************************
+* ファイル名：Game.cpp
+* 概要　　　：main関数を持ち、freeglutの処理を主に実行
+* 　　　　　　freeglutを使用
+********************************************************/
+#pragma once
 #include "header.h"
 
-float cameraX = 0.0f;
-float cameraY = 1.0f;
-float cameraZ = 0.0f;
-float cameraAngle = 0.0f;
-float cameraDirX;
-float cameraDirZ;
-int size;
-const int Path = 0;
-const int Wall = 1;
-const int Key = 2;
-const int Gate = 3;
-std::vector<std::vector<int>> maze;
-bool keyflag = false;
-bool gateflag = false;
-bool support = true;
-bool TitleSound = false;
-bool PlaySound = false;
-bool ResultSound = false;
-bool move = false;
-bool goForward = false;
-bool goBack = false;
-bool flag = false;
-int scene = 0;
-const int title = 0;
-const int play = 1;
-const int result = 2;
-const int option = 3;
-const int pause = 4;
-int WindowW = 0;
-int WindowH = 0;
-int currentItem = 0;
-int currentOpItem = 0;
-int currentPaItem = 0;
-std::chrono::time_point<std::chrono::steady_clock> start_time;
-std::chrono::time_point<std::chrono::steady_clock> pause_start_time;
-std::chrono::time_point<std::chrono::steady_clock> pause_end_time;
-char Goal_char[50];
-float line_diffuse[] = { 1.0f,1.0f,1.0f,1.0f };//床の設定
-float line_specular[] = { 1.0f,1.0f,1.0f,1.0f };
-float point_diffuse[] = { 0.75f,0.75f,0.0f,1.0f };//足跡の設定
+float cameraX = 0.0f;               //カメラのx座標
+float cameraY = 1.0f;               //カメラのy座標
+float cameraZ = 0.0f;               //カメラのz座標
+float cameraAngle = 0.0f;           //カメラの角度
+float cameraDirX;                   //カメラのx軸方向の向き
+float cameraDirZ;                   //カメラのz軸方向の向き
+int size;                           //迷路のサイズ
+const int Path = 0;                 //道を0とする
+const int Wall = 1;                 //壁を1とする
+const int Key = 2;                  //鍵を2とする
+const int Gate = 3;                 //扉を3とする
+std::vector<std::vector<int>> maze; //迷路の二次元配列
+bool keyflag = false;               //鍵を取得しているかのフラグ
+bool gateflag = false;              //扉が開いているかのフラグ
+bool support = true;                //足跡機能のフラグ(デフォルトでON)
+bool TitleSound = false;            //タイトル画面のBGMがなっているかのフラグ
+bool PlaySound = false;             //ゲーム画面のBGMがなっているかのフラグ
+bool ResultSound = false;           //リザルト画面のBGMがなっているかのフラグ
+bool move = false;                  //移動しているかのフラグ
+bool goForward = false;             //前に進んでいるかのフラグ
+bool goBack = false;                //後ろに進んでいるかのフラグ
+bool flag = false;                  //扉のSEを一度だけ再生するためのフラグ
+int scene = 0;                      //現在のゲーム状態
+const int title = 0;                //タイトル画面を0とする
+const int play = 1;                 //ゲーム画面を1とする
+const int result = 2;               //リザルト画面を2とする
+const int option = 3;               //オプション画面を3とする
+const int pause = 4;                //ポーズ画面を4とする
+int WindowW = 0;                    //ウィンドウの幅
+int WindowH = 0;                    //ウィンドウの高さ
+int currentItem = 0;                //タイトル画面の選択項目
+int currentOpItem = 0;              //オプション画面の選択項目
+int currentPaItem = 0;              //ポーズ画面の選択項目
+std::chrono::time_point<std::chrono::steady_clock> start_time;        //ステージを始めた時間
+std::chrono::time_point<std::chrono::steady_clock> pause_start_time;  //ポーズ画面を開き始めた時間
+std::chrono::time_point<std::chrono::steady_clock> pause_end_time;    //ポーズ画面を閉じた時間
+std::chrono::nanoseconds pause_time;                                  //ポーズ画面を開いていた累計時間
+char Goal_char[50];                                //クリアタイムを記述する文字配列
+float line_diffuse[] = { 1.0f,1.0f,1.0f,1.0f };    //床、足跡、壁、鍵、扉の
+float line_specular[] = { 1.0f,1.0f,1.0f,1.0f };   //環境光、拡散光、鏡面光、鏡面係数の設定
+float point_diffuse[] = { 0.75f,0.75f,0.0f,1.0f };
 float point_specular[] = { 0.75f,0.75f,0.0f,1.0f };
-float cube_ambient[] = { 0.5f,0.5f,0.5f,1.0f };//壁の設定
+float cube_ambient[] = { 0.5f,0.5f,0.5f,1.0f };
 float cube_diffuse[] = { 0.75f,0.75f,0.75f,1.0f };
 float cube_specular[] = { 0.9f,0.9f, 0.9f, 1.0f };
 float cube_shininess[] = { 1.0f };
-float key_ambient[] = { 0.24725f,0.1995f,0.0745f,1.0f };//鍵の設定
+float key_ambient[] = { 0.24725f,0.1995f,0.0745f,1.0f };
 float key_diffuse[] = { 0.75164f,0.60648f,0.22648f,1.0f };
 float key_specular[] = { 0.628281f,0.555802f,0.366065f,1.0f };
 float key_shininess[] = { 0.4f };
-float gate_ambient[] = { 0.19125f,0.0735f,0.0225f,1.0f };//扉の設定
+float gate_ambient[] = { 0.19125f,0.0735f,0.0225f,1.0f };
 float gate_diffuse[] = { 0.7038f,0.27048f,0.0828f,1.0f };
 float gate_specular[] = { 0.256777f,0.137622f, 0.086014f, 1.0f };
 float gate_shininess[] = { 0.4f };
 float mtrl_shininess[] = { 1.0f };
 
-AABB cameraBox;
-std::vector<AABB> cubes;
-AABB KEY;
-AABB GATE;
-AABB GOAL;
-
-std::vector<Square> squares;
+AABB cameraBox;              //カメラのAABB
+AABB KEY;                    //鍵のAABB
+AABB GATE;                   //扉のAABB
+AABB GOAL;                   //ゴールのAABB
+std::vector<AABB> cubes;     //全ての壁のAABBを格納する配列
+std::vector<Square> squares; //全ての足跡の座標を格納する配列
 
 //開始(Enter)と終了(Esc)
+/*******************************************************
+* 一般キーが押された時に呼び出される関数
+* 引数
+* key:押されたキーのASCIIコード
+* x,y:キーを押したときのマウスの座標値
+********************************************************/
 void myKeyboard(unsigned char key, int x, int y) {
 	//タイトル画面
 	if (scene == title) {
@@ -147,6 +159,7 @@ void myKeyboard(unsigned char key, int x, int y) {
 		if (key == 13) {
 			if (currentPaItem == 0) {
 				pause_end_time = std::chrono::steady_clock::now();
+				pause_time = pause_time + (pause_end_time - pause_start_time);
 				scene = play;
 			}
 			else if (currentPaItem == 1) {
@@ -693,17 +706,16 @@ void myDisplay() {
 
 //初期化
 void myInit(char* progname) {
-	int width = 640, height = 480;
-	WindowW = width;
-	WindowH = height;
+	WindowW = 640;
+	WindowH = 480;
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	glutInitWindowSize(width, height);
+	glutInitWindowSize(WindowW, WindowH);
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("Maze");
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(90.0, (double)width / (double)height, 0.1, 20.0);
+	gluPerspective(90.0, (double)WindowW / (double)WindowH, 0.1, 20.0);
 	glMatrixMode(GL_MODELVIEW);
 	glShadeModel(GL_SMOOTH);
 	glLoadIdentity();
@@ -762,14 +774,14 @@ void Update(int value) {
 				break;
 			}
 		}
-		if (CheckCollisionKey(cameraBox, KEY)) {//鍵の当たり判定
+		if (CheckCollision(cameraBox, KEY)) {//鍵の当たり判定
 			if (!keyflag) {
 				keyflag = true;
 				PlaySE(1);
 			}
 				
 		}
-		if (CheckCollisionGate(cameraBox, GATE)) {//扉の当たり判定
+		if (CheckCollision(cameraBox, GATE)) {//扉の当たり判定
 			if (!keyflag) {
 				cameraX = preCameraPos.x;
 				cameraZ = preCameraPos.z;
@@ -784,7 +796,6 @@ void Update(int value) {
 		}
 		if (CheckCollision(cameraBox, GOAL) && gateflag) {//ゴールの当たり判定
 			//クリアタイム計算
-			auto pause_time = pause_end_time - pause_start_time;
 			auto current_time = std::chrono::steady_clock::now();
 			auto Goalseconds = std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time - pause_time).count();
 			snprintf(Goal_char, sizeof(Goal_char), "Clear Time: %lld Seconds", Goalseconds);
