@@ -1,3 +1,10 @@
+/*******************************************************
+* ファイル名　　　：header.h
+* 概要　　　　　　：プログラムの構造体、関数を定義
+* 外部ライブラリ　：freeglut-3.6.0		glut.h
+* 　　　　　　　　　SDL2-2.30.9		　　SDL.h
+* 　　　　　　　　　SDL2_mixer-2.8.0	SDL_mixer.h
+********************************************************/
 #pragma once
 #include <stdlib.h>
 #include <GL/glut.h>
@@ -11,35 +18,37 @@
 #include <string>
 #include <cstring>
 
-struct Vector3 {//座標構造体
-	float x;
-	float y;
-	float z;
+//座標構造体を定義
+struct Vector3 {
+	float x;    //x座標
+	float y;    //y座標
+	float z;    //z座標
 };
 
-struct AABB {//AABB構造体
-	Vector3 min;
-	Vector3 max;
+//AABB(Axis-Aligned Bounding Box)構造体を定義
+struct AABB {
+	Vector3 min;    //最小座標
+	Vector3 max;    //最大座標
 };
 
-struct Square {//足跡構造体
-	float x, z;
+//足跡座標構造体を定義
+struct Square {
+	float x;    //x座標
+	float z;    //z座標
 };
 
-AABB GetCameraAABB(const Vector3& cameraPosition);//カメラのAABB取得
-AABB GetCubeAABB(const Vector3& CubeCenter, float size);//壁のAABB取得
-AABB GetKeyAABB(const Vector3& KeyCenter, float size);//鍵のAABB取得
-bool CheckCollision(const AABB Camera, const AABB Cube);//衝突判定
-bool CheckCollisionKey(const AABB Camera, const AABB Key);//鍵の取得判定
-bool CheckCollisionGate(const AABB Camera, const AABB Gate);//扉の衝突判定
-std::vector<std::vector<int>> InitMaze(int size);//棒倒し法
-void drawSquare(float x, float z);//足跡描画
-void MakeArray(int size);//配列の要素数変更
-bool initSDL();//SDLの初期化
-void closeSDL();//SDLの終了
-void LoadSound();//音データのロード
-void PlayBGM(int i);//BGMの再生
-void PlaySE(int i);//SE（サウンドエフェクト）の再生
-void StopSE(int i);//SEの停止
-//GLuint LoadTexture(const char* filename);
-//void DrawTexture(GLuint Texture);
+AABB GetCameraAABB(const Vector3& cameraPosition);            //カメラのAABB設定
+AABB GetCubeAABB(const Vector3& CubeCenter, float size);      //壁のAABB設定
+AABB GetKeyAABB(const Vector3& KeyCenter, float size);        //鍵のAABB設定
+bool CheckCollision(const AABB Camera, const AABB Cube);      //衝突判定
+bool CheckCollisionKey(const AABB Camera, const AABB Key);    //鍵の衝突判定
+bool CheckCollisionGate(const AABB Camera, const AABB Gate);  //扉の衝突判定
+std::vector<std::vector<int>> InitMaze(int size);             //棒倒し法の実装
+void drawSquare(float x, float z);                            //足跡描画
+void MakeArray(int size);                                     //配列の要素数変更
+bool initSDL();                                               //SDLの初期化
+void closeSDL();                                              //SDLの終了
+void LoadSound();                                             //音データのロード
+void PlayBGM(int i);                                          //BGMの再生、停止
+void PlaySE(int i);                                           //SEの再生
+void StopSE(int i);                                           //SEの停止

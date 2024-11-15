@@ -1,12 +1,21 @@
+/*******************************************************
+* ファイル名：Maze.cpp
+* 概要　　　：二次元配列の迷路の自動生成、サイズ変更、足跡の描画を実行
+* 　　　　　　freeglutを使用
+********************************************************/
+#pragma once
 #include "header.h"
 
-const int Path = 0;
-const int Wall = 1;
-const int Key = 2;
-const int Gate = 3;
-std::vector<std::vector<int>> matrix;
+const int Path = 0;                    //道を0とする
+const int Wall = 1;                    //壁を1とする
+const int Key = 2;                     //鍵を2とする
+const int Gate = 3;                    //扉を3とする
+std::vector<std::vector<int>> matrix;  //迷路の二次元配列
 
-//配列の要素数変更
+/*******************************************************
+* 配列のサイズの変更を行う関数
+* 引数で指定した数にサイズを変更する
+********************************************************/
 void MakeArray(int size) {
 	matrix.resize(size);
 	for (int i = 0; i < size; ++i) {
@@ -14,57 +23,69 @@ void MakeArray(int size) {
 	}
 }
 
-//棒倒し法
+/*******************************************************
+* 二次元配列の迷路を自動生成する関数
+* アルゴリズムとして棒倒し法を使用
+* 引数で指定した数をサイズとした迷路を生成する
+* 返り値として生成した迷路を返す
+********************************************************/
 std::vector<std::vector<int>> InitMaze(int size) {
-	//変数、配列の初期化
-	MakeArray(size);
+	MakeArray(size);  //配列のサイズ変更
+
+	//迷路の初期化
 	for (int x = 0; x < size; x++) {
 		for (int z = 0; z < size; z++) {
 			matrix[x][z] = Path;
 		}
 	}
-	//迷路生成
+
+	//外周を全て壁にする
 	for (int x = 0; x < size; x++) {
 		for (int z = 0; z < size; z++) {
 			if (x == 0 || z == 0 || x == size - 1 || z == size - 1) {
-				matrix[x][z] = Wall;// 外周はすべて壁
+				matrix[x][z] = Wall;
 			}
 			else {
 				matrix[x][z] = Path;
 			}
 		}
 	}
+
+	//棒倒し法
 	for (int x = 2; x < size - 1; x += 2) {
 		for (int z = 2; z < size - 1; z += 2) {
-			matrix[x][z] = 1;
+			matrix[x][z] = 1;      //最初の棒
 			while (true)
 			{
+				int direction;     //棒を倒す方向
+
 				// 1行目のみ上に倒せる
-				int direction;
 				if (z == 2)
 					direction = rand() % 4;
 				else
 					direction = rand() % 3;
 
+				int wallX = x;     //x座標
+				int wallZ = z;     //z座標
+
 				// 棒を倒す方向を決める
-				int wallX = x;
-				int wallZ = z;
 				switch (direction)
 				{
-				case 0: // 右
+				case 0: //右
 					wallX++;
 					break;
-				case 1: // 下
+				case 1: //下
 					wallZ++;
 					break;
-				case 2: // 左
+				case 2: //左
 					wallX--;
 					break;
-				case 3: // 上
+				case 3: //上
 					wallZ--;
 					break;
 				}
-				// 壁じゃない場合のみ倒して終了
+
+				//壁じゃない場合のみ棒を倒して終了
 				if (matrix[wallX][wallZ] != Wall)
 				{
 					matrix[wallX][wallZ] = Wall;
@@ -73,15 +94,19 @@ std::vector<std::vector<int>> InitMaze(int size) {
 			}
 		}
 	}
-	matrix[size - 1][size - 2] = Gate;
+	matrix[size - 1][size - 2] = Gate; //右上を扉とする
+
+	//迷路の中央部分の道のどこかに鍵を設置
 	while (true) {
-		int MinRamge = size / 3;
+		int MinRamge = size / 3;                                   //迷路のサイズの3分の1の範囲
 		int MaxRange = 2 * size / 3 - 1;
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_int_distribution<int> dis(MinRamge, MaxRange);
-		int x = dis(gen);
+		std::random_device rd;                                     //ハードウェア乱数生成器を初期化
+		std::mt19937 gen(rd());                                    //擬似乱数生成器を初期化
+		std::uniform_int_distribution<int> dis(MinRamge, MaxRange);//MinRamge、MaxRangeの範囲で乱数生成するための分布オブジェクトを作成
+		int x = dis(gen);                                          //乱数生成
 		int z = dis(gen);
+
+		//選ばれた場所が道の場合鍵を設置
 		if (matrix[x][z] == Path) {
 			matrix[x][z] = Key;
 			break;
@@ -90,8 +115,12 @@ std::vector<std::vector<int>> InitMaze(int size) {
 	return matrix;
 }
 
-//足跡描画
+/*******************************************************
+* 足跡を描画する関数
+* 引数として描画するx座標、z座標を受け取る
+********************************************************/
 void drawSquare(float x, float z) {
+	//四角形のポリゴンを描画
 	glBegin(GL_QUADS);
 	glVertex3f(x - 0.1f, 0.0f, z - 0.1f);
 	glVertex3f(x + 0.1f, 0.0f, z - 0.1f);
