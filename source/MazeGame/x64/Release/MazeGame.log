@@ -1,14 +1,11 @@
-﻿  AABB.cpp
-  Game.cpp
-C:\Users\0sx6r\GitHub\himuro125.github.io\source\MazeGame\Game.cpp(209,24): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\source\MazeGame\Game.cpp(212,24): warning C4305: '+=': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\source\MazeGame\Game.cpp(811,12): warning C4244: '引数': 'time_t' から 'unsigned int' への変換です。データが失われる可能性があります。
-  Maze.cpp
-  sound.cpp
+﻿  Game.cpp
+C:\Users\0sx6r\GitHub\himuro125.github.io\source\MazeGame\Game.cpp(218,24): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\source\MazeGame\Game.cpp(221,24): warning C4305: '+=': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\source\MazeGame\Game.cpp(863,12): warning C4244: '引数': 'time_t' から 'unsigned int' への変換です。データが失われる可能性があります。
   コード生成しています。
-  3 of 314 functions ( 1.0%) were compiled, the rest were copied from previous compilation.
+  0 of 314 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   MazeGame.vcxproj -> C:\Users\0sx6r\GitHub\himuro125.github.io\bin\作品\x64\Release\MazeGame.exe
   ..\..\bin\SDL2-2.30.9\lib\x64\SDL2.dll
