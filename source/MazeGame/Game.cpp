@@ -303,7 +303,7 @@ void myDisplay() {
 		gluOrtho2D(0, WindowW, 0, WindowH);//直交投影を定義
 		glMatrixMode(GL_MODELVIEW);        //モデルビュー行列スタックを選択
 		glLoadIdentity();
-		char Titletext[10] = "MAZE GAME";  //文字列配列
+		char Titletext[17] = "3D Maze Explorer";  //文字列配列
 		char Level1[7] = "Level1";
 		char Level2[7] = "Level2";
 		char Level3[7] = "Level3";
@@ -417,7 +417,7 @@ void myDisplay() {
 
 		//床描画
 		glBegin(GL_LINES);
-		for (int i = -35; i < 36; i += 2) {
+		for (int i = -35; i < 7; i += 2) {
 			glVertex3i(i, 0, -35);
 			glVertex3i(i, 0, 35);
 			glVertex3i(-50, 0, i);
@@ -773,7 +773,7 @@ void myReshape(int width, int height) {
 ********************************************************/
 void onTimer(int value) {
 	if (support) {
-		// 新しい四角形を足元の位置に追加
+		//新しい足跡を足元の位置に追加
 		squares.push_back(Square{ cameraX, cameraZ });
 		//0.5秒間隔
 		glutTimerFunc(500, onTimer, 0);

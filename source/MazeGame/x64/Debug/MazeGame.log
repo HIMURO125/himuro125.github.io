@@ -1,14 +1,8 @@
-﻿  AABB.cpp
-  Game.cpp
-  Maze.cpp
-C:\Users\0sx6r\GitHub\himuro125.github.io\MazeGame\MazeGame\Game.cpp(2,9): warning C4005: 'M_PI': マクロが再定義されました。
-      C:\Users\0sx6r\GitHub\himuro125.github.io\bin\SDL2-2.30.9\include\SDL_stdinc.h(623,9):
-      'M_PI' の以前の定義を確認してください
-  
-C:\Users\0sx6r\GitHub\himuro125.github.io\MazeGame\MazeGame\Game.cpp(801,12): warning C4244: '引数': 'time_t' から 'unsigned int' への変換です。データが失われる可能性があります。
-  sound.cpp
-  コードを生成中...
-  MazeGame.vcxproj -> C:\Users\0sx6r\GitHub\himuro125.github.io\MazeGame\x64\Debug\MazeGame.exe
+﻿  Game.cpp
+C:\Users\0sx6r\GitHub\himuro125.github.io\source\MazeGame\Game.cpp(218,24): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\source\MazeGame\Game.cpp(221,24): warning C4305: '+=': 'double' から 'float' へ切り詰めます。
+C:\Users\0sx6r\GitHub\himuro125.github.io\source\MazeGame\Game.cpp(863,12): warning C4244: '引数': 'time_t' から 'unsigned int' への変換です。データが失われる可能性があります。
+  MazeGame.vcxproj -> C:\Users\0sx6r\GitHub\himuro125.github.io\bin\作品\x64\Debug\MazeGame.exe
   ..\..\bin\SDL2-2.30.9\lib\x64\SDL2.dll
   1 個のファイルをコピーしました
   ..\..\bin\SDL2_mixer-2.8.0\lib\x64\SDL2_mixer.dll
