@@ -131,6 +131,7 @@
     <PostBuildEvent>
       <Command>xcopy "..\..\bin\SDL2-2.30.9\lib\x64\SDL2.dll" "$(OutDir)" /i /s /y
 xcopy "..\..\bin\SDL2_mixer-2.8.0\lib\x64\SDL2_mixer.dll" "$(OutDir)" /i /s /y
+xcopy "..\..\bin\freeglut-3.6.0\build\bin\Debug\freeglutd.dll" "$(OutDir)" /i /s /y
 xcopy ".\bgm1.mp3" "$(OutDir)" /i /s /y
 xcopy ".\bgm2.mp3" "$(OutDir)" /i /s /y
 xcopy ".\bgm3.mp3" "$(OutDir)" /i /s /y
@@ -160,6 +161,7 @@ xcopy ".\key.wav" "$(OutDir)" /i /s /y</Command>
     <PostBuildEvent>
       <Command>xcopy "..\..\bin\SDL2-2.30.9\lib\x64\SDL2.dll" "$(OutDir)" /i /s /y
 xcopy "..\..\bin\SDL2_mixer-2.8.0\lib\x64\SDL2_mixer.dll" "$(OutDir)" /i /s /y
+xcopy "..\..\bin\freeglut-3.6.0\build\bin\Release\freeglut.dll" "$(OutDir)" /i /s /y
 xcopy ".\bgm1.mp3" "$(OutDir)" /i /s /y
 xcopy ".\bgm2.mp3" "$(OutDir)" /i /s /y
 xcopy ".\bgm3.mp3" "$(OutDir)" /i /s /y
