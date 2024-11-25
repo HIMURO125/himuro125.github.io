@@ -49,3 +49,5 @@ void LoadSound();                                             //音データのロード
 void PlayBGM(int i);                                          //BGMの再生、停止
 void PlaySE(int i);                                           //SEの再生
 void StopSE(int i);                                           //SEの停止
+void DrawChara(int WindowW, int WindowH, int pos, char* text);//文字の描画
+void DrawChara2(int WindowW, int WindowH, int posx, int posy, char* text);

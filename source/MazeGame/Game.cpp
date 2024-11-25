@@ -89,9 +89,10 @@ void myKeyboard(unsigned char key, int x, int y) {
 				keyflag = false;                              //フラグ等のリセット
 				gateflag = false;
 				flag = false;
-				scene = play;
+				cameraAngle = 0.0f;
 				cameraX = -34.0f;
 				cameraZ = -34.0f;
+				scene = play;
 			}
 			//レベル２
 			else if (currentItem == 1) {
@@ -102,9 +103,10 @@ void myKeyboard(unsigned char key, int x, int y) {
 				keyflag = false;                              //フラグ等のリセット
 				gateflag = false;
 				flag = false;
-				scene = play;
+				cameraAngle = 0.0f;
 				cameraX = -34.0f;
 				cameraZ = -34.0f;
+				scene = play;
 			}
 			//レベル３
 			else if (currentItem == 2) {
@@ -115,9 +117,10 @@ void myKeyboard(unsigned char key, int x, int y) {
 				keyflag = false;                              //フラグ等のリセット
 				gateflag = false;
 				flag = false;
-				scene = play;
+				cameraAngle = 0.0f;
 				cameraX = -34.0f;
 				cameraZ = -34.0f;
+				scene = play;
 			}
 			//オプション画面に遷移
 			else if (currentItem == 3) {
@@ -215,10 +218,10 @@ void mySpecialKeys(int key, int x, int y) {
 			goBack = true;
 			break;
 		case GLUT_KEY_LEFT:  //左矢印キーで左を向く
-			cameraAngle -= M_PI / 2;
+			cameraAngle -= (float)(M_PI / 2);
 			break;
 		case GLUT_KEY_RIGHT: //右矢印キーで右を向く
-			cameraAngle += M_PI / 2;
+			cameraAngle += (float)(M_PI / 2);
 			break;
 		}
 	}
@@ -308,22 +311,10 @@ void myDisplay() {
 		char Level2[7] = "Level2";
 		char Level3[7] = "Level3";
 		char Option[7] = "Option";
-		char* p;
-		int textWidth = 0;
 
-		glColor3d(1.0, 1.0, 1.0);          //文字の色設定
-		//文字数カウント
-		for (p = Titletext; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		int xPos = (WindowW - textWidth) / 2; //画面中央座標を設定
-		int yPos = WindowH / 2;
-		glRasterPos2i(xPos, yPos + 100);      //文字の位置を設定
-		//文字描画
-		for (p = Titletext; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		textWidth = 0;
+		//文字の色設定
+		glColor3d(1.0, 1.0, 1.0);
+		DrawChara(WindowW, WindowH, 100, Titletext);
 		//選択中は文字の色を変える
 		if (currentItem == 0) {
 			glColor3d(1.0, 0.0, 0.0);
@@ -331,63 +322,32 @@ void myDisplay() {
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-
-		for (p = Level1; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		xPos = (WindowW - textWidth) / 2;
-		glRasterPos2i(xPos, yPos);
-		for (p = Level1; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-
-		textWidth = 0;
+		DrawChara(WindowW, WindowH, 0, Level1);
+		
 		if (currentItem == 1) {
 			glColor3d(1.0, 0.0, 0.0);
 		}
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		for (p = Level2; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		xPos = (WindowW - textWidth) / 2;
-		glRasterPos2i(xPos, yPos - 50);
-		for (p = Level2; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-
-		textWidth = 0;
+		DrawChara(WindowW, WindowH, -50, Level2);
+		
 		if (currentItem == 2) {
 			glColor3d(1.0, 0.0, 0.0);
 		}
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		for (p = Level3; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		xPos = (WindowW - textWidth) / 2;
-		glRasterPos2i(xPos, yPos - 100);
-		for (p = Level3; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-
-		textWidth = 0;
+		DrawChara(WindowW, WindowH, -100, Level3);
+		
 		if (currentItem == 3) {
 			glColor3d(1.0, 0.0, 0.0);
 		}
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		for (p = Option; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		xPos = (WindowW - textWidth) / 2;
-		glRasterPos2i(xPos, yPos - 150);
-		for (p = Option; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
+		DrawChara(WindowW, WindowH, -150, Option);
+		
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();  //保存した変換行列を復帰
 
@@ -529,42 +489,13 @@ void myDisplay() {
 		gluOrtho2D(0, WindowW, 0, WindowH);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		char Titletext[12] = "Game Clear!";
-		char Starttext[12] = "Press Enter";
-		char* p;
-		int textWidth = 0;
+		char Resulttext[12] = "Game Clear!";
+		char Backtext[12] = "Press Enter";
 
-		for (p = Titletext; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		int xPos = (WindowW - textWidth) / 2;
-		int yPos = WindowH / 2;
-		glRasterPos2i(xPos, yPos + 50);
-		for (p = Titletext; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-
-		textWidth = 0;
-		for (p = Goal_char; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		xPos = (WindowW - textWidth) / 2;
-		yPos = WindowH / 2;
-		glRasterPos2i(xPos, yPos);
-		for (p = Goal_char; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-
-		textWidth = 0;
-		for (p = Starttext; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		xPos = (WindowW - textWidth) / 2;
-		yPos = WindowH / 2;
-		glRasterPos2i(xPos, yPos - 50);
-		for (p = Starttext; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
+		DrawChara(WindowW, WindowH, 50, Resulttext);
+		DrawChara(WindowW, WindowH, 0, Goal_char);
+		DrawChara(WindowW, WindowH, -50, Backtext);
+		
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 
@@ -586,63 +517,24 @@ void myDisplay() {
 		char Foot[11] = "Footprints";
 		char On[3] = "ON";
 		char Off[4] = "OFF";
-		char* p;
-		int textWidth = 0;
 
-		for (p = Optiontext; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		int xPos = (WindowW - textWidth) / 2;
-		int yPos = WindowH / 2;
-		glRasterPos2i(xPos, yPos + 100);
-		for (p = Optiontext; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-
-		textWidth = 0;
-		for (p = Foot; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		xPos = (WindowW - textWidth) / 2;
-		yPos = WindowH / 2;
-		glRasterPos2i(xPos, yPos);
-		for (p = Foot; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-
-		textWidth = 0;
+		DrawChara(WindowW, WindowH, 100, Optiontext);
+		DrawChara(WindowW, WindowH, 0, Foot);
 		if (currentOpItem == 0) {
 			glColor3d(1.0, 0.0, 0.0);
 		}
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		for (p = On; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		xPos = (WindowW - textWidth) / 2;
-		yPos = WindowH / 2;
-		glRasterPos2i(xPos - 50, yPos - 50);
-		for (p = On; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-
-		textWidth = 0;
+		DrawChara2(WindowW, WindowH, -50, -50, On);
 		if (currentOpItem == 1) {
 			glColor3d(1.0, 0.0, 0.0);
 		}
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		for (p = Off; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		xPos = (WindowW - textWidth) / 2;
-		yPos = WindowH / 2;
-		glRasterPos2i(xPos + 50, yPos - 50);
-		for (p = Off; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
+		DrawChara2(WindowW, WindowH, 50, -50, Off);
+		
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 
@@ -665,63 +557,24 @@ void myDisplay() {
 		char Continue[10] = "Continue?";
 		char Yes[4] = "Yes";
 		char No[3] = "No";
-		char* p;
 
-		int textWidth = 0;
-		for (p = Pausetext; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		int xPos = (WindowW - textWidth) / 2;
-		int yPos = WindowH / 2;
-		glRasterPos2i(xPos, yPos + 100);
-		for (p = Pausetext; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-
-		textWidth = 0;
-		for (p = Continue; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		xPos = (WindowW - textWidth) / 2;
-		yPos = WindowH / 2;
-		glRasterPos2i(xPos, yPos);
-		for (p = Continue; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-
-		textWidth = 0;
+		DrawChara(WindowW, WindowH, 100, Pausetext);
+		DrawChara(WindowW, WindowH, 0, Continue);
 		if (currentPaItem == 0) {
 			glColor3d(1.0, 0.0, 0.0);
 		}
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		for (p = Yes; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		xPos = (WindowW - textWidth) / 2;
-		yPos = WindowH / 2;
-		glRasterPos2i(xPos - 50, yPos - 50);
-		for (p = Yes; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-
-		textWidth = 0;
+		DrawChara2(WindowW, WindowH, -50, -50, Yes);
 		if (currentPaItem == 1) {
 			glColor3d(1.0, 0.0, 0.0);
 		}
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		for (p = No; *p; p++) {
-			textWidth += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
-		xPos = (WindowW - textWidth) / 2;
-		yPos = WindowH / 2;
-		glRasterPos2i(xPos + 50, yPos - 50);
-		for (p = No; *p; p++) {
-			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *p);
-		}
+		DrawChara2(WindowW, WindowH, 50, -50, No);
+		
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 
@@ -775,9 +628,9 @@ void onTimer(int value) {
 	if (support) {
 		//新しい足跡を足元の位置に追加
 		squares.push_back(Square{ cameraX, cameraZ });
-		//0.5秒間隔
-		glutTimerFunc(500, onTimer, 0);
 	}
+	//0.5秒間隔
+	glutTimerFunc(500, onTimer, 0);
 }
 
 /*******************************************************
@@ -860,7 +713,7 @@ void Update(int value) {
 * argv:コマンドライン引数の文字列の配列
 ********************************************************/
 int main(int argc, char** argv) {
-	srand(time(NULL));                 //乱数生成のシード値を現在時刻で設定
+	srand((unsigned int)(time(NULL)));                 //乱数生成のシード値を現在時刻で設定
 	glutInit(&argc, argv);             //GLUTライブラリの初期化 引数はウィンドウ名
 	myInit();
 	glutKeyboardFunc(myKeyboard);      //一般キーが押された時に呼び出す関数の指定

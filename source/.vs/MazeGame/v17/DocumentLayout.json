@@ -7,20 +7,12 @@
       "RelativeMoniker": "D:0:0:{D67AC087-9AAD-4CF4-AF1C-060A8C1913D5}|MazeGame\\MazeGame.vcxproj|solutionrelative:MazeGame\\Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D67AC087-9AAD-4CF4-AF1C-060A8C1913D5}|MazeGame\\MazeGame.vcxproj|C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\Maze.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{D67AC087-9AAD-4CF4-AF1C-060A8C1913D5}|MazeGame\\MazeGame.vcxproj|solutionrelative:MazeGame\\Maze.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D67AC087-9AAD-4CF4-AF1C-060A8C1913D5}|MazeGame\\MazeGame.vcxproj|C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\sound.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{D67AC087-9AAD-4CF4-AF1C-060A8C1913D5}|MazeGame\\MazeGame.vcxproj|solutionrelative:MazeGame\\sound.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{D67AC087-9AAD-4CF4-AF1C-060A8C1913D5}|MazeGame\\MazeGame.vcxproj|C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\Character.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D67AC087-9AAD-4CF4-AF1C-060A8C1913D5}|MazeGame\\MazeGame.vcxproj|solutionrelative:MazeGame\\Character.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D67AC087-9AAD-4CF4-AF1C-060A8C1913D5}|MazeGame\\MazeGame.vcxproj|C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\header.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{D67AC087-9AAD-4CF4-AF1C-060A8C1913D5}|MazeGame\\MazeGame.vcxproj|solutionrelative:MazeGame\\header.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D67AC087-9AAD-4CF4-AF1C-060A8C1913D5}|MazeGame\\MazeGame.vcxproj|C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\AABB.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{D67AC087-9AAD-4CF4-AF1C-060A8C1913D5}|MazeGame\\MazeGame.vcxproj|solutionrelative:MazeGame\\AABB.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,55 +22,33 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AABB.cpp",
-              "DocumentMoniker": "C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\AABB.cpp",
-              "RelativeDocumentMoniker": "MazeGame\\AABB.cpp",
-              "ToolTip": "C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\AABB.cpp",
-              "RelativeToolTip": "MazeGame\\AABB.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAA4AAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "Character.cpp",
+              "DocumentMoniker": "C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\Character.cpp",
+              "RelativeDocumentMoniker": "MazeGame\\Character.cpp",
+              "ToolTip": "C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\Character.cpp",
+              "RelativeToolTip": "MazeGame\\Character.cpp",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABwAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-11-15T13:51:41.724Z"
+              "WhenOpened": "2024-11-25T04:58:35.487Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "header.h",
               "DocumentMoniker": "C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\header.h",
               "RelativeDocumentMoniker": "MazeGame\\header.h",
               "ToolTip": "C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\header.h",
               "RelativeToolTip": "MazeGame\\header.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAAACAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADQAAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-11-15T01:13:38.307Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "sound.cpp",
-              "DocumentMoniker": "C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\sound.cpp",
-              "RelativeDocumentMoniker": "MazeGame\\sound.cpp",
-              "ToolTip": "C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\sound.cpp",
-              "RelativeToolTip": "MazeGame\\sound.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-11-15T01:13:35.163Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Maze.cpp",
-              "DocumentMoniker": "C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\Maze.cpp",
-              "RelativeDocumentMoniker": "MazeGame\\Maze.cpp",
-              "ToolTip": "C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\Maze.cpp",
-              "RelativeToolTip": "MazeGame\\Maze.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-11-15T01:13:35.022Z"
+              "WhenOpened": "2024-11-15T01:13:38.307Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -88,7 +58,7 @@
               "RelativeDocumentMoniker": "MazeGame\\Game.cpp",
               "ToolTip": "C:\\Users\\0sx6r\\GitHub\\himuro125.github.io\\source\\MazeGame\\Game.cpp",
               "RelativeToolTip": "MazeGame\\Game.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAZAAAAAAAAAA==",
+              "ViewState": "AgIAABsBAAAAAAAAAAAAAB4BAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-11-15T01:13:34.833Z",
               "EditorCaption": ""

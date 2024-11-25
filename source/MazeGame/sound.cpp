@@ -10,7 +10,7 @@ Mix_Music* bgm1 = nullptr;  //ˆê‚Â–Ú‚ÌBGM‚ğ•Û
 Mix_Music* bgm2 = nullptr;  //“ñ‚Â–Ú‚ÌBGM‚ğ•Û
 Mix_Music* bgm3 = nullptr;  //O‚Â–Ú‚ÌBGM‚ğ•Û
 Mix_Chunk* foot = nullptr;  //‘«Õ‚ÌSE‚ğ•Û
-Mix_Chunk* key = nullptr;   //Œ®‚ÌSE‚ğ•Û
+Mix_Chunk* key  = nullptr;  //Œ®‚ÌSE‚ğ•Û
 Mix_Chunk* gate = nullptr;  //”à‚ÌSE‚ğ•Û
 
 /*******************************************************

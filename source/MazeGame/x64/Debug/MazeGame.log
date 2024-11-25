@@ -1,11 +1,4 @@
-﻿  AABB.cpp
-  Game.cpp
-C:\Users\0sx6r\GitHub\himuro125.github.io\source\MazeGame\Game.cpp(218,24): warning C4305: '-=': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\source\MazeGame\Game.cpp(221,24): warning C4305: '+=': 'double' から 'float' へ切り詰めます。
-C:\Users\0sx6r\GitHub\himuro125.github.io\source\MazeGame\Game.cpp(863,12): warning C4244: '引数': 'time_t' から 'unsigned int' への変換です。データが失われる可能性があります。
-  Maze.cpp
-  sound.cpp
-  コードを生成中...
+﻿  Game.cpp
   MazeGame.vcxproj -> C:\Users\0sx6r\GitHub\himuro125.github.io\bin\作品\x64\Debug\MazeGame.exe
   ..\..\bin\SDL2-2.30.9\lib\x64\SDL2.dll
   1 個のファイルをコピーしました
