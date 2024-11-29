@@ -6,17 +6,15 @@
 * 　　　　　　　　　SDL2_mixer-2.8.0	SDL_mixer.h
 ********************************************************/
 #pragma once
-#include <stdlib.h>
 #include <GL/glut.h>
 #include <SDL.h>
 #include <SDL_mixer.h>
-#include <math.h>
-#include <time.h>
+#include <cmath>
+#include <ctime>
 #include <vector>
 #include <random>
 #include <chrono>
-#include <string>
-#include <cstring>
+#include <cstdio>
 
 //座標構造体を定義
 struct Vector3 {

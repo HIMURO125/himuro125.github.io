@@ -34,11 +34,14 @@ const int play = 1;                 //ゲーム画面を1とする
 const int result = 2;               //リザルト画面を2とする
 const int option = 3;               //オプション画面を3とする
 const int pause = 4;                //ポーズ画面を4とする
+const int select = 5;               //セレクト画面を5とする
+const int explain = 6;              //説明画面を6とする
 int WindowW = 0;                    //ウィンドウの幅
 int WindowH = 0;                    //ウィンドウの高さ
-int currentItem = 0;                //タイトル画面の選択項目
+int currentTiItem = 0;              //タイトル画面の選択項目
 int currentOpItem = 0;              //オプション画面の選択項目
 int currentPaItem = 0;              //ポーズ画面の選択項目
+int currentSeItem = 0;              //セレクト画面の選択項目
 std::chrono::time_point<std::chrono::steady_clock> start_time;        //ステージを始めた時間
 std::chrono::time_point<std::chrono::steady_clock> pause_start_time;  //ポーズ画面を開き始めた時間
 std::chrono::time_point<std::chrono::steady_clock> pause_end_time;    //ポーズ画面を閉じた時間
@@ -80,50 +83,16 @@ void myKeyboard(unsigned char key, int x, int y) {
 	if (scene == title) {
 		//Enterキー
 		if (key == 13) {
-			//レベル１
-			if (currentItem == 0) {
-				currentPaItem = 0;
-				size = 9;
-				maze = InitMaze(size);                        //サイズを指定して迷路作成
-				start_time = std::chrono::steady_clock::now();//開始時刻の記録
-				keyflag = false;                              //フラグ等のリセット
-				gateflag = false;
-				flag = false;
-				cameraAngle = 0.0f;
-				cameraX = -34.0f;
-				cameraZ = -34.0f;
-				scene = play;
+			//セレクト画面に遷移
+			if (currentTiItem == 0) {
+				scene = select;
 			}
-			//レベル２
-			else if (currentItem == 1) {
-				currentPaItem = 0;
-				size = 15;
-				maze = InitMaze(size);                        //サイズを指定して迷路作成
-				start_time = std::chrono::steady_clock::now();//開始時刻の記録
-				keyflag = false;                              //フラグ等のリセット
-				gateflag = false;
-				flag = false;
-				cameraAngle = 0.0f;
-				cameraX = -34.0f;
-				cameraZ = -34.0f;
-				scene = play;
-			}
-			//レベル３
-			else if (currentItem == 2) {
-				currentPaItem = 0;
-				size = 21;
-				maze = InitMaze(size);                        //サイズを指定して迷路作成
-				start_time = std::chrono::steady_clock::now();//開始時刻の記録
-				keyflag = false;                              //フラグ等のリセット
-				gateflag = false;
-				flag = false;
-				cameraAngle = 0.0f;
-				cameraX = -34.0f;
-				cameraZ = -34.0f;
-				scene = play;
+			//説明画面に遷移
+			else if (currentTiItem == 1) {
+				scene = explain;
 			}
 			//オプション画面に遷移
-			else if (currentItem == 3) {
+			else if (currentTiItem == 2) {
 				scene = option;
 			}
 		}
@@ -174,6 +143,67 @@ void myKeyboard(unsigned char key, int x, int y) {
 			}
 		}
 	}
+	//セレクト画面
+	else if (scene == select) {
+		//Enterキー
+		if (key == 13) {
+			//レベル１
+			if (currentSeItem == 0) {
+				currentPaItem = 0;
+				size = 9;
+				maze = InitMaze(size);                        //サイズを指定して迷路作成
+				start_time = std::chrono::steady_clock::now();//開始時刻の記録
+				keyflag = false;                              //フラグ等のリセット
+				gateflag = false;
+				flag = false;
+				cameraAngle = 0.0f;
+				cameraX = -34.0f;
+				cameraZ = -34.0f;
+				scene = play;
+				currentSeItem = 0;
+			}
+			//レベル２
+			else if (currentSeItem == 1) {
+				currentPaItem = 0;
+				size = 15;
+				maze = InitMaze(size);                        //サイズを指定して迷路作成
+				start_time = std::chrono::steady_clock::now();//開始時刻の記録
+				keyflag = false;                              //フラグ等のリセット
+				gateflag = false;
+				flag = false;
+				cameraAngle = 0.0f;
+				cameraX = -34.0f;
+				cameraZ = -34.0f;
+				scene = play;
+				currentSeItem = 0;
+			}
+			//レベル３
+			else if (currentSeItem == 2) {
+				currentPaItem = 0;
+				size = 21;
+				maze = InitMaze(size);                        //サイズを指定して迷路作成
+				start_time = std::chrono::steady_clock::now();//開始時刻の記録
+				keyflag = false;                              //フラグ等のリセット
+				gateflag = false;
+				flag = false;
+				cameraAngle = 0.0f;
+				cameraX = -34.0f;
+				cameraZ = -34.0f;
+				scene = play;
+				currentSeItem = 0;
+			}
+			//タイトル画面に遷移
+			else if (currentSeItem == 3) {
+				scene = title;
+				currentSeItem = 0;
+			}
+		}
+	}
+	//説明画面
+	else if (scene == explain) {
+		if (key == 13)
+			scene = title;
+	}
 	//Escキー
 	if (key == 27)
 		exit(0);  //終了
@@ -190,10 +220,10 @@ void mySpecialKeys(int key, int x, int y) {
 	if (scene == title) {
 		switch (key) {
 		case GLUT_KEY_UP:   //上矢印キーで項目を上に移動
-			currentItem = (currentItem + 3) % 4;
+			currentTiItem = (currentTiItem + 2) % 3;
 			break;
 		case GLUT_KEY_DOWN: //上矢印キーで項目を下に移動
-			currentItem = (currentItem + 1) % 4;
+			currentTiItem = (currentTiItem + 1) % 3;
 			break;
 		}
 	}
@@ -233,6 +263,17 @@ void mySpecialKeys(int key, int x, int y) {
 			break;
 		case GLUT_KEY_RIGHT: //右矢印キーで項目を右に移動
 			currentPaItem = (currentPaItem + 1) % 2;
+			break;
+		}
+	}
+	//セレクト画面
+	else if (scene == select) {
+		switch (key) {
+		case GLUT_KEY_UP:   //上矢印キーで項目を上に移動
+			currentSeItem = (currentSeItem + 3) % 4;
+			break;
+		case GLUT_KEY_DOWN: //上矢印キーで項目を下に移動
+			currentSeItem = (currentSeItem + 1) % 4;
 			break;
 		}
 	}
@@ -307,46 +348,37 @@ void myDisplay() {
 		glMatrixMode(GL_MODELVIEW);        //モデルビュー行列スタックを選択
 		glLoadIdentity();
 		char Titletext[17] = "3D Maze Explorer";  //文字列配列
-		char Level1[7] = "Level1";
-		char Level2[7] = "Level2";
-		char Level3[7] = "Level3";
+		char Select[13] = "Stage Select";
+		char Explain[12] = "Explanation";
 		char Option[7] = "Option";
 
 		//文字の色設定
 		glColor3d(1.0, 1.0, 1.0);
 		DrawChara(WindowW, WindowH, 100, Titletext);
 		//選択中は文字の色を変える
-		if (currentItem == 0) {
+		if (currentTiItem == 0) {
 			glColor3d(1.0, 0.0, 0.0);
 		}
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		DrawChara(WindowW, WindowH, 0, Level1);
+		DrawChara(WindowW, WindowH, 0, Select);
 		
-		if (currentItem == 1) {
+		if (currentTiItem == 1) {
 			glColor3d(1.0, 0.0, 0.0);
 		}
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		DrawChara(WindowW, WindowH, -50, Level2);
+		DrawChara(WindowW, WindowH, -50, Explain);
 		
-		if (currentItem == 2) {
+		if (currentTiItem == 2) {
 			glColor3d(1.0, 0.0, 0.0);
 		}
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		DrawChara(WindowW, WindowH, -100, Level3);
-		
-		if (currentItem == 3) {
-			glColor3d(1.0, 0.0, 0.0);
-		}
-		else {
-			glColor3d(1.0, 1.0, 1.0);
-		}
-		DrawChara(WindowW, WindowH, -150, Option);
+		DrawChara(WindowW, WindowH, -100, Option);
 		
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();  //保存した変換行列を復帰
@@ -575,6 +607,95 @@ void myDisplay() {
 		}
 		DrawChara2(WindowW, WindowH, 50, -50, No);
 		
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+	}
+	//セレクト画面
+	else if (scene == select) {
+		glPushMatrix();
+		glMatrixMode(GL_PROJECTION);
+
+		glPushMatrix();
+		glLoadIdentity();
+		gluOrtho2D(0, WindowW, 0, WindowH);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		char Selecttext[13] = "Stage Select";
+		char Level1[7] = "Level1";
+		char Level2[7] = "Level2";
+		char Level3[7] = "Level3";
+		char Back[5] = "Back";
+
+		//文字の色設定
+		glColor3d(1.0, 1.0, 1.0);
+		DrawChara(WindowW, WindowH, 100, Selecttext);
+		//選択中は文字の色を変える
+		if (currentSeItem == 0) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, 0, Level1);
+
+		if (currentSeItem == 1) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, -50, Level2);
+
+		if (currentSeItem == 2) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, -100, Level3);
+
+		if (currentSeItem == 3) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, -150, Back);
+
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();  //保存した変換行列を復帰
+
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+	}
+	//説明画面
+	else if (scene == explain) {
+		glPushMatrix();
+		glColor3f(1, 1, 1);
+		glMatrixMode(GL_PROJECTION);
+
+		glPushMatrix();
+		glLoadIdentity();
+		gluOrtho2D(0, WindowW, 0, WindowH);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		char Extext[12] = "Explanation";
+		char Ex1[17] = "Arrows:Move,Turn";
+		char Ex2[8] = "P:Pause";
+		char Ex3[10] = "Esc:Exit";
+		char Back[5] = "Back";
+
+		glColor3d(1.0, 1.0, 1.0);
+		DrawChara(WindowW, WindowH, 100, Extext);
+		DrawChara(WindowW, WindowH, 0, Ex1);
+		DrawChara(WindowW, WindowH, -50, Ex2);
+		DrawChara(WindowW, WindowH, -100, Ex3);
+		glColor3d(1.0, 0.0, 0.0);
+		DrawChara(WindowW, WindowH, -200, Back);
+
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 
