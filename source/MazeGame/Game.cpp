@@ -945,8 +945,8 @@ void Update(int value) {
 	}
 	//オプション画面
 	else if (scene == option) {
-		SetBGMVolume(currentOpItem3);
-		SetSEVolume(currentOpItem4);
+		SetBGMVolume(currentOpItem3);//BGM音量設定
+		SetSEVolume(currentOpItem4); //SE音量設定
 	}
 	glutPostRedisplay(); //再描画を指示する
 	glutTimerFunc(16, Update, 0);

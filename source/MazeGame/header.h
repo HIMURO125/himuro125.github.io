@@ -48,5 +48,5 @@ void PlayBGM(int i);                                          //BGMÇÃçƒê∂ÅAí‚é~
 void PlaySE(int i);                                           //SEÇÃçƒê∂
 void StopSE(int i);                                           //SEÇÃí‚é~
 void DrawChara(int WindowW, int WindowH, int posx, int posy, char* text);//ï∂éöÇÃï`âÊ
-void SetBGMVolume(int i);
-void SetSEVolume(int i);
+void SetBGMVolume(int i);                                     //BGMâπó ê›íË
+void SetSEVolume(int i);                                      //SEâπó ê›íË
