@@ -39,7 +39,10 @@ const int explain = 6;              //説明画面を6とする
 int WindowW = 0;                    //ウィンドウの幅
 int WindowH = 0;                    //ウィンドウの高さ
 int currentTiItem = 0;              //タイトル画面の選択項目
-int currentOpItem = 0;              //オプション画面の選択項目
+int currentOpItem1 = 0;             //オプション画面の選択項目 行選択
+int currentOpItem2 = 0;				//足跡項目
+int currentOpItem3 = 4;				//BGM音量項目
+int currentOpItem4 = 4;				//SE音量項目
 int currentPaItem = 0;              //ポーズ画面の選択項目
 int currentSeItem = 0;              //セレクト画面の選択項目
 std::chrono::time_point<std::chrono::steady_clock> start_time;        //ステージを始めた時間
@@ -106,17 +109,18 @@ void myKeyboard(unsigned char key, int x, int y) {
 	}
 	//オプション画面
 	else if (scene == option) {
-		//Enterキー
-		if (key == 13) {
+		//最終行が選択されている、Enterキーを押す
+		if (currentOpItem1 == 3 && key == 13) {
 			//足跡機能ON
-			if (currentOpItem == 0) {
+			if (currentOpItem2 == 0) {
 				support = true;
 			}
 			//足跡機能OFF
-			else if (currentOpItem == 1) {
+			else if (currentOpItem2 == 1) {
 				support = false;
 			}
-			scene = title;  //タイトル画面に遷移
+			scene = title;		//タイトル画面に遷移
+			currentOpItem1 = 0; //選択行リセット
 		}
 	}
 	//ゲーム画面
@@ -231,10 +235,38 @@ void mySpecialKeys(int key, int x, int y) {
 	else if (scene == option) {
 		switch (key) {
 		case GLUT_KEY_LEFT:  //左矢印キーで項目を左に移動
-			currentOpItem = (currentOpItem + 1) % 2; 
+			//足跡
+			if (currentOpItem1 == 0) {
+				currentOpItem2 = (currentOpItem2 + 1) % 2;
+			}
+			//BGM
+			else if (currentOpItem1 == 1) {
+				currentOpItem3 = (currentOpItem3 + 4) % 5;
+			}
+			//SE
+			else if (currentOpItem1 == 2) {
+				currentOpItem4 = (currentOpItem4 + 4) % 5;
+			}
 			break;
 		case GLUT_KEY_RIGHT: //右矢印キーで項目を右に移動
-			currentOpItem = (currentOpItem + 1) % 2;
+			//足跡
+			if (currentOpItem1 == 0) {
+				currentOpItem2 = (currentOpItem2 + 1) % 2;
+			}
+			//BGM
+			else if (currentOpItem1 == 1) {
+				currentOpItem3 = (currentOpItem3 + 1) % 5;
+			}
+			//SE
+			else if (currentOpItem1 == 2) {
+				currentOpItem4 = (currentOpItem4 + 1) % 5;
+			}
+			break;
+		case GLUT_KEY_UP:   //上矢印キーで行を上に移動
+			currentOpItem1 = (currentOpItem1 + 3) % 4;
+			break;
+		case GLUT_KEY_DOWN: //下矢印キーで行を下に移動
+			currentOpItem1 = (currentOpItem1 + 1) % 4;
 			break;
 		}
 	}
@@ -330,7 +362,6 @@ void myDisplay() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //グラフィックス用のフレームバッファ、zバッファの初期化
 	//タイトル画面
 	if (scene == title) {
-		squares.clear(); //足跡消去
 		PlaySound = false;
 		ResultSound = false;
 		//BGM再生
@@ -354,7 +385,7 @@ void myDisplay() {
 
 		//文字の色設定
 		glColor3d(1.0, 1.0, 1.0);
-		DrawChara(WindowW, WindowH, 100, Titletext);
+		DrawChara(WindowW, WindowH, 0, 100, Titletext);
 		//選択中は文字の色を変える
 		if (currentTiItem == 0) {
 			glColor3d(1.0, 0.0, 0.0);
@@ -362,7 +393,7 @@ void myDisplay() {
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		DrawChara(WindowW, WindowH, 0, Select);
+		DrawChara(WindowW, WindowH, 0, 0, Select);
 		
 		if (currentTiItem == 1) {
 			glColor3d(1.0, 0.0, 0.0);
@@ -370,7 +401,7 @@ void myDisplay() {
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		DrawChara(WindowW, WindowH, -50, Explain);
+		DrawChara(WindowW, WindowH, 0, -50, Explain);
 		
 		if (currentTiItem == 2) {
 			glColor3d(1.0, 0.0, 0.0);
@@ -378,7 +409,7 @@ void myDisplay() {
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		DrawChara(WindowW, WindowH, -100, Option);
+		DrawChara(WindowW, WindowH, 0, -100, Option);
 		
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();  //保存した変換行列を復帰
@@ -501,7 +532,6 @@ void myDisplay() {
 	}
 	//リザルト画面
 	else if (scene == result) {
-		squares.clear();
 		StopSE(2);  //扉のSE停止
 		TitleSound = false;
 		PlaySound = false;
@@ -524,9 +554,9 @@ void myDisplay() {
 		char Resulttext[12] = "Game Clear!";
 		char Backtext[12] = "Press Enter";
 
-		DrawChara(WindowW, WindowH, 50, Resulttext);
-		DrawChara(WindowW, WindowH, 0, Goal_char);
-		DrawChara(WindowW, WindowH, -50, Backtext);
+		DrawChara(WindowW, WindowH, 0, 50, Resulttext);
+		DrawChara(WindowW, WindowH, 0, 0, Goal_char);
+		DrawChara(WindowW, WindowH, 0, -50, Backtext);
 		
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
@@ -549,23 +579,112 @@ void myDisplay() {
 		char Foot[11] = "Footprints";
 		char On[3] = "ON";
 		char Off[4] = "OFF";
+		char BGM[4] = "BGM";
+		char SE[3] = "SE";
+		char One[2] = "1";
+		char Two[2] = "2";
+		char Three[2] = "3";
+		char Max[4] = "MAX";
+		char Ok[3] = "OK";
 
-		DrawChara(WindowW, WindowH, 100, Optiontext);
-		DrawChara(WindowW, WindowH, 0, Foot);
-		if (currentOpItem == 0) {
+		//文字描画
+		DrawChara(WindowW, WindowH, 0, 150, Optiontext);
+		DrawChara(WindowW, WindowH, 0, 100, Foot);
+		if (currentOpItem1 == 0 && currentOpItem2 == 0) {
 			glColor3d(1.0, 0.0, 0.0);
 		}
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		DrawChara2(WindowW, WindowH, -50, -50, On);
-		if (currentOpItem == 1) {
+		DrawChara(WindowW, WindowH, -50, 50, On);
+		if (currentOpItem1 == 0 && currentOpItem2 == 1) {
 			glColor3d(1.0, 0.0, 0.0);
 		}
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		DrawChara2(WindowW, WindowH, 50, -50, Off);
+		DrawChara(WindowW, WindowH, 50, 50, Off);
+		glColor3d(1.0, 1.0, 1.0);
+		DrawChara(WindowW, WindowH, 0, 0, BGM);
+		if (currentOpItem1 == 1 && currentOpItem3 == 0) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, -150, -50, Off);
+		if (currentOpItem1 == 1 && currentOpItem3 == 1) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, -75, -50, One);
+		if (currentOpItem1 == 1 && currentOpItem3 == 2) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, 0, -50, Two);
+		if (currentOpItem1 == 1 && currentOpItem3 == 3) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, 75, -50, Three);
+		if (currentOpItem1 == 1 && currentOpItem3 == 4) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, 150, -50, Max);
+		glColor3d(1.0, 1.0, 1.0);
+		DrawChara(WindowW, WindowH, 0, -100, SE);
+		if (currentOpItem1 == 2 && currentOpItem4 == 0) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, -150, -150, Off);
+		if (currentOpItem1 == 2 && currentOpItem4 == 1) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, -75, -150, One);
+		if (currentOpItem1 == 2 && currentOpItem4 == 2) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, 0, -150, Two);
+		if (currentOpItem1 == 2 && currentOpItem4 == 3) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, 75, -150, Three);
+		if (currentOpItem1 == 2 && currentOpItem4 == 4) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, 150, -150, Max);
+		if (currentOpItem1 == 3) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, 0, -200, Ok);
 		
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
@@ -590,22 +709,22 @@ void myDisplay() {
 		char Yes[4] = "Yes";
 		char No[3] = "No";
 
-		DrawChara(WindowW, WindowH, 100, Pausetext);
-		DrawChara(WindowW, WindowH, 0, Continue);
+		DrawChara(WindowW, WindowH, 0, 100, Pausetext);
+		DrawChara(WindowW, WindowH, 0, 0, Continue);
 		if (currentPaItem == 0) {
 			glColor3d(1.0, 0.0, 0.0);
 		}
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		DrawChara2(WindowW, WindowH, -50, -50, Yes);
+		DrawChara(WindowW, WindowH, -50, -50, Yes);
 		if (currentPaItem == 1) {
 			glColor3d(1.0, 0.0, 0.0);
 		}
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		DrawChara2(WindowW, WindowH, 50, -50, No);
+		DrawChara(WindowW, WindowH, 50, -50, No);
 		
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
@@ -615,6 +734,7 @@ void myDisplay() {
 	}
 	//セレクト画面
 	else if (scene == select) {
+		squares.clear(); //足跡消去
 		glPushMatrix();
 		glMatrixMode(GL_PROJECTION);
 
@@ -631,7 +751,7 @@ void myDisplay() {
 
 		//文字の色設定
 		glColor3d(1.0, 1.0, 1.0);
-		DrawChara(WindowW, WindowH, 100, Selecttext);
+		DrawChara(WindowW, WindowH, 0, 100, Selecttext);
 		//選択中は文字の色を変える
 		if (currentSeItem == 0) {
 			glColor3d(1.0, 0.0, 0.0);
@@ -639,7 +759,7 @@ void myDisplay() {
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		DrawChara(WindowW, WindowH, 0, Level1);
+		DrawChara(WindowW, WindowH, 0, 0, Level1);
 
 		if (currentSeItem == 1) {
 			glColor3d(1.0, 0.0, 0.0);
@@ -647,7 +767,7 @@ void myDisplay() {
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		DrawChara(WindowW, WindowH, -50, Level2);
+		DrawChara(WindowW, WindowH, 0, -50, Level2);
 
 		if (currentSeItem == 2) {
 			glColor3d(1.0, 0.0, 0.0);
@@ -655,7 +775,7 @@ void myDisplay() {
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		DrawChara(WindowW, WindowH, -100, Level3);
+		DrawChara(WindowW, WindowH, 0, -100, Level3);
 
 		if (currentSeItem == 3) {
 			glColor3d(1.0, 0.0, 0.0);
@@ -663,7 +783,7 @@ void myDisplay() {
 		else {
 			glColor3d(1.0, 1.0, 1.0);
 		}
-		DrawChara(WindowW, WindowH, -150, Back);
+		DrawChara(WindowW, WindowH, 0, -150, Back);
 
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();  //保存した変換行列を復帰
@@ -689,12 +809,12 @@ void myDisplay() {
 		char Back[5] = "Back";
 
 		glColor3d(1.0, 1.0, 1.0);
-		DrawChara(WindowW, WindowH, 100, Extext);
-		DrawChara(WindowW, WindowH, 0, Ex1);
-		DrawChara(WindowW, WindowH, -50, Ex2);
-		DrawChara(WindowW, WindowH, -100, Ex3);
+		DrawChara(WindowW, WindowH, 0, 100, Extext);
+		DrawChara(WindowW, WindowH, 0, 0, Ex1);
+		DrawChara(WindowW, WindowH, 0, -50, Ex2);
+		DrawChara(WindowW, WindowH, 0, -100, Ex3);
 		glColor3d(1.0, 0.0, 0.0);
-		DrawChara(WindowW, WindowH, -200, Back);
+		DrawChara(WindowW, WindowH, 0, -200, Back);
 
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
@@ -822,6 +942,11 @@ void Update(int value) {
 			snprintf(Goal_char, sizeof(Goal_char), "Clear Time: %lld Seconds", Goalseconds);
 			scene = result;
 		}
+	}
+	//オプション画面
+	else if (scene == option) {
+		SetBGMVolume(currentOpItem3);
+		SetSEVolume(currentOpItem4);
 	}
 	glutPostRedisplay(); //再描画を指示する
 	glutTimerFunc(16, Update, 0);

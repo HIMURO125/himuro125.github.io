@@ -48,6 +48,8 @@ void closeSDL() {
 * BGM、SEの読み込みを行う関数
 * プロジェクトフォルダの指定した音ファイルを読み込み変数に格納する
 * どれか一つでも読み込みに失敗した場合プログラムを終了させる
+* BGM音量は25%に設定
+* SE音量は100%に設定
 ********************************************************/
 void LoadSound() {
     bgm1 = Mix_LoadMUS("bgm1.mp3");  //BGMの読み込み
@@ -61,17 +63,19 @@ void LoadSound() {
         closeSDL();
         exit(0);
     }
+    Mix_VolumeMusic(32);             //BGM音量調整
+    Mix_VolumeChunk(foot, 128);      //SE音量調整
+    Mix_VolumeChunk(key, 128);
+    Mix_VolumeChunk(gate, 128);
 }
 
 /*******************************************************
 * BGMの再生、停止を行う関数
 * BGMを全て停止させた後、引数で指定したBGMを再生する
-* BGM音量は25%に設定
 * 引数
 * i:BGMを指定する値
 ********************************************************/
 void PlayBGM(int i) {
-    Mix_VolumeMusic(32);          //BGM音量調整
     Mix_HaltMusic();              //全てのBGMの停止
     if (i == 0) {
         Mix_PlayMusic(bgm1, -1);  //bgm1を無限ループで再生
@@ -86,14 +90,11 @@ void PlayBGM(int i) {
 
 /*******************************************************
 * SEの再生を行う関数
-* SE音量は100%に設定
 * 引数
 * i:SEを指定する値
 ********************************************************/
 void PlaySE(int i) {
-    Mix_VolumeChunk(foot, 128);        //SE音量調整
-    Mix_VolumeChunk(key, 128);
-    Mix_VolumeChunk(gate, 128);
+    
     if (i == 0) {
         Mix_PlayChannel(0, foot, -1);  //footを無限ループで再生
     }
@@ -119,5 +120,61 @@ void StopSE(int i) {
     }
     else if (i == 2) {
         Mix_HaltChannel(2);    //チャンネル2番(gate)を停止
+    }
+}
+
+/*******************************************************
+* BGMの音量調整を行う関数
+* 引数
+* i:調整レベルを指定する値
+********************************************************/
+void SetBGMVolume(int i) {
+    if (i == 0) {
+        Mix_VolumeMusic(0);
+    }
+    else if (i == 1) {
+        Mix_VolumeMusic(8);
+    }
+    else if (i == 2) {
+        Mix_VolumeMusic(16);
+    }
+    else if (i == 3) {
+        Mix_VolumeMusic(24);
+    }
+    else if (i == 4) {
+        Mix_VolumeMusic(32);
+    }
+}
+
+/*******************************************************
+* SEの音量調整を行う関数
+* 引数
+* i:調整レベルを指定する値
+********************************************************/
+void SetSEVolume(int i) {
+    if (i == 0) {
+        Mix_VolumeChunk(foot, 0);
+        Mix_VolumeChunk(key, 0);
+        Mix_VolumeChunk(gate, 0);
+    }
+    else if (i == 1) {
+        Mix_VolumeChunk(foot, 32);
+        Mix_VolumeChunk(key, 32);
+        Mix_VolumeChunk(gate, 32);
+    }
+    else if (i == 2) {
+        Mix_VolumeChunk(foot, 64);
+        Mix_VolumeChunk(key, 64);
+        Mix_VolumeChunk(gate, 64);
+    }
+    else if (i == 3) {
+        Mix_VolumeChunk(foot, 96);
+        Mix_VolumeChunk(key, 96);
+        Mix_VolumeChunk(gate, 96);
+    }
+    else if (i == 4) {
+        Mix_VolumeChunk(foot, 128);
+        Mix_VolumeChunk(key, 128);
+        Mix_VolumeChunk(gate, 128);
     }
 }
