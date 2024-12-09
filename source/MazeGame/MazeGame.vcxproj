@@ -139,7 +139,9 @@ xcopy ".\bgm2.mp3" "$(OutDir)" /i /s /y
 xcopy ".\bgm3.mp3" "$(OutDir)" /i /s /y
 xcopy ".\foot.wav" "$(OutDir)" /i /s /y
 xcopy ".\gate.wav" "$(OutDir)" /i /s /y
-xcopy ".\key.wav" "$(OutDir)" /i /s /y</Command>
+xcopy ".\key.wav" "$(OutDir)" /i /s /y
+xcopy ".\cursor.wav" "$(OutDir)" /i /s /y
+xcopy ".\enter.wav" "$(OutDir)" /i /s /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -170,7 +172,9 @@ xcopy ".\bgm2.mp3" "$(OutDir)" /i /s /y
 xcopy ".\bgm3.mp3" "$(OutDir)" /i /s /y
 xcopy ".\foot.wav" "$(OutDir)" /i /s /y
 xcopy ".\gate.wav" "$(OutDir)" /i /s /y
-xcopy ".\key.wav" "$(OutDir)" /i /s /y</Command>
+xcopy ".\key.wav" "$(OutDir)" /i /s /y
+xcopy ".\cursor.wav" "$(OutDir)" /i /s /y
+xcopy ".\enter.wav" "$(OutDir)" /i /s /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

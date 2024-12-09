@@ -86,6 +86,7 @@ void myKeyboard(unsigned char key, int x, int y) {
 	if (scene == title) {
 		//Enterキー
 		if (key == 13) {
+			PlaySE(4);
 			//セレクト画面に遷移
 			if (currentTiItem == 0) {
 				scene = select;
@@ -111,6 +112,7 @@ void myKeyboard(unsigned char key, int x, int y) {
 	else if (scene == option) {
 		//最終行が選択されている、Enterキーを押す
 		if (currentOpItem1 == 3 && key == 13) {
+			PlaySE(4);
 			//足跡機能ON
 			if (currentOpItem2 == 0) {
 				support = true;
@@ -135,6 +137,7 @@ void myKeyboard(unsigned char key, int x, int y) {
 	else if (scene == pause) {
 		//Enterキー
 		if (key == 13) {
+			PlaySE(4);
 			//Yes
 			if (currentPaItem == 0) {
 				pause_end_time = std::chrono::steady_clock::now();             //ポーズ終了時刻の記録
@@ -151,6 +154,7 @@ void myKeyboard(unsigned char key, int x, int y) {
 	else if (scene == select) {
 		//Enterキー
 		if (key == 13) {
+			PlaySE(4);
 			//レベル１
 			if (currentSeItem == 0) {
 				currentPaItem = 0;
@@ -205,8 +209,10 @@ void myKeyboard(unsigned char key, int x, int y) {
 	}
 	//説明画面
 	else if (scene == explain) {
-		if (key == 13)
+		if (key == 13) {
+			PlaySE(4);
 			scene = title;
+		}
 	}
 	//Escキー
 	if (key == 27)
@@ -225,9 +231,11 @@ void mySpecialKeys(int key, int x, int y) {
 		switch (key) {
 		case GLUT_KEY_UP:   //上矢印キーで項目を上に移動
 			currentTiItem = (currentTiItem + 2) % 3;
+			PlaySE(3);
 			break;
 		case GLUT_KEY_DOWN: //上矢印キーで項目を下に移動
 			currentTiItem = (currentTiItem + 1) % 3;
+			PlaySE(3);
 			break;
 		}
 	}
@@ -247,6 +255,7 @@ void mySpecialKeys(int key, int x, int y) {
 			else if (currentOpItem1 == 2) {
 				currentOpItem4 = (currentOpItem4 + 4) % 5;
 			}
+			PlaySE(3);
 			break;
 		case GLUT_KEY_RIGHT: //右矢印キーで項目を右に移動
 			//足跡
@@ -261,12 +270,15 @@ void mySpecialKeys(int key, int x, int y) {
 			else if (currentOpItem1 == 2) {
 				currentOpItem4 = (currentOpItem4 + 1) % 5;
 			}
+			PlaySE(3);
 			break;
 		case GLUT_KEY_UP:   //上矢印キーで行を上に移動
 			currentOpItem1 = (currentOpItem1 + 3) % 4;
+			PlaySE(3);
 			break;
 		case GLUT_KEY_DOWN: //下矢印キーで行を下に移動
 			currentOpItem1 = (currentOpItem1 + 1) % 4;
+			PlaySE(3);
 			break;
 		}
 	}
@@ -292,9 +304,11 @@ void mySpecialKeys(int key, int x, int y) {
 		switch (key) {
 		case GLUT_KEY_LEFT:  //左矢印キーで項目を左に移動
 			currentPaItem = (currentPaItem + 1) % 2;
+			PlaySE(3);
 			break;
 		case GLUT_KEY_RIGHT: //右矢印キーで項目を右に移動
 			currentPaItem = (currentPaItem + 1) % 2;
+			PlaySE(3);
 			break;
 		}
 	}
@@ -303,9 +317,11 @@ void mySpecialKeys(int key, int x, int y) {
 		switch (key) {
 		case GLUT_KEY_UP:   //上矢印キーで項目を上に移動
 			currentSeItem = (currentSeItem + 3) % 4;
+			PlaySE(3);
 			break;
 		case GLUT_KEY_DOWN: //上矢印キーで項目を下に移動
 			currentSeItem = (currentSeItem + 1) % 4;
+			PlaySE(3);
 			break;
 		}
 	}

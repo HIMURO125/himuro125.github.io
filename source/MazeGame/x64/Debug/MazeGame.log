@@ -1,9 +1,4 @@
-﻿  AABB.cpp
-  Character.cpp
-  Game.cpp
-  Maze.cpp
-  sound.cpp
-  コードを生成中...
+﻿  Game.cpp
   MazeGame.vcxproj -> C:\Users\0sx6r\GitHub\himuro125.github.io\bin\作品\x64\Debug\MazeGame.exe
   ..\..\bin\SDL2-2.30.9\lib\x64\SDL2.dll
   1 個のファイルをコピーしました
@@ -22,4 +17,8 @@
   .\gate.wav
   1 個のファイルをコピーしました
   .\key.wav
+  1 個のファイルをコピーしました
+  .\cursor.wav
+  1 個のファイルをコピーしました
+  .\enter.wav
   1 個のファイルをコピーしました

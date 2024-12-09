@@ -65,6 +65,10 @@ https://soundeffect-lab.info/sound/search.php?s=%E3%82%A2%E3%82%B9%E3%83%95%E3%8
 https://soundeffect-lab.info/sound/search.php?s=%E9%9E%98%E3%82%92%E6%8C%81%E3%81%A4
 門を開ける.mp3(wav形式へと変換)
 https://soundeffect-lab.info/sound/search.php?s=%E9%96%80%E3%82%92%E9%96%8B%E3%81%91%E3%82%8B
+カーソル移動6.mp3(wav形式へと変換)
+https://soundeffect-lab.info/sound/search.php?s=%E3%82%AB%E3%83%BC%E3%82%BD%E3%83%AB%E7%A7%BB%E5%8B%956
+決定ボタンを押す7.mp3(wav形式へと変換)
+https://soundeffect-lab.info/sound/search.php?s=%E6%B1%BA%E5%AE%9A%E3%83%9C%E3%82%BF%E3%83%B3%E3%82%92%E6%8A%BC%E3%81%997
 
 BGM：FREE BGM  DOVA-SYNDROME
 真相究明.mp3

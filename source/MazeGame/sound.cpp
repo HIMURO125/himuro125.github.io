@@ -12,6 +12,8 @@ Mix_Music* bgm3 = nullptr;  //三つ目のBGMを保持
 Mix_Chunk* foot = nullptr;  //足跡のSEを保持
 Mix_Chunk* key  = nullptr;  //鍵のSEを保持
 Mix_Chunk* gate = nullptr;  //扉のSEを保持
+Mix_Chunk* cursor = nullptr;//カーソル移動のSEを保持
+Mix_Chunk* enter = nullptr; //決定時のSEを保持
 
 /*******************************************************
 * SDL、SDL_mixerの初期化を行う関数
@@ -40,6 +42,8 @@ void closeSDL() {
     Mix_FreeChunk(foot);  //SEの開放
     Mix_FreeChunk(key);
     Mix_FreeChunk(gate);
+    Mix_FreeChunk(cursor);
+    Mix_FreeChunk(enter);
     Mix_CloseAudio();     //SDL_mixerの終了
     SDL_Quit();           //SDLの終了
 }
@@ -58,8 +62,10 @@ void LoadSound() {
     foot = Mix_LoadWAV("foot.wav");  //SEの読み込み
     key = Mix_LoadWAV("key.wav");
     gate = Mix_LoadWAV("gate.wav");
+    cursor = Mix_LoadWAV("cursor.wav");
+    enter = Mix_LoadWAV("enter.wav");
     //読み込み失敗
-    if (!bgm1 || !bgm2 || !bgm3 || !foot || !key || !gate) {
+    if (!bgm1 || !bgm2 || !bgm3 || !foot || !key || !gate || !cursor || !enter) {
         closeSDL();
         exit(0);
     }
@@ -67,6 +73,7 @@ void LoadSound() {
     Mix_VolumeChunk(foot, 128);      //SE音量調整
     Mix_VolumeChunk(key, 128);
     Mix_VolumeChunk(gate, 128);
+    Mix_VolumeChunk(cursor, 128);
 }
 
 /*******************************************************
@@ -104,6 +111,12 @@ void PlaySE(int i) {
     else if (i == 2) {
         Mix_PlayChannel(2, gate, 0);   //gateを一度だけ再生
     }
+    else if (i == 3) {
+        Mix_PlayChannel(3, cursor, 0); //cursorを一度だけ再生
+    }
+    else if (i == 4) {
+        Mix_PlayChannel(4, enter, 0);  //enterを一度だけ再生
+    }
 }
 
 /*******************************************************
@@ -120,6 +133,12 @@ void StopSE(int i) {
     }
     else if (i == 2) {
         Mix_HaltChannel(2);    //チャンネル2番(gate)を停止
+    }
+    else if (i == 3) {
+        Mix_HaltChannel(3);    //チャンネル3番(cursor)を停止
+    }
+    else if (i == 4) {
+        Mix_HaltChannel(4);    //チャンネル4番(enter)を停止
     }
 }
 
@@ -156,25 +175,34 @@ void SetSEVolume(int i) {
         Mix_VolumeChunk(foot, 0);
         Mix_VolumeChunk(key, 0);
         Mix_VolumeChunk(gate, 0);
+        Mix_VolumeChunk(cursor, 0);
+        Mix_VolumeChunk(enter, 0);
     }
     else if (i == 1) {
         Mix_VolumeChunk(foot, 32);
         Mix_VolumeChunk(key, 32);
         Mix_VolumeChunk(gate, 32);
+        Mix_VolumeChunk(cursor, 32);
+        Mix_VolumeChunk(enter, 32);
     }
     else if (i == 2) {
         Mix_VolumeChunk(foot, 64);
         Mix_VolumeChunk(key, 64);
         Mix_VolumeChunk(gate, 64);
+        Mix_VolumeChunk(cursor, 64);
+        Mix_VolumeChunk(enter, 64);
     }
     else if (i == 3) {
         Mix_VolumeChunk(foot, 96);
         Mix_VolumeChunk(key, 96);
         Mix_VolumeChunk(gate, 96);
+        Mix_VolumeChunk(enter, 96);
     }
     else if (i == 4) {
         Mix_VolumeChunk(foot, 128);
         Mix_VolumeChunk(key, 128);
         Mix_VolumeChunk(gate, 128);
+        Mix_VolumeChunk(cursor, 128);
+        Mix_VolumeChunk(enter, 128);
     }
 }
