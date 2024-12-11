@@ -74,6 +74,7 @@ AABB GATE;                   //扉のAABB
 AABB GOAL;                   //ゴールのAABB
 std::vector<AABB> cubes;     //全ての壁のAABBを格納する配列
 std::vector<Square> squares; //全ての足跡の座標を格納する配列
+GLuint WallTextureID;
 
 /*******************************************************
 * 一般キーが押された時に呼び出される関数
@@ -492,6 +493,7 @@ void myDisplay() {
 					glMaterialfv(GL_FRONT, GL_SPECULAR, cube_specular);
 					glMaterialfv(GL_FRONT, GL_SHININESS, cube_shininess);
 					glutSolidCube(1.0);                                  //ソリッドの立方体を描画
+					DrawTexture(WallTextureID);
 					glPopMatrix();
 				}
 				//鍵を取っていない場合描画
@@ -989,6 +991,7 @@ int main(int argc, char** argv) {
 		return -1;
 	}
 	LoadSound();
+	WallTextureID = SetTexture("wall.jpg");
 	glutMainLoop();                    //他イベント待ちになるイベント処理ループに入る
 	closeSDL();
 	return 0;

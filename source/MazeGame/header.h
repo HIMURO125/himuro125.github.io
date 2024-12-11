@@ -9,6 +9,7 @@
 #include <GL/glut.h>
 #include <SDL.h>
 #include <SDL_mixer.h>
+#include <stb_image.h>
 #include <cmath>
 #include <ctime>
 #include <vector>
@@ -50,3 +51,5 @@ void StopSE(int i);                                           //SEÇÃí‚é~
 void DrawChara(int WindowW, int WindowH, int posx, int posy, char* text);//ï∂éöÇÃï`âÊ
 void SetBGMVolume(int i);                                     //BGMâπó ê›íË
 void SetSEVolume(int i);                                      //SEâπó ê›íË
+GLuint SetTexture(const char* filename);
+void DrawTexture(GLuint TextureID);
