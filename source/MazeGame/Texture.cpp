@@ -29,39 +29,37 @@ GLuint SetTexture(const char* filename) {
 }
 
 void DrawTexture(GLuint TextureID) {
+    //glScaled(1.0, 1.0, 1.0);
     glBindTexture(GL_TEXTURE_2D, TextureID);
     glBegin(GL_QUADS);
 
-    //前面
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -7.5f, 1.0f);
-    glTexCoord2f(2.0f, 0.0f); glVertex3f(1.0f, -7.5f, 1.0f);
-    glTexCoord2f(2.0f, 15.0f); glVertex3f(1.0f, 7.5f, 1.0f);
-    glTexCoord2f(0.0f, 15.0f); glVertex3f(-1.0f, 7.5f, 1.0f);
-    //後面
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -7.5f, -1.0f);
-    glTexCoord2f(2.0f, 0.0f); glVertex3f(1.0f, -7.5f, -1.0f);
-    glTexCoord2f(2.0f, 15.0f); glVertex3f(1.0f, 7.5f, -1.0f);
-    glTexCoord2f(0.0f, 15.0f); glVertex3f(-1.0f, 7.5f, -1.0f);
-    //上部
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, 7.5f, -1.0f);
-    glTexCoord2f(2.0f, 0.0f); glVertex3f(1.0f, 7.5f, -1.0f);
-    glTexCoord2f(2.0f, 2.0f); glVertex3f(1.0f, 7.5f, 1.0f);
-    glTexCoord2f(0.0f, 2.0f); glVertex3f(-1.0f, 7.5f, 1.0f);
-    //下部
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -7.5f, -1.0f);
-    glTexCoord2f(2.0f, 0.0f); glVertex3f(1.0f, -7.5f, -1.0f);
-    glTexCoord2f(2.0f, 2.0f); glVertex3f(1.0f, -7.5f, 1.0f);
-    glTexCoord2f(0.0f, 2.0f); glVertex3f(-1.0f, -7.5f, 1.0f);
-    //側面（右）
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f, -7.5f, -1.0f);
-    glTexCoord2f(2.0f, 0.0f); glVertex3f(1.0f, 7.5f, -1.0f);
-    glTexCoord2f(2.0f, 2.0f); glVertex3f(1.0f, 7.5f, 1.0f);
-    glTexCoord2f(0.0f, 2.0f); glVertex3f(1.0f, -7.5f, 1.0f);
-    //側面（左）
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -7.5f, -1.0f);
-    glTexCoord2f(2.0f, 0.0f); glVertex3f(-1.0f, 7.5f, -1.0f);
-    glTexCoord2f(2.0f, 2.0f); glVertex3f(-1.0f, 7.5f, 1.0f);
-    glTexCoord2f(0.0f, 2.0f); glVertex3f(-1.0f, -7.5f, 1.0f);
+    // 前面
+    glNormal3f(0.0f, 0.0f, 1.0f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, -0.5f, 0.5f);
+    glTexCoord2f(2.0f, 0.0f); glVertex3f(0.5f, -0.5f, 0.5f);
+    glTexCoord2f(2.0f, 15.0f); glVertex3f(0.5f, 0.5f, 0.5f);
+    glTexCoord2f(0.0f, 15.0f); glVertex3f(-0.5f, 0.5f, 0.5f);
+
+    // 後面
+    glNormal3f(0.0f, 0.0f, -1.0f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, -0.5f, -0.5f);
+    glTexCoord2f(2.0f, 0.0f); glVertex3f(0.5f, -0.5f, -0.5f);
+    glTexCoord2f(2.0f, 15.0f); glVertex3f(0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 15.0f); glVertex3f(-0.5f, 0.5f, -0.5f);
+
+    // 側面（右）
+    glNormal3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.5f, -0.5f, -0.5f);
+    glTexCoord2f(2.0f, 0.0f); glVertex3f(0.5f, -0.5f, 0.5f);
+    glTexCoord2f(2.0f, 15.0f); glVertex3f(0.5f, 0.5f, 0.5f);
+    glTexCoord2f(0.0f, 15.0f); glVertex3f(0.5f, 0.5f, -0.5f);
+
+    // 側面（左）
+    glNormal3f(-1.0f, 0.0f, 0.0f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, -0.5f, -0.5f);
+    glTexCoord2f(2.0f, 0.0f); glVertex3f(-0.5f, -0.5f, 0.5f);
+    glTexCoord2f(2.0f, 15.0f); glVertex3f(-0.5f, 0.5f, 0.5f);
+    glTexCoord2f(0.0f, 15.0f); glVertex3f(-0.5f, 0.5f, -0.5f);
 
     glEnd();
     glBindTexture(GL_TEXTURE_2D, 0);

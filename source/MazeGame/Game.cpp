@@ -445,6 +445,8 @@ void myDisplay() {
 		}
 		glEnable(GL_DEPTH_TEST);       //陰面処理、光源の有効化
 		glEnable(GL_LIGHTING);
+		glEnable(GL_TEXTURE_2D);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
 		glPushMatrix();
 		cameraDirX = cos(cameraAngle); //x軸方向の向きを設定
@@ -492,7 +494,7 @@ void myDisplay() {
 					glMaterialfv(GL_FRONT, GL_DIFFUSE, cube_diffuse);
 					glMaterialfv(GL_FRONT, GL_SPECULAR, cube_specular);
 					glMaterialfv(GL_FRONT, GL_SHININESS, cube_shininess);
-					glutSolidCube(1.0);                                  //ソリッドの立方体を描画
+					//glutSolidCube(1.0);                                  //ソリッドの立方体を描画
 					DrawTexture(WallTextureID);
 					glPopMatrix();
 				}
@@ -547,6 +549,7 @@ void myDisplay() {
 		glPopMatrix();
 
 		glDisable(GL_DEPTH_TEST);  //陰面処理の無効化
+		glDisable(GL_TEXTURE_2D);
 	}
 	//リザルト画面
 	else if (scene == result) {
