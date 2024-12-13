@@ -4,6 +4,7 @@
 * 外部ライブラリ　：freeglut-3.6.0		glut.h
 * 　　　　　　　　　SDL2-2.30.9		　　SDL.h
 * 　　　　　　　　　SDL2_mixer-2.8.0	SDL_mixer.h
+*                   stb_image           stb_image.h
 ********************************************************/
 #pragma once
 #include <GL/glut.h>
@@ -16,6 +17,7 @@
 #include <random>
 #include <chrono>
 #include <cstdio>
+using namespace std;
 
 //座標構造体を定義
 struct Vector3 {
@@ -40,7 +42,7 @@ AABB GetCameraAABB(const Vector3& cameraPosition);            //カメラのAABB設定
 AABB GetCubeAABB(const Vector3& CubeCenter, float size);      //壁のAABB設定
 AABB GetKeyAABB(const Vector3& KeyCenter, float size);        //鍵のAABB設定
 bool CheckCollision(const AABB Camera, const AABB Obj);       //衝突判定
-std::vector<std::vector<int>> InitMaze(int size);             //迷路の自動生成
+vector<vector<int>> InitMaze(int size);                       //迷路の自動生成
 void drawSquare(float x, float z);                            //足跡描画
 bool initSDL();                                               //SDLの初期化
 void closeSDL();                                              //SDLの終了
@@ -51,5 +53,5 @@ void StopSE(int i);                                           //SEの停止
 void DrawChara(int WindowW, int WindowH, int posx, int posy, char* text);//文字の描画
 void SetBGMVolume(int i);                                     //BGM音量設定
 void SetSEVolume(int i);                                      //SE音量設定
-GLuint SetTexture(const char* filename);
-void DrawTexture(GLuint TextureID);
+GLuint SetTexture(const char* filename);                      //テクスチャデータの読み込み
+void DrawWallTexture(GLuint TextureID);                       //壁のテクスチャの描画

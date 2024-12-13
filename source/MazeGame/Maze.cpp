@@ -6,11 +6,11 @@
 #pragma once
 #include "header.h"
 
-const int Path = 0;                    //道を0とする
-const int Wall = 1;                    //壁を1とする
-const int Key = 2;                     //鍵を2とする
-const int Gate = 3;                    //扉を3とする
-std::vector<std::vector<int>> matrix;  //迷路の二次元配列
+const int Path = 0;         //道を0とする
+const int Wall = 1;         //壁を1とする
+const int Key = 2;          //鍵を2とする
+const int Gate = 3;         //扉を3とする
+vector<vector<int>> matrix; //迷路の二次元配列
 
 /*******************************************************
 * 引数で指定した大きさの迷路を自動生成する関数
@@ -19,7 +19,7 @@ std::vector<std::vector<int>> matrix;  //迷路の二次元配列
 * 引数
 * size:迷路のサイズ
 ********************************************************/
-std::vector<std::vector<int>> InitMaze(int size) {
+vector<vector<int>> InitMaze(int size) {
 	//迷路のサイズ変更
 	matrix.resize(size);
 	for (int i = 0; i < size; ++i) {
@@ -92,12 +92,12 @@ std::vector<std::vector<int>> InitMaze(int size) {
 
 	//迷路の中央部分の道のどこかに鍵を設置
 	while (true) {
-		int MinRamge = size / 3;                                   //迷路のサイズの3分の1の範囲
+		int MinRamge = size / 3;                              //迷路のサイズの3分の1の範囲
 		int MaxRange = 2 * size / 3 - 1;
-		std::random_device rd;                                     //ハードウェア乱数生成器を初期化
-		std::mt19937 gen(rd());                                    //擬似乱数生成器を初期化
-		std::uniform_int_distribution<int> dis(MinRamge, MaxRange);//MinRamge、MaxRangeの範囲で乱数生成するための分布オブジェクトを作成
-		int x = dis(gen);                                          //乱数生成
+		random_device rd;                                     //ハードウェア乱数生成器を初期化
+		mt19937 gen(rd());                                    //擬似乱数生成器を初期化
+		uniform_int_distribution<int> dis(MinRamge, MaxRange);//MinRamge、MaxRangeの範囲で乱数生成するための分布オブジェクトを作成
+		int x = dis(gen);                                     //乱数生成
 		int z = dis(gen);
 
 		//選ばれた場所が道の場合鍵を設置

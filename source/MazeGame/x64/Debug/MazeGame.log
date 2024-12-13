@@ -1,5 +1,4 @@
-﻿  Texture.cpp
-  MazeGame.vcxproj -> C:\Users\0sx6r\GitHub\himuro125.github.io\bin\作品\x64\Debug\MazeGame.exe
+﻿  MazeGame.vcxproj -> C:\Users\0sx6r\GitHub\himuro125.github.io\bin\作品\x64\Debug\MazeGame.exe
   ..\..\bin\SDL2-2.30.9\lib\x64\SDL2.dll
   1 個のファイルをコピーしました
   ..\..\bin\SDL2_mixer-2.8.0\lib\x64\SDL2_mixer.dll
@@ -21,4 +20,6 @@
   .\cursor.wav
   1 個のファイルをコピーしました
   .\enter.wav
+  1 個のファイルをコピーしました
+  .\wall.jpg
   1 個のファイルをコピーしました

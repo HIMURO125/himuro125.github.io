@@ -1,17 +1,28 @@
+/*******************************************************
+* ファイル名：Texture.cpp
+* 概要　　　：テクスチャの読み込み、描画を行う
+********************************************************/
 #pragma once
 #define STB_IMAGE_IMPLEMENTATION
 #include "header.h"
 
+/*******************************************************
+* テクスチャの読み込みを行う関数
+* 返り値としてテクスチャデータのIDを返す
+* 引数
+* filename:テクスチャファイルの名前
+********************************************************/
 GLuint SetTexture(const char* filename) {
 	GLuint TextureID;
     int width, height, channels;
-    unsigned char* data = stbi_load(filename, &width, &height, &channels, 0);
+    unsigned char* data = stbi_load(filename, &width, &height, &channels, 0);//テクスチャの読み込み
 
+    //失敗した場合終了
     if (!data) {
         exit(1);
     }
     glGenTextures(1, &TextureID);
-    glBindTexture(GL_TEXTURE_2D, TextureID);
+    glBindTexture(GL_TEXTURE_2D, TextureID);//テクスチャのバインド
 
     // テクスチャの設定
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -23,13 +34,17 @@ GLuint SetTexture(const char* filename) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
         (channels == 4 ? GL_RGBA : GL_RGB), GL_UNSIGNED_BYTE, data);
 
-    glBindTexture(GL_TEXTURE_2D, 0); // テクスチャのバインドを解除
-    stbi_image_free(data); // メモリを解放
+    glBindTexture(GL_TEXTURE_2D, 0); //テクスチャのバインドを解除
+    stbi_image_free(data); //メモリを解放
     return TextureID;
 }
 
-void DrawTexture(GLuint TextureID) {
-    //glScaled(1.0, 1.0, 1.0);
+/*******************************************************
+* 壁のテクスチャの描画を行う関数
+* 引数
+* TextureIDe:テクスチャデータのID
+********************************************************/
+void DrawWallTexture(GLuint TextureID) {
     glBindTexture(GL_TEXTURE_2D, TextureID);
     glBegin(GL_QUADS);
 

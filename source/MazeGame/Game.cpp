@@ -17,7 +17,7 @@ const int Path = 0;                 //道を0とする
 const int Wall = 1;                 //壁を1とする
 const int Key = 2;                  //鍵を2とする
 const int Gate = 3;                 //扉を3とする
-std::vector<std::vector<int>> maze; //迷路の二次元配列
+vector<vector<int>> maze;           //迷路の二次元配列
 bool keyflag = false;               //鍵を取得しているかのフラグ
 bool gateflag = false;              //扉が開いているかのフラグ
 bool support = true;                //足跡機能のフラグ(デフォルトでON)
@@ -45,10 +45,10 @@ int currentOpItem3 = 4;				//BGM音量項目
 int currentOpItem4 = 4;				//SE音量項目
 int currentPaItem = 0;              //ポーズ画面の選択項目
 int currentSeItem = 0;              //セレクト画面の選択項目
-std::chrono::time_point<std::chrono::steady_clock> start_time;        //ステージを始めた時間
-std::chrono::time_point<std::chrono::steady_clock> pause_start_time;  //ポーズ画面を開き始めた時間
-std::chrono::time_point<std::chrono::steady_clock> pause_end_time;    //ポーズ画面を閉じた時間
-std::chrono::nanoseconds pause_time;                                  //ポーズ画面を開いていた累計時間
+chrono::time_point<chrono::steady_clock> start_time;        //ステージを始めた時間
+chrono::time_point<chrono::steady_clock> pause_start_time;  //ポーズ画面を開き始めた時間
+chrono::time_point<chrono::steady_clock> pause_end_time;    //ポーズ画面を閉じた時間
+chrono::nanoseconds pause_time;                             //ポーズ画面を開いていた累計時間
 char Goal_char[50];                                //クリアタイムを記述する文字配列
 float line_diffuse[] = { 1.0f,1.0f,1.0f,1.0f };    //床、足跡、壁、鍵、扉の
 float line_specular[] = { 1.0f,1.0f,1.0f,1.0f };   //環境光、拡散光、鏡面光、鏡面係数の設定
@@ -130,8 +130,8 @@ void myKeyboard(unsigned char key, int x, int y) {
 	else if (scene == play) {
 		//Pキー
 		if (key == 'p') {
-			scene = pause;                                       //ポーズ画面に遷移
-			pause_start_time = std::chrono::steady_clock::now(); //ポーズ開始時刻の記録
+			scene = pause;                                  //ポーズ画面に遷移
+			pause_start_time = chrono::steady_clock::now(); //ポーズ開始時刻の記録
 		}
 	}
 	//ポーズ画面
@@ -141,7 +141,7 @@ void myKeyboard(unsigned char key, int x, int y) {
 			PlaySE(4);
 			//Yes
 			if (currentPaItem == 0) {
-				pause_end_time = std::chrono::steady_clock::now();             //ポーズ終了時刻の記録
+				pause_end_time = chrono::steady_clock::now();                  //ポーズ終了時刻の記録
 				pause_time = pause_time + (pause_end_time - pause_start_time); //ポーズ累計時間の記録
 				scene = play;  //ゲーム画面に遷移
 			}
@@ -159,10 +159,10 @@ void myKeyboard(unsigned char key, int x, int y) {
 			//レベル１
 			if (currentSeItem == 0) {
 				currentPaItem = 0;
-				size = 9;
-				maze = InitMaze(size);                        //サイズを指定して迷路作成
-				start_time = std::chrono::steady_clock::now();//開始時刻の記録
-				keyflag = false;                              //フラグ等のリセット
+				::size = 9;
+				maze = InitMaze(::size);                  //サイズを指定して迷路作成
+				start_time = chrono::steady_clock::now(); //開始時刻の記録
+				keyflag = false;                          //フラグ等のリセット
 				gateflag = false;
 				flag = false;
 				cameraAngle = 0.0f;
@@ -174,10 +174,10 @@ void myKeyboard(unsigned char key, int x, int y) {
 			//レベル２
 			else if (currentSeItem == 1) {
 				currentPaItem = 0;
-				size = 15;
-				maze = InitMaze(size);                        //サイズを指定して迷路作成
-				start_time = std::chrono::steady_clock::now();//開始時刻の記録
-				keyflag = false;                              //フラグ等のリセット
+				::size = 15;
+				maze = InitMaze(::size);
+				start_time = chrono::steady_clock::now();
+				keyflag = false;
 				gateflag = false;
 				flag = false;
 				cameraAngle = 0.0f;
@@ -189,10 +189,10 @@ void myKeyboard(unsigned char key, int x, int y) {
 			//レベル３
 			else if (currentSeItem == 2) {
 				currentPaItem = 0;
-				size = 21;
-				maze = InitMaze(size);                        //サイズを指定して迷路作成
-				start_time = std::chrono::steady_clock::now();//開始時刻の記録
-				keyflag = false;                              //フラグ等のリセット
+				::size = 21;
+				maze = InitMaze(::size);
+				start_time = chrono::steady_clock::now();
+				keyflag = false;
 				gateflag = false;
 				flag = false;
 				cameraAngle = 0.0f;
@@ -340,9 +340,9 @@ void mySpecialKeysUp(int key, int x, int y) {
 		goForward = false;
 		goBack = false;
 		//移動時のSE停止
-		if (move) {
+		if (::move) {
 			StopSE(0);
-			move = false;
+			::move = false;
 		}
 	}
 }
@@ -481,8 +481,8 @@ void myDisplay() {
 		cubes.clear();  //壁のAABBを全て消去
 
 		//壁、鍵、ゴール描画
-		for (int x = 0; x < size; x++) {
-			for (int z = 0; z < size; z++) {
+		for (int x = 0; x < ::size; x++) {
+			for (int z = 0; z < ::size; z++) {
 				//壁
 				if (maze[x][z] == Wall) {
 					glPushMatrix();
@@ -494,8 +494,7 @@ void myDisplay() {
 					glMaterialfv(GL_FRONT, GL_DIFFUSE, cube_diffuse);
 					glMaterialfv(GL_FRONT, GL_SPECULAR, cube_specular);
 					glMaterialfv(GL_FRONT, GL_SHININESS, cube_shininess);
-					//glutSolidCube(1.0);                                  //ソリッドの立方体を描画
-					DrawTexture(WallTextureID);
+					DrawWallTexture(WallTextureID);                      //テクスチャの描画
 					glPopMatrix();
 				}
 				//鍵を取っていない場合描画
@@ -909,18 +908,18 @@ void Update(int value) {
 		if (goForward) {
 			cameraX += cameraDirX * speed;
 			cameraZ += cameraDirZ * speed;
-			if (!move) {
+			if (!::move) {
 				PlaySE(0);
-				move = true;
+				::move = true;
 			}
 		}
 		//後退
 		else if (goBack) {
 			cameraX -= cameraDirX * speed;
 			cameraZ -= cameraDirZ * speed;
-			if (!move) {
+			if (!::move) {
 				PlaySE(0);
-				move = true;
+				::move = true;
 			}
 		}
 		Vector3 cameraPosition = { cameraX, cameraY, cameraZ }; //移動後のカメラ座標
@@ -958,8 +957,8 @@ void Update(int value) {
 		//ゴールの衝突判定
 		if (CheckCollision(cameraBox, GOAL) && gateflag) {
 			//クリアタイム計算
-			auto current_time = std::chrono::steady_clock::now();
-			auto Goalseconds = std::chrono::duration_cast<std::chrono::seconds>(current_time - start_time - pause_time).count();
+			auto current_time = chrono::steady_clock::now();
+			auto Goalseconds = chrono::duration_cast<chrono::seconds>(current_time - start_time - pause_time).count();
 			snprintf(Goal_char, sizeof(Goal_char), "Clear Time: %lld Seconds", Goalseconds);
 			scene = result;
 		}
