@@ -6,6 +6,7 @@
 #pragma once
 #include "header.h"
 
+int window = 0;
 float cameraX = 0.0f;               //カメラのx座標
 float cameraY = 1.0f;               //カメラのy座標
 float cameraZ = 0.0f;               //カメラのz座標
@@ -217,8 +218,13 @@ void myKeyboard(unsigned char key, int x, int y) {
 		}
 	}
 	//Escキー
-	if (key == 27)
+	if (key == 27) {
+		glDeleteTextures(1, &WallTextureID);
+		glDeleteTextures(1, &GateTextureID);
+		glutDestroyWindow(window);
+		closeSDL();
 		exit(0);  //終了
+	}
 }
 
 /*******************************************************
@@ -535,7 +541,6 @@ void myDisplay() {
 					glMaterialfv(GL_FRONT, GL_SPECULAR, gate_specular);
 					glMaterialfv(GL_FRONT, GL_SHININESS, gate_shininess);
 					DrawGateTexture(GateTextureID);
-					//glutSolidCube(1.0);
 					glPopMatrix();
 				}
 				//扉を開けたらゴールの当たり判定を作成
@@ -856,7 +861,7 @@ void myInit() {
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); //ダブルバッファモード、RGBAモード、zバッファの使用を宣言
 	glutInitWindowSize(WindowW, WindowH);                      //ウィンドウサイズの指定 引数は共にピクセル値
 	glutInitWindowPosition(0, 0);                              //ウィンドウの左上の位置の指定 引数は共にピクセル値
-	glutCreateWindow("Maze");                                  //ウィンドウ生成 引数はウィンドウ名
+	window = glutCreateWindow("Maze");                                  //ウィンドウ生成 引数はウィンドウ名
 	glClearColor(0.0, 0.0, 0.0, 1.0);                          //カラーバッファのクリア
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -998,6 +1003,5 @@ int main(int argc, char** argv) {
 	WallTextureID = SetTexture("wall.jpg");
 	GateTextureID = SetTexture("gate.jpg");
 	glutMainLoop();                    //他イベント待ちになるイベント処理ループに入る
-	closeSDL();
 	return 0;
 }

@@ -57,10 +57,10 @@ void DrawWallTexture(GLuint TextureID) {
 
     // 後面
     glNormal3f(1.0f, 0.0f, 0.0f);
-    glTexCoord2f(0.0f, 15.0f); glVertex3f(0.5f, -0.5f, -0.5f);
-    glTexCoord2f(2.0f, 15.0f); glVertex3f(0.5f, -0.5f, 0.5f);
-    glTexCoord2f(2.0f, 0.0f); glVertex3f(0.5f, 0.5f, 0.5f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.5f, 0.5f, -0.5f);
+    glTexCoord2f(2.0f, 15.0f); glVertex3f(0.5f, -0.5f, -0.5f);
+    glTexCoord2f(0.0f, 15.0f); glVertex3f(0.5f, -0.5f, 0.5f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.5f, 0.5f, 0.5f);
+    glTexCoord2f(2.0f, 0.0f); glVertex3f(0.5f, 0.5f, -0.5f);
 
     // 側面（右）
     glNormal3f(0.0f, 0.0f, 1.0f);
@@ -71,10 +71,10 @@ void DrawWallTexture(GLuint TextureID) {
 
     // 側面（左）
     glNormal3f(0.0f, 0.0f, -1.0f);
-    glTexCoord2f(0.0f, 15.0f); glVertex3f(-0.5f, -0.5f, -0.5f);
-    glTexCoord2f(2.0f, 15.0f); glVertex3f(0.5f, -0.5f, -0.5f);
-    glTexCoord2f(2.0f, 0.0f); glVertex3f(0.5f, 0.5f, -0.5f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, 0.5f, -0.5f);
+    glTexCoord2f(2.0f, 15.0f); glVertex3f(-0.5f, -0.5f, -0.5f);
+    glTexCoord2f(0.0f, 15.0f); glVertex3f(0.5f, -0.5f, -0.5f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.5f, 0.5f, -0.5f);
+    glTexCoord2f(2.0f, 0.0f); glVertex3f(-0.5f, 0.5f, -0.5f);
 
     glEnd();
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -91,10 +91,10 @@ void DrawGateTexture(GLuint TextureID) {
 
     // 前面
     glNormal3f(0.0f, 0.0f, 1.0f);
-    glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.5f, -0.5f, -0.5f);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.5f, -0.5f, 0.5f);
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.5f, 0.5f, 0.5f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, 0.5f, -0.5f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.5f, -0.5f, -0.5f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.5f, -0.5f, 0.5f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, 0.5f, 0.5f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.5f, 0.5f, -0.5f);
 
     glEnd();
     glBindTexture(GL_TEXTURE_2D, 0);
