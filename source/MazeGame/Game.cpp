@@ -65,16 +65,17 @@ float key_shininess[] = { 0.4f };
 float gate_ambient[] = { 0.19125f,0.0735f,0.0225f,1.0f };
 float gate_diffuse[] = { 0.7038f,0.27048f,0.0828f,1.0f };
 float gate_specular[] = { 0.256777f,0.137622f, 0.086014f, 1.0f };
-float gate_shininess[] = { 0.4f };
+float gate_shininess[] = { 1.0f };
 float mtrl_shininess[] = { 1.0f };
 
 AABB cameraBox;              //カメラのAABB
 AABB KEY;                    //鍵のAABB
 AABB GATE;                   //扉のAABB
 AABB GOAL;                   //ゴールのAABB
-std::vector<AABB> cubes;     //全ての壁のAABBを格納する配列
-std::vector<Square> squares; //全ての足跡の座標を格納する配列
+vector<AABB> cubes;     //全ての壁のAABBを格納する配列
+vector<Square> squares; //全ての足跡の座標を格納する配列
 GLuint WallTextureID;
+GLuint GateTextureID;
 
 /*******************************************************
 * 一般キーが押された時に呼び出される関数
@@ -533,7 +534,8 @@ void myDisplay() {
 					glMaterialfv(GL_FRONT, GL_DIFFUSE, gate_diffuse);
 					glMaterialfv(GL_FRONT, GL_SPECULAR, gate_specular);
 					glMaterialfv(GL_FRONT, GL_SHININESS, gate_shininess);
-					glutSolidCube(1.0);
+					DrawGateTexture(GateTextureID);
+					//glutSolidCube(1.0);
 					glPopMatrix();
 				}
 				//扉を開けたらゴールの当たり判定を作成
@@ -994,6 +996,7 @@ int main(int argc, char** argv) {
 	}
 	LoadSound();
 	WallTextureID = SetTexture("wall.jpg");
+	GateTextureID = SetTexture("gate.jpg");
 	glutMainLoop();                    //他イベント待ちになるイベント処理ループに入る
 	closeSDL();
 	return 0;

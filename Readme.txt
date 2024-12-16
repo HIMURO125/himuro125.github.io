@@ -44,6 +44,8 @@ SDL2-2.30.9		SDL.h
 
 SDL2_mixer-2.8.0	SDL_mixer.h
 
+stb_image               stb_image.h
+
 C言語標準ライブラリ	stdlib.h 
 			math.h
 			time.h
