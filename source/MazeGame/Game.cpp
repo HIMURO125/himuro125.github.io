@@ -158,10 +158,20 @@ void myKeyboard(unsigned char key, int x, int y) {
 		//Enterキー
 		if (key == 13) {
 			PlaySE(4);
-			//レベル１
-			if (currentSeItem == 0) {
+			if (currentSeItem == 0 || currentSeItem == 1 || currentSeItem == 2) {
+				//レベル１
+				if (currentSeItem == 0) {
+					::size = 9;
+				}
+				//レベル２
+				else if (currentSeItem == 1) {
+					::size = 15;
+				}
+				//レベル３
+				else if (currentSeItem == 2) {
+					::size = 21;
+				}
 				currentPaItem = 0;
-				::size = 9;
 				maze = InitMaze(::size);                  //サイズを指定して迷路作成
 				start_time = chrono::steady_clock::now(); //開始時刻の記録
 				keyflag = false;                          //フラグ等のリセット
@@ -171,43 +181,14 @@ void myKeyboard(unsigned char key, int x, int y) {
 				cameraX = -34.0f;
 				cameraZ = -34.0f;
 				scene = play;
-				currentSeItem = 0;
-			}
-			//レベル２
-			else if (currentSeItem == 1) {
-				currentPaItem = 0;
-				::size = 15;
-				maze = InitMaze(::size);
-				start_time = chrono::steady_clock::now();
-				keyflag = false;
-				gateflag = false;
-				flag = false;
-				cameraAngle = 0.0f;
-				cameraX = -34.0f;
-				cameraZ = -34.0f;
-				scene = play;
-				currentSeItem = 0;
-			}
-			//レベル３
-			else if (currentSeItem == 2) {
-				currentPaItem = 0;
-				::size = 21;
-				maze = InitMaze(::size);
-				start_time = chrono::steady_clock::now();
-				keyflag = false;
-				gateflag = false;
-				flag = false;
-				cameraAngle = 0.0f;
-				cameraX = -34.0f;
-				cameraZ = -34.0f;
-				scene = play;
-				currentSeItem = 0;
+				cubes.clear();
+				cubes = InitWallAABB(::size, ::maze);
 			}
 			//タイトル画面に遷移
 			else if (currentSeItem == 3) {
 				scene = title;
-				currentSeItem = 0;
 			}
+			currentSeItem = 0;
 		}
 	}
 	//説明画面
@@ -450,10 +431,9 @@ void myDisplay() {
 			PlayBGM(1);
 			PlaySound = true;
 		}
-		glEnable(GL_DEPTH_TEST);       //陰面処理、光源の有効化
+		glEnable(GL_DEPTH_TEST);       //陰面処理、光源、テクスチャの有効化
 		glEnable(GL_LIGHTING);
 		glEnable(GL_TEXTURE_2D);
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
 		glPushMatrix();
 		cameraDirX = cos(cameraAngle); //x軸方向の向きを設定
@@ -484,8 +464,8 @@ void myDisplay() {
 			}
 		}
 
+		
 		Vector3 center; //中心座標
-		cubes.clear();  //壁のAABBを全て消去
 
 		//壁、鍵、ゴール描画
 		for (int x = 0; x < ::size; x++) {
@@ -495,8 +475,6 @@ void myDisplay() {
 					glPushMatrix();
 					glTranslated(2 * x - 36, 7.5, 2 * z - 36);           //移動
 					glScaled(2.0, 15.0, 2.0);                            //大きさ変更
-					center = { 2.0f * x - 36, 2.0f, 2.0f * z - 36 };
-					cubes.push_back(GetCubeAABB(center, 2.0));           //壁のAABBを追加
 					glMaterialfv(GL_FRONT, GL_AMBIENT, cube_ambient);
 					glMaterialfv(GL_FRONT, GL_DIFFUSE, cube_diffuse);
 					glMaterialfv(GL_FRONT, GL_SPECULAR, cube_specular);
@@ -554,7 +532,7 @@ void myDisplay() {
 		}
 		glPopMatrix();
 
-		glDisable(GL_DEPTH_TEST);  //陰面処理の無効化
+		glDisable(GL_DEPTH_TEST);  //陰面処理、テクスチャの無効化
 		glDisable(GL_TEXTURE_2D);
 	}
 	//リザルト画面
@@ -940,12 +918,9 @@ void Update(int value) {
 			}
 		}
 		//鍵の衝突判定
-		if (CheckCollision(cameraBox, KEY)) {
-			if (!keyflag) {
-				keyflag = true;
-				PlaySE(1);
-			}
-				
+		if (!keyflag && CheckCollision(cameraBox, KEY)) {
+			keyflag = true;
+			PlaySE(1);
 		}
 		//扉の衝突判定
 		if (CheckCollision(cameraBox, GATE)) {
@@ -962,7 +937,7 @@ void Update(int value) {
 			}
 		}
 		//ゴールの衝突判定
-		if (CheckCollision(cameraBox, GOAL) && gateflag) {
+		if (gateflag && CheckCollision(cameraBox, GOAL)) {
 			//クリアタイム計算
 			auto current_time = chrono::steady_clock::now();
 			auto Goalseconds = chrono::duration_cast<chrono::seconds>(current_time - start_time - pause_time).count();

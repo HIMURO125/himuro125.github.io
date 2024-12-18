@@ -75,3 +75,19 @@ bool CheckCollision(const AABB Camera, const AABB Obj) {
 		(Camera.min.y <= Obj.max.y && Camera.max.y >= Obj.min.y) &&
 		(Camera.min.z <= Obj.max.z && Camera.max.z >= Obj.min.z);
 }
+
+vector<AABB> InitWallAABB(int size, vector<vector<int>> maze) {
+	vector<AABB> cubes;
+	Vector3 center; //’†SÀ•W
+	cubes.clear();  //•Ç‚ÌAABB‚ğ‘S‚ÄÁ‹
+	for (int x = 0; x < size; x++) {
+		for (int z = 0; z < size; z++) {
+			//•Ç
+			if (maze[x][z] == 1) {
+				center = { 2.0f * x - 36, 2.0f, 2.0f * z - 36 };
+				cubes.push_back(GetCubeAABB(center, 2.0));           //•Ç‚ÌAABB‚ğ’Ç‰Á
+			}
+		}
+	}
+	return cubes;
+}

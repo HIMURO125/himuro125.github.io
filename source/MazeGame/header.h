@@ -56,3 +56,4 @@ void SetSEVolume(int i);                                      //SE音量設定
 GLuint SetTexture(const char* filename);                      //テクスチャデータの読み込み
 void DrawWallTexture(GLuint TextureID);                       //壁のテクスチャの描画
 void DrawGateTexture(GLuint TextureID);                       //扉のテクスチャの描画
+vector<AABB> InitWallAABB(int size, vector<vector<int>> maze);
