@@ -11,9 +11,9 @@ float cameraX = 0.0f;               //カメラのx座標
 float cameraY = 1.0f;               //カメラのy座標
 float cameraZ = 0.0f;               //カメラのz座標
 float cameraAngle = 0.0f;           //カメラの角度
-float cameraDirX;                   //カメラのx軸方向の向き
-float cameraDirZ;                   //カメラのz軸方向の向き
-int size;                           //迷路のサイズ
+float cameraDirX = 0.0f; ;          //カメラのx軸方向の向き
+float cameraDirZ = 0.0f;            //カメラのz軸方向の向き
+int size = 0;                       //迷路のサイズ
 const int Path = 0;                 //道を0とする
 const int Wall = 1;                 //壁を1とする
 const int Key = 2;                  //鍵を2とする
@@ -50,15 +50,14 @@ chrono::time_point<chrono::steady_clock> start_time;        //ステージを始めた時
 chrono::time_point<chrono::steady_clock> pause_start_time;  //ポーズ画面を開き始めた時間
 chrono::time_point<chrono::steady_clock> pause_end_time;    //ポーズ画面を閉じた時間
 chrono::nanoseconds pause_time;                             //ポーズ画面を開いていた累計時間
-char Goal_char[50];                                //クリアタイムを記述する文字配列
+char Goal_char[50] = {};                                //クリアタイムを記述する文字配列
 float line_diffuse[] = { 1.0f,1.0f,1.0f,1.0f };    //床、足跡、壁、鍵、扉の
 float line_specular[] = { 1.0f,1.0f,1.0f,1.0f };   //環境光、拡散光、鏡面光、鏡面係数の設定
 float point_diffuse[] = { 0.75f,0.75f,0.0f,1.0f };
 float point_specular[] = { 0.75f,0.75f,0.0f,1.0f };
 float cube_ambient[] = { 0.5f,0.5f,0.5f,1.0f };
 float cube_diffuse[] = { 0.75f,0.75f,0.75f,1.0f };
-float cube_specular[] = { 0.9f,0.9f, 0.9f, 1.0f };
-float cube_shininess[] = { 1.0f };
+float cube_specular[] = { 0.9f,0.9f, 0.9f,1.0f };
 float key_ambient[] = { 0.24725f,0.1995f,0.0745f,1.0f };
 float key_diffuse[] = { 0.75164f,0.60648f,0.22648f,1.0f };
 float key_specular[] = { 0.628281f,0.555802f,0.366065f,1.0f };
@@ -66,17 +65,16 @@ float key_shininess[] = { 0.4f };
 float gate_ambient[] = { 0.19125f,0.0735f,0.0225f,1.0f };
 float gate_diffuse[] = { 0.7038f,0.27048f,0.0828f,1.0f };
 float gate_specular[] = { 0.256777f,0.137622f, 0.086014f, 1.0f };
-float gate_shininess[] = { 1.0f };
-float mtrl_shininess[] = { 1.0f };
+float shininess[] = { 1.0f };
 
-AABB cameraBox;              //カメラのAABB
-AABB KEY;                    //鍵のAABB
-AABB GATE;                   //扉のAABB
-AABB GOAL;                   //ゴールのAABB
+AABB cameraBox = {};    //カメラのAABB
+AABB KEY = {};          //鍵のAABB
+AABB GATE = {};         //扉のAABB
+AABB GOAL = {};         //ゴールのAABB
 vector<AABB> cubes;     //全ての壁のAABBを格納する配列
 vector<Square> squares; //全ての足跡の座標を格納する配列
-GLuint WallTextureID;
-GLuint GateTextureID;
+GLuint WallTextureID = 0;
+GLuint GateTextureID = 0;
 
 /*******************************************************
 * 一般キーが押された時に呼び出される関数
@@ -84,7 +82,7 @@ GLuint GateTextureID;
 * key:押されたキーのASCIIコード
 * x,y:キーを押したときのマウスの座標値
 ********************************************************/
-void myKeyboard(unsigned char key, int x, int y) {
+static void myKeyboard(unsigned char key, int x, int y) {
 	//タイトル画面
 	if (scene == title) {
 		//Enterキー
@@ -214,7 +212,7 @@ void myKeyboard(unsigned char key, int x, int y) {
 * key:押された特殊キーのコード
 * x,y:キーを押したときのマウスの座標値
 ********************************************************/
-void mySpecialKeys(int key, int x, int y) {
+static void mySpecialKeys(int key, int x, int y) {
 	//タイトル画面
 	if (scene == title) {
 		switch (key) {
@@ -322,7 +320,7 @@ void mySpecialKeys(int key, int x, int y) {
 * key:押されていた特殊キーのコード
 * x,y:キーを押したときのマウスの座標値
 ********************************************************/
-void mySpecialKeysUp(int key, int x, int y) {
+static void mySpecialKeysUp(int key, int x, int y) {
 	//上矢印キーまたは下矢印キーを離したとき
 	if (key == GLUT_KEY_UP || key == GLUT_KEY_DOWN) {
 		goForward = false;
@@ -339,7 +337,7 @@ void mySpecialKeysUp(int key, int x, int y) {
 * 光源の各種設定を行う関数
 * 設定を行った後、光源を有効にする
 ********************************************************/
-void SetLight() {
+static void SetLight() {
 	float light0_pos[] = { 1.0f ,0.0f, 1.0f ,0.0f };     //平行光源の方向ベクトルの数値
 	float light1_pos[] = { -1.0f ,0.0f, -1.0f ,0.0f };
 	float light0_ambient[] = { 0.25f,0.25f,0.25f,1.0f }; //光源の環境光、拡散光、鏡面光の数値
@@ -363,7 +361,7 @@ void SetLight() {
 * freeglutによる描画を行う時に呼び出す関数
 * ゲーム状態に応じて描画を変更
 ********************************************************/
-void myDisplay() {
+static void myDisplay() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //グラフィックス用のフレームバッファ、zバッファの初期化
 	//タイトル画面
 	if (scene == title) {
@@ -375,14 +373,12 @@ void myDisplay() {
 			TitleSound = true;
 		}
 
-		glPushMatrix();                    //現在の変換行列状態を保存 これにより他の行列処理の影響を受け無くなる
 		glMatrixMode(GL_PROJECTION);       //投影変換行列スタックを選択
-
-		glPushMatrix();
 		glLoadIdentity();                  //単位行列を格納
 		gluOrtho2D(0, WindowW, 0, WindowH);//直交投影を定義
 		glMatrixMode(GL_MODELVIEW);        //モデルビュー行列スタックを選択
 		glLoadIdentity();
+		glPushMatrix();                    //現在の変換行列状態を保存 これにより他の行列処理の影響を受け無くなる
 		char Titletext[17] = "3D Maze Explorer";  //文字列配列
 		char Select[13] = "Stage Select";
 		char Explain[12] = "Explanation";
@@ -416,11 +412,7 @@ void myDisplay() {
 		}
 		DrawChara(WindowW, WindowH, 0, -100, Option);
 		
-		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();  //保存した変換行列を復帰
-
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
 	}
 	//ゲーム画面
 	else if (scene == play) {
@@ -434,6 +426,11 @@ void myDisplay() {
 		glEnable(GL_DEPTH_TEST);       //陰面処理、光源、テクスチャの有効化
 		glEnable(GL_LIGHTING);
 		glEnable(GL_TEXTURE_2D);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluPerspective(60.0, (double)WindowW / (double)WindowH, 0.1, 20.0); //透視投影を定義
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 
 		glPushMatrix();
 		cameraDirX = cos(cameraAngle); //x軸方向の向きを設定
@@ -442,7 +439,7 @@ void myDisplay() {
 		SetLight();
 		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, line_diffuse); //マテリアルの各種設定
 		glMaterialfv(GL_FRONT, GL_SPECULAR, line_specular);
-		glMaterialfv(GL_FRONT, GL_SHININESS, mtrl_shininess);
+		glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
 
 		//床描画
 		glBegin(GL_LINES);
@@ -459,7 +456,7 @@ void myDisplay() {
 			for (const auto& square : squares) {
 				glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, point_diffuse);
 				glMaterialfv(GL_FRONT, GL_SPECULAR, point_specular);
-				glMaterialfv(GL_FRONT, GL_SHININESS, mtrl_shininess);
+				glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
 				drawSquare(square.x, square.z);
 			}
 		}
@@ -478,7 +475,7 @@ void myDisplay() {
 					glMaterialfv(GL_FRONT, GL_AMBIENT, cube_ambient);
 					glMaterialfv(GL_FRONT, GL_DIFFUSE, cube_diffuse);
 					glMaterialfv(GL_FRONT, GL_SPECULAR, cube_specular);
-					glMaterialfv(GL_FRONT, GL_SHININESS, cube_shininess);
+					glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
 					DrawWallTexture(WallTextureID);                      //テクスチャの描画
 					glPopMatrix();
 				}
@@ -517,7 +514,7 @@ void myDisplay() {
 					glMaterialfv(GL_FRONT, GL_AMBIENT, gate_ambient);
 					glMaterialfv(GL_FRONT, GL_DIFFUSE, gate_diffuse);
 					glMaterialfv(GL_FRONT, GL_SPECULAR, gate_specular);
-					glMaterialfv(GL_FRONT, GL_SHININESS, gate_shininess);
+					glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
 					DrawGateTexture(GateTextureID);
 					glPopMatrix();
 				}
@@ -532,8 +529,34 @@ void myDisplay() {
 		}
 		glPopMatrix();
 
-		glDisable(GL_DEPTH_TEST);  //陰面処理、テクスチャの無効化
+		glDisable(GL_DEPTH_TEST);  //陰面処理、テクスチャ、光源の無効化
 		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_LIGHTING);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0, WindowW, 0, WindowH, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		//UIの描画
+		if (support) {
+			glPushMatrix();
+			glTranslated(WindowW - 37.5, WindowH - 50, 0);
+			glRotated(cameraAngle * 180 / M_PI, 0, 0, 1);
+			glTranslated(-WindowW + 37.5, -WindowH + 50, 0);
+			glColor3f(1, 0, 0);
+			glBegin(GL_TRIANGLES);
+			glVertex2d(WindowW - 50, WindowH - 50);
+			glVertex2d(WindowW - 25, WindowH - 50);
+			glVertex2d(WindowW - 37.5, WindowH - 25);
+			glEnd();
+			glColor3f(1, 1, 1);
+			glBegin(GL_TRIANGLES);
+			glVertex2d(WindowW - 50, WindowH - 50);
+			glVertex2d(WindowW - 37.5, WindowH - 75);
+			glVertex2d(WindowW - 25, WindowH - 50);
+			glEnd();
+			glPopMatrix();
+		}
 	}
 	//リザルト画面
 	else if (scene == result) {
@@ -546,16 +569,13 @@ void myDisplay() {
 			ResultSound = true;
 		}
 		glDisable(GL_LIGHTING);  //光源の無効化
-
-		glPushMatrix();
 		glColor3f(1, 1, 1);
 		glMatrixMode(GL_PROJECTION);
-
-		glPushMatrix();
 		glLoadIdentity();
 		gluOrtho2D(0, WindowW, 0, WindowH);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+		glPushMatrix();
 		char Resulttext[12] = "Game Clear!";
 		char Backtext[12] = "Press Enter";
 
@@ -563,25 +583,19 @@ void myDisplay() {
 		DrawChara(WindowW, WindowH, 0, 0, Goal_char);
 		DrawChara(WindowW, WindowH, 0, -50, Backtext);
 		
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-
-		glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
 	}
 	//オプション画面
 	else if (scene == option) {
-		glPushMatrix();
 		glColor3f(1, 1, 1);
 		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
 		glLoadIdentity();
 		gluOrtho2D(0, WindowW, 0, WindowH);
-
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+		glPushMatrix();
 		char Optiontext[7] = "Option";
-		char Foot[11] = "Footprints";
+		char Foot[8] = "Support";
 		char On[3] = "ON";
 		char Off[4] = "OFF";
 		char BGM[4] = "BGM";
@@ -691,24 +705,18 @@ void myDisplay() {
 		}
 		DrawChara(WindowW, WindowH, 0, -200, Ok);
 		
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-
-		glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
 	}
 	//ポーズ画面
 	else if (scene == pause) {
 		glDisable(GL_LIGHTING);
-		glPushMatrix();
 		glColor3f(1, 1, 1);
 		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
 		glLoadIdentity();
 		gluOrtho2D(0, WindowW, 0, WindowH);
-
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+		glPushMatrix();
 		char Pausetext[6] = "Pause";
 		char Continue[10] = "Continue?";
 		char Yes[4] = "Yes";
@@ -731,23 +739,17 @@ void myDisplay() {
 		}
 		DrawChara(WindowW, WindowH, 50, -50, No);
 		
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-
-		glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
 	}
 	//セレクト画面
 	else if (scene == select) {
 		squares.clear(); //足跡消去
-		glPushMatrix();
 		glMatrixMode(GL_PROJECTION);
-
-		glPushMatrix();
 		glLoadIdentity();
 		gluOrtho2D(0, WindowW, 0, WindowH);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+		glPushMatrix();
 		char Selecttext[13] = "Stage Select";
 		char Level1[7] = "Level1";
 		char Level2[7] = "Level2";
@@ -790,23 +792,17 @@ void myDisplay() {
 		}
 		DrawChara(WindowW, WindowH, 0, -150, Back);
 
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();  //保存した変換行列を復帰
-
-		glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
 	}
 	//説明画面
 	else if (scene == explain) {
-		glPushMatrix();
 		glColor3f(1, 1, 1);
 		glMatrixMode(GL_PROJECTION);
-
-		glPushMatrix();
 		glLoadIdentity();
 		gluOrtho2D(0, WindowW, 0, WindowH);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+		glPushMatrix();
 		char Extext[12] = "Explanation";
 		char Ex1[17] = "Arrows:Move,Turn";
 		char Ex2[8] = "P:Pause";
@@ -821,10 +817,6 @@ void myDisplay() {
 		glColor3d(1.0, 0.0, 0.0);
 		DrawChara(WindowW, WindowH, 0, -200, Back);
 
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-
-		glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
 	}
 	glutSwapBuffers();  //描画実行
@@ -833,18 +825,14 @@ void myDisplay() {
 /*******************************************************
 * ウィンドウの初期化を行う関数
 ********************************************************/
-void myInit() {
+static void myInit() {
 	WindowW = 640;
 	WindowH = 480;
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); //ダブルバッファモード、RGBAモード、zバッファの使用を宣言
 	glutInitWindowSize(WindowW, WindowH);                      //ウィンドウサイズの指定 引数は共にピクセル値
 	glutInitWindowPosition(0, 0);                              //ウィンドウの左上の位置の指定 引数は共にピクセル値
-	window = glutCreateWindow("Maze");                                  //ウィンドウ生成 引数はウィンドウ名
+	window = glutCreateWindow("Maze");                         //ウィンドウ生成 引数はウィンドウ名
 	glClearColor(0.0, 0.0, 0.0, 1.0);                          //カラーバッファのクリア
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(90.0, (double)WindowW / (double)WindowH, 0.1, 20.0); //透視投影を定義
-	glMatrixMode(GL_MODELVIEW);
 	glShadeModel(GL_SMOOTH);
 	glLoadIdentity();
 }
@@ -854,15 +842,10 @@ void myInit() {
 * 引数
 * width,height:新しいウィンドウの横幅と縦幅 共にピクセル数
 ********************************************************/
-void myReshape(int width, int height) {
+static void myReshape(int width, int height) {
 	glViewport(0, 0, width, height);  //ビューポートの設定
 	WindowW = width;
 	WindowH = height;
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(60.0, (double)width / (double)height, 0.1, 20.0);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
 }
 
 /*******************************************************
@@ -870,7 +853,7 @@ void myReshape(int width, int height) {
 * 引数
 * value:この関数に付与された番号 今回は使用しない
 ********************************************************/
-void onTimer(int value) {
+static void onTimer(int value) {
 	if (support) {
 		//新しい足跡を足元の位置に追加
 		squares.push_back(Square{ cameraX, cameraZ });
@@ -884,7 +867,7 @@ void onTimer(int value) {
 * 引数
 * value:この関数に付与された番号 今回は使用しない
 ********************************************************/
-void Update(int value) {
+static void Update(int value) {
 	Vector3 preCameraPos = { cameraX, cameraY, cameraZ }; //移動前のカメラ座標
 	float speed = 0.1f; // カメラの移動速度
 	//ゲーム画面

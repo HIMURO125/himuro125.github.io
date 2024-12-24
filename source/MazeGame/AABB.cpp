@@ -13,7 +13,7 @@
 * cameraPosition:現在のカメラの座標
 ********************************************************/
 AABB GetCameraAABB(const Vector3& cameraPosition) {
-	AABB cameraBox;                             //カメラのAABB
+	AABB cameraBox = {};                        //カメラのAABB
 	cameraBox.min.x = cameraPosition.x - 0.5f;  //xの最小座標
 	cameraBox.min.y = cameraPosition.y - 0.5f;  //yの最小座標
 	cameraBox.min.z = cameraPosition.z - 0.5f;  //zの最小座標
@@ -31,7 +31,7 @@ AABB GetCameraAABB(const Vector3& cameraPosition) {
 * size      :AABBの大きさ
 ********************************************************/
 AABB GetCubeAABB(const Vector3& CubeCenter, float size) {
-	AABB cube;                             //壁のAABB
+	AABB cube = {};                        //壁のAABB
 	float halfSize = size / 2.0f;
 	cube.min.x = CubeCenter.x - halfSize;  //xの最小座標
 	cube.min.y = CubeCenter.y - halfSize;  //yの最小座標
@@ -50,7 +50,7 @@ AABB GetCubeAABB(const Vector3& CubeCenter, float size) {
 * size     :AABBの大きさ
 ********************************************************/
 AABB GetKeyAABB(const Vector3& KeyCenter, float size) {
-	AABB key;                            //鍵のAABB
+	AABB key = {};                       //鍵のAABB
 	float halfsize = size / 2.0f;
 	key.min.x = KeyCenter.x - halfsize;  //xの最小座標
 	key.min.y = KeyCenter.y - halfsize;  //yの最小座標
@@ -85,7 +85,7 @@ vector<AABB> InitWallAABB(int size, vector<vector<int>> maze) {
 			//壁
 			if (maze[x][z] == 1) {
 				center = { 2.0f * x - 36, 2.0f, 2.0f * z - 36 };
-				cubes.push_back(GetCubeAABB(center, 2.0));           //壁のAABBを追加
+				cubes.push_back(GetCubeAABB(center, 2.0)); //壁のAABBを追加
 			}
 		}
 	}
