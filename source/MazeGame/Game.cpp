@@ -451,16 +451,15 @@ static void myDisplay() {
 		}
 		glEnd();
 
+		glDisable(GL_LIGHTING);
 		//足跡描画
 		if (support) {
 			for (const auto& square : squares) {
-				glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, point_diffuse);
-				glMaterialfv(GL_FRONT, GL_SPECULAR, point_specular);
-				glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
+				glColor3f(1, 1, 0);
 				drawSquare(square.x, square.z);
 			}
 		}
-
+		glEnable(GL_LIGHTING);
 		
 		Vector3 center; //中心座標
 
@@ -532,12 +531,12 @@ static void myDisplay() {
 		glDisable(GL_DEPTH_TEST);  //陰面処理、テクスチャ、光源の無効化
 		glDisable(GL_TEXTURE_2D);
 		glDisable(GL_LIGHTING);
+		//UIの描画
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0, WindowW, 0, WindowH, -1, 1);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		//UIの描画
 		if (support) {
 			glPushMatrix();
 			glTranslated(WindowW - 37.5, WindowH - 50, 0);
@@ -557,6 +556,13 @@ static void myDisplay() {
 			glEnd();
 			glPopMatrix();
 		}
+		glPushMatrix();
+		auto current_time = chrono::steady_clock::now();
+		auto seconds = chrono::duration_cast<chrono::seconds>(current_time - start_time - pause_time).count();
+		char Time_Char[30] = {};
+		snprintf(Time_Char, sizeof(Time_Char), "Time: %lld ", seconds);
+		DrawChara(WindowW / 4, WindowH * 7 / 4, 0, 0, Time_Char);
+		glPopMatrix();
 	}
 	//リザルト画面
 	else if (scene == result) {
