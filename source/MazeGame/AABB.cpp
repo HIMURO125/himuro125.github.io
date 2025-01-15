@@ -76,6 +76,14 @@ bool CheckCollision(const AABB Camera, const AABB Obj) {
 		(Camera.min.z <= Obj.max.z && Camera.max.z >= Obj.min.z);
 }
 
+/*******************************************************
+* 全ての壁のAABBを記録する関数
+* 引数に迷路のサイズと迷路の二次元配列を渡す
+* 全てのAABBを記録したvectorを返す
+* 引数
+* size:迷路のサイズ
+* maze:迷路の二次元配列
+********************************************************/
 vector<AABB> InitWallAABB(int size, vector<vector<int>> maze) {
 	vector<AABB> cubes;
 	Vector3 center; //中心座標

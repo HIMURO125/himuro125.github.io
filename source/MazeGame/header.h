@@ -17,6 +17,10 @@
 #include <random>
 #include <chrono>
 #include <cstdio>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
+#include <string>
 using namespace std;
 
 //座標構造体を定義
@@ -56,4 +60,4 @@ void SetSEVolume(int i);                                      //SE音量設定
 GLuint SetTexture(const char* filename);                      //テクスチャデータの読み込み
 void DrawWallTexture(GLuint TextureID);                       //壁のテクスチャの描画
 void DrawGateTexture(GLuint TextureID);                       //扉のテクスチャの描画
-vector<AABB> InitWallAABB(int size, vector<vector<int>> maze);
+vector<AABB> InitWallAABB(int size, vector<vector<int>> maze);//壁のAABB設定

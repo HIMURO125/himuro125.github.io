@@ -446,8 +446,8 @@ static void myDisplay() {
 		for (int i = -35; i < 7; i += 2) {
 			glVertex3i(i, 0, -35);
 			glVertex3i(i, 0, 35);
-			glVertex3i(-50, 0, i);
-			glVertex3i(50, 0, i);
+			glVertex3i(-35, 0, i);
+			glVertex3i(35, 0, i);
 		}
 		glEnd();
 
@@ -539,20 +539,20 @@ static void myDisplay() {
 		glLoadIdentity();
 		if (support) {
 			glPushMatrix();
-			glTranslated(WindowW - 37.5, WindowH - 50, 0);
+			glTranslated(WindowW - 47.5, WindowH - 60, 0);
 			glRotated(cameraAngle * 180 / M_PI, 0, 0, 1);
-			glTranslated(-WindowW + 37.5, -WindowH + 50, 0);
+			glTranslated(-WindowW + 47.5, -WindowH + 60, 0);
 			glColor3f(1, 0, 0);
 			glBegin(GL_TRIANGLES);
-			glVertex2d(WindowW - 50, WindowH - 50);
-			glVertex2d(WindowW - 25, WindowH - 50);
-			glVertex2d(WindowW - 37.5, WindowH - 25);
+			glVertex2d(WindowW - 65, WindowH - 60);
+			glVertex2d(WindowW - 30, WindowH - 60);
+			glVertex2d(WindowW - 47.5, WindowH - 30);
 			glEnd();
 			glColor3f(1, 1, 1);
 			glBegin(GL_TRIANGLES);
-			glVertex2d(WindowW - 50, WindowH - 50);
-			glVertex2d(WindowW - 37.5, WindowH - 75);
-			glVertex2d(WindowW - 25, WindowH - 50);
+			glVertex2d(WindowW - 65, WindowH - 60);
+			glVertex2d(WindowW - 47.5, WindowH - 90);
+			glVertex2d(WindowW - 30, WindowH - 60);
 			glEnd();
 			glPopMatrix();
 		}
