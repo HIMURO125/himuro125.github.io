@@ -17,9 +17,18 @@ vector<int> ReadFile(string filename) {
     return data;
 }
 
-void WriteFile(vector<int> data, string filename) {
-    ofstream file(filename);
-    for (int i = 0; i < data.size(); i++) {
-        file << data[i] << endl;
+void WriteFile(long long data, string filename) {
+    ofstream file(filename, ios::app);
+    file << endl << data;
+}
+
+void CheckFile(string filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        ofstream newfile(filename);
+        newfile << 100 << endl;
+        newfile << 200 << endl;
+        newfile << 300;
+        newfile.close();
     }
 }

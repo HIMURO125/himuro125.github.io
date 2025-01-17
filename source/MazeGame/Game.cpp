@@ -37,6 +37,7 @@ const int option = 3;               //オプション画面を3とする
 const int pause = 4;                //ポーズ画面を4とする
 const int select = 5;               //セレクト画面を5とする
 const int explain = 6;              //説明画面を6とする
+const int ranking = 7;				//ランキング画面を7とする
 int WindowW = 0;                    //ウィンドウの幅
 int WindowH = 0;                    //ウィンドウの高さ
 int currentTiItem = 0;              //タイトル画面の選択項目
@@ -99,6 +100,9 @@ static void myKeyboard(unsigned char key, int x, int y) {
 			//オプション画面に遷移
 			else if (currentTiItem == 2) {
 				scene = option;
+			}
+			else if (currentTiItem == 3) {
+				scene = ranking;
 			}
 		}
 	}
@@ -190,7 +194,7 @@ static void myKeyboard(unsigned char key, int x, int y) {
 		}
 	}
 	//説明画面
-	else if (scene == explain) {
+	else if (scene == explain || scene == ranking) {
 		if (key == 13) {
 			PlaySE(4);
 			scene = title;
@@ -217,11 +221,11 @@ static void mySpecialKeys(int key, int x, int y) {
 	if (scene == title) {
 		switch (key) {
 		case GLUT_KEY_UP:   //上矢印キーで項目を上に移動
-			currentTiItem = (currentTiItem + 2) % 3;
+			currentTiItem = (currentTiItem + 3) % 4;
 			PlaySE(3);
 			break;
 		case GLUT_KEY_DOWN: //上矢印キーで項目を下に移動
-			currentTiItem = (currentTiItem + 1) % 3;
+			currentTiItem = (currentTiItem + 1) % 4;
 			PlaySE(3);
 			break;
 		}
@@ -383,6 +387,7 @@ static void myDisplay() {
 		char Select[13] = "Stage Select";
 		char Explain[12] = "Explanation";
 		char Option[7] = "Option";
+		char Rank[8] = "Ranking";
 
 		//文字の色設定
 		glColor3d(1.0, 1.0, 1.0);
@@ -411,6 +416,14 @@ static void myDisplay() {
 			glColor3d(1.0, 1.0, 1.0);
 		}
 		DrawChara(WindowW, WindowH, 0, -100, Option);
+
+		if (currentTiItem == 3) {
+			glColor3d(1.0, 0.0, 0.0);
+		}
+		else {
+			glColor3d(1.0, 1.0, 1.0);
+		}
+		DrawChara(WindowW, WindowH, 0, -150, Rank);
 		
 		glPopMatrix();  //保存した変換行列を復帰
 	}
@@ -825,6 +838,55 @@ static void myDisplay() {
 
 		glPopMatrix();
 	}
+	//ランキング画面
+	else if (scene == ranking) {
+		glColor3f(1, 1, 1);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluOrtho2D(0, WindowW, 0, WindowH);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glPushMatrix();
+		char Rank[8] = "Ranking";
+		char Level1[7] = "Level1";
+		char Level2[7] = "Level2";
+		char Level3[7] = "Level3";
+		char Back[5] = "Back";
+		vector<int> Lev1 = ReadFile("Rank1.txt");
+		vector<int> Lev2 = ReadFile("Rank2.txt");
+		vector<int> Lev3 = ReadFile("Rank3.txt");
+
+		char fir1[20], sec1[20], thir1[20];
+		char fir2[20], sec2[20], thir2[20];
+		char fir3[20], sec3[20], thir3[20];
+
+		snprintf(fir1, sizeof(fir1), "1# %d sec", Lev1[0]);
+		snprintf(sec1, sizeof(sec1), "2# %d sec", Lev1[1]);
+		snprintf(thir1, sizeof(thir1), "3# %d sec", Lev1[2]);
+		snprintf(fir2, sizeof(fir2), "1# %d sec", Lev2[0]);
+		snprintf(sec2, sizeof(sec2), "2# %d sec", Lev2[1]);
+		snprintf(thir2, sizeof(thir2), "3# %d sec", Lev2[2]);
+		snprintf(fir3, sizeof(fir2), "1# %d sec", Lev3[0]);
+		snprintf(sec3, sizeof(sec2), "2# %d sec", Lev3[1]);
+		snprintf(thir3, sizeof(thir2), "3# %d sec", Lev3[2]);
+
+		DrawChara(WindowW, WindowH, 0, 100, Rank);
+		DrawChara(WindowW, WindowH, -150, 50, Level1);
+		DrawChara(WindowW, WindowH, -150, 0, fir1);
+		DrawChara(WindowW, WindowH, -150, -50, sec1);
+		DrawChara(WindowW, WindowH, -150, -100, thir1);
+		DrawChara(WindowW, WindowH, 0, 50, Level2);
+		DrawChara(WindowW, WindowH, 0, 0, fir2);
+		DrawChara(WindowW, WindowH, 0, -50, sec2);
+		DrawChara(WindowW, WindowH, 0, -100, thir2);
+		DrawChara(WindowW, WindowH, 150, 50, Level3);
+		DrawChara(WindowW, WindowH, 150, 0, fir3);
+		DrawChara(WindowW, WindowH, 150, -50, sec3);
+		DrawChara(WindowW, WindowH, 150, -100, thir3);
+		glColor3f(1, 0, 0);
+		DrawChara(WindowW, WindowH, 0, -150, Back);
+
+	}
 	glutSwapBuffers();  //描画実行
 }
 
@@ -931,6 +993,17 @@ static void Update(int value) {
 			auto current_time = chrono::steady_clock::now();
 			auto Goalseconds = chrono::duration_cast<chrono::seconds>(current_time - start_time - pause_time).count();
 			snprintf(Goal_char, sizeof(Goal_char), "Clear Time: %lld Seconds", Goalseconds);
+			switch(::size) {
+			case 9:
+				WriteFile(Goalseconds, "Rank1.txt");
+				break;
+			case 15:
+				WriteFile(Goalseconds, "Rank2.txt");
+				break;
+			case 21:
+				WriteFile(Goalseconds, "Rank3.txt");
+				break;
+			}
 			scene = result;
 		}
 	}
@@ -964,6 +1037,9 @@ int main(int argc, char** argv) {
 		return -1;
 	}
 	LoadSound();
+	CheckFile("Rank1.txt");
+	CheckFile("Rank2.txt");
+	CheckFile("Rank3.txt");
 	WallTextureID = SetTexture("wall.jpg");
 	GateTextureID = SetTexture("gate.jpg");
 	glutMainLoop();                    //他イベント待ちになるイベント処理ループに入る
