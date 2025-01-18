@@ -61,6 +61,6 @@ GLuint SetTexture(const char* filename);                      //テクスチャデータ
 void DrawWallTexture(GLuint TextureID);                       //壁のテクスチャの描画
 void DrawGateTexture(GLuint TextureID);                       //扉のテクスチャの描画
 vector<AABB> InitWallAABB(int size, vector<vector<int>> maze);//壁のAABB設定
-vector<int> ReadFile(string filename);
-void WriteFile(long long data, string filename);
-void CheckFile(string filename);
+vector<int> ReadFile(string filename);						  //ファイルの読み込み
+void WriteFile(long long data, string filename);			  //ファイルの書き込み
+void CheckFile(string filename);							  //ファイルの存在確認

@@ -68,14 +68,14 @@ float gate_diffuse[] = { 0.7038f,0.27048f,0.0828f,1.0f };
 float gate_specular[] = { 0.256777f,0.137622f, 0.086014f, 1.0f };
 float shininess[] = { 1.0f };
 
-AABB cameraBox = {};    //カメラのAABB
-AABB KEY = {};          //鍵のAABB
-AABB GATE = {};         //扉のAABB
-AABB GOAL = {};         //ゴールのAABB
-vector<AABB> cubes;     //全ての壁のAABBを格納する配列
-vector<Square> squares; //全ての足跡の座標を格納する配列
-GLuint WallTextureID = 0;
-GLuint GateTextureID = 0;
+AABB cameraBox = {};     //カメラのAABB
+AABB KEY = {};           //鍵のAABB
+AABB GATE = {};          //扉のAABB
+AABB GOAL = {};          //ゴールのAABB
+vector<AABB> cubes;      //全ての壁のAABBを格納する配列
+vector<Square> squares;  //全ての足跡の座標を格納する配列
+GLuint WallTextureID = 0;//壁のテクスチャID
+GLuint GateTextureID = 0;//扉のテクスチャID
 
 /*******************************************************
 * 一般キーが押された時に呼び出される関数
@@ -193,7 +193,7 @@ static void myKeyboard(unsigned char key, int x, int y) {
 			currentSeItem = 0;
 		}
 	}
-	//説明画面
+	//説明画面とランキング画面
 	else if (scene == explain || scene == ranking) {
 		if (key == 13) {
 			PlaySE(4);
@@ -852,7 +852,7 @@ static void myDisplay() {
 		char Level2[7] = "Level2";
 		char Level3[7] = "Level3";
 		char Back[5] = "Back";
-		vector<int> Lev1 = ReadFile("Rank1.txt");
+		vector<int> Lev1 = ReadFile("Rank1.txt");//ファイルの読み込み
 		vector<int> Lev2 = ReadFile("Rank2.txt");
 		vector<int> Lev3 = ReadFile("Rank3.txt");
 
@@ -860,7 +860,7 @@ static void myDisplay() {
 		char fir2[20], sec2[20], thir2[20];
 		char fir3[20], sec3[20], thir3[20];
 
-		snprintf(fir1, sizeof(fir1), "1# %d sec", Lev1[0]);
+		snprintf(fir1, sizeof(fir1), "1# %d sec", Lev1[0]);  //int型をchar型に変換
 		snprintf(sec1, sizeof(sec1), "2# %d sec", Lev1[1]);
 		snprintf(thir1, sizeof(thir1), "3# %d sec", Lev1[2]);
 		snprintf(fir2, sizeof(fir2), "1# %d sec", Lev2[0]);
@@ -993,6 +993,7 @@ static void Update(int value) {
 			auto current_time = chrono::steady_clock::now();
 			auto Goalseconds = chrono::duration_cast<chrono::seconds>(current_time - start_time - pause_time).count();
 			snprintf(Goal_char, sizeof(Goal_char), "Clear Time: %lld Seconds", Goalseconds);
+			//クリアタイムの書き込み
 			switch(::size) {
 			case 9:
 				WriteFile(Goalseconds, "Rank1.txt");
