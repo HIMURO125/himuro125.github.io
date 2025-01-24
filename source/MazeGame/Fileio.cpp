@@ -5,6 +5,7 @@
 #pragma once
 #include "header.h"
 
+const int Init = 9999;
 /*******************************************************
 * ファイルの読み込みを行う関数
 * 返り値としてソートした読み込んだデータを返す
@@ -48,9 +49,36 @@ void CheckFile(string filename) {
     ifstream file(filename);
     if (!file.is_open()) {
         ofstream newfile(filename);
-        newfile << 100 << endl;
-        newfile << 200 << endl;
-        newfile << 300;
+        newfile << Init << endl;
+        newfile << Init << endl;
+        newfile << Init;
         newfile.close();
+    }
+}
+
+void ChangeData1(char* str, int data, size_t size) {
+    if (data == 9999) {
+        snprintf(str, size, "1# NULL");
+    }
+    else {
+        snprintf(str, size, "1# %d sec", data);  //int型をchar型に変換
+    }
+}
+
+void ChangeData2(char* str, int data, size_t size) {
+    if (data == 9999) {
+        snprintf(str, size, "2# NULL");
+    }
+    else {
+        snprintf(str, size, "2# %d sec", data);
+    }
+}
+
+void ChangeData3(char* str, int data, size_t size) {
+    if (data == 9999) {
+        snprintf(str, size, "3# NULL");
+    }
+    else {
+        snprintf(str, size, "3# %d sec", data);
     }
 }

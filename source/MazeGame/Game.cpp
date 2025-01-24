@@ -78,6 +78,95 @@ GLuint WallTextureID = 0;//壁のテクスチャID
 GLuint GateTextureID = 0;//扉のテクスチャID
 
 /*******************************************************
+* 描画の更新を行う関数
+* 引数
+* value:この関数に付与された番号 今回は使用しない
+********************************************************/
+static void Update(int value) {
+	Vector3 preCameraPos = { cameraX, cameraY, cameraZ }; //移動前のカメラ座標
+	float speed = 0.1f; // カメラの移動速度
+	//ゲーム画面
+	if (scene == play) {
+		//前進
+		if (goForward) {
+			cameraX += cameraDirX * speed;
+			cameraZ += cameraDirZ * speed;
+			if (!::move) {
+				PlaySE(0);
+				::move = true;
+			}
+		}
+		//後退
+		else if (goBack) {
+			cameraX -= cameraDirX * speed;
+			cameraZ -= cameraDirZ * speed;
+			if (!::move) {
+				PlaySE(0);
+				::move = true;
+			}
+		}
+		Vector3 cameraPosition = { cameraX, cameraY, cameraZ }; //移動後のカメラ座標
+		cameraBox = GetCameraAABB(cameraPosition);
+		//壁の衝突検知
+		for (int i = 0; i < cubes.size(); i++) {
+			if (CheckCollision(cameraBox, cubes[i])) {
+				cameraX = preCameraPos.x;
+				cameraZ = preCameraPos.z;
+				break;
+			}
+		}
+		//鍵の衝突判定
+		if (!keyflag && CheckCollision(cameraBox, KEY)) {
+			keyflag = true;
+			PlaySE(1);
+		}
+		//扉の衝突判定
+		if (CheckCollision(cameraBox, GATE)) {
+			if (!keyflag) {
+				cameraX = preCameraPos.x;
+				cameraZ = preCameraPos.z;
+			}
+			else if (keyflag) {
+				gateflag = true;
+				if (!flag) {
+					PlaySE(2);
+					flag = true;
+				}
+			}
+		}
+		//ゴールの衝突判定
+		if (gateflag && CheckCollision(cameraBox, GOAL)) {
+			//クリアタイム計算
+			auto current_time = chrono::steady_clock::now();
+			auto Goalseconds = chrono::duration_cast<chrono::seconds>(current_time - start_time - pause_time).count();
+			snprintf(Goal_char, sizeof(Goal_char), "Clear Time: %lld Seconds", Goalseconds);
+			//クリアタイムの書き込み
+			switch (::size) {
+			case 9:
+				WriteFile(Goalseconds, "Rank1.txt");
+				break;
+			case 15:
+				WriteFile(Goalseconds, "Rank2.txt");
+				break;
+			case 21:
+				WriteFile(Goalseconds, "Rank3.txt");
+				break;
+			}
+			scene = result;
+		}
+	}
+	//オプション画面
+	else if (scene == option) {
+		SetBGMVolume(currentOpItem3);//BGM音量設定
+		SetSEVolume(currentOpItem4); //SE音量設定
+	}
+	glutPostRedisplay(); //再描画を指示する
+	if (scene == play || scene == option || scene == pause) {
+		glutTimerFunc(16, Update, 0);
+	}
+}
+
+/*******************************************************
 * 一般キーが押された時に呼び出される関数
 * 引数
 * key:押されたキーのASCIIコード
@@ -100,7 +189,9 @@ static void myKeyboard(unsigned char key, int x, int y) {
 			//オプション画面に遷移
 			else if (currentTiItem == 2) {
 				scene = option;
+				Update(0);
 			}
+			//ランキング画面に遷移
 			else if (currentTiItem == 3) {
 				scene = ranking;
 			}
@@ -191,6 +282,7 @@ static void myKeyboard(unsigned char key, int x, int y) {
 				scene = title;
 			}
 			currentSeItem = 0;
+			Update(0);
 		}
 	}
 	//説明画面とランキング画面
@@ -208,6 +300,8 @@ static void myKeyboard(unsigned char key, int x, int y) {
 		closeSDL();
 		exit(0);  //終了
 	}
+	if (scene != play)
+		glutPostRedisplay();
 }
 
 /*******************************************************
@@ -316,6 +410,8 @@ static void mySpecialKeys(int key, int x, int y) {
 			break;
 		}
 	}
+	if (scene != play)
+		glutPostRedisplay();
 }
 
 /*******************************************************
@@ -852,6 +948,7 @@ static void myDisplay() {
 		char Level2[7] = "Level2";
 		char Level3[7] = "Level3";
 		char Back[5] = "Back";
+		char one[4] = "1#";
 		vector<int> Lev1 = ReadFile("Rank1.txt");//ファイルの読み込み
 		vector<int> Lev2 = ReadFile("Rank2.txt");
 		vector<int> Lev3 = ReadFile("Rank3.txt");
@@ -860,15 +957,15 @@ static void myDisplay() {
 		char fir2[20], sec2[20], thir2[20];
 		char fir3[20], sec3[20], thir3[20];
 
-		snprintf(fir1, sizeof(fir1), "1# %d sec", Lev1[0]);  //int型をchar型に変換
-		snprintf(sec1, sizeof(sec1), "2# %d sec", Lev1[1]);
-		snprintf(thir1, sizeof(thir1), "3# %d sec", Lev1[2]);
-		snprintf(fir2, sizeof(fir2), "1# %d sec", Lev2[0]);
-		snprintf(sec2, sizeof(sec2), "2# %d sec", Lev2[1]);
-		snprintf(thir2, sizeof(thir2), "3# %d sec", Lev2[2]);
-		snprintf(fir3, sizeof(fir2), "1# %d sec", Lev3[0]);
-		snprintf(sec3, sizeof(sec2), "2# %d sec", Lev3[1]);
-		snprintf(thir3, sizeof(thir2), "3# %d sec", Lev3[2]);
+		ChangeData1(fir1, Lev1[0], sizeof(fir1));
+		ChangeData2(sec1, Lev1[1], sizeof(sec1));
+		ChangeData3(thir1, Lev1[2], sizeof(thir1));
+		ChangeData1(fir2, Lev2[0], sizeof(fir2));
+		ChangeData2(sec2, Lev2[1], sizeof(sec2));
+		ChangeData3(thir2, Lev2[2], sizeof(thir2));
+		ChangeData1(fir3, Lev3[0], sizeof(fir3));
+		ChangeData2(sec3, Lev3[1], sizeof(sec3));
+		ChangeData3(thir3, Lev3[2], sizeof(thir3));
 
 		DrawChara(WindowW, WindowH, 0, 100, Rank);
 		DrawChara(WindowW, WindowH, -150, 50, Level1);
@@ -914,6 +1011,8 @@ static void myReshape(int width, int height) {
 	glViewport(0, 0, width, height);  //ビューポートの設定
 	WindowW = width;
 	WindowH = height;
+	if (scene != play)
+		glutPostRedisplay();
 }
 
 /*******************************************************
@@ -930,92 +1029,7 @@ static void onTimer(int value) {
 	glutTimerFunc(500, onTimer, 0);
 }
 
-/*******************************************************
-* 描画の更新を行う関数
-* 引数
-* value:この関数に付与された番号 今回は使用しない
-********************************************************/
-static void Update(int value) {
-	Vector3 preCameraPos = { cameraX, cameraY, cameraZ }; //移動前のカメラ座標
-	float speed = 0.1f; // カメラの移動速度
-	//ゲーム画面
-	if (scene == play) {
-		//前進
-		if (goForward) {
-			cameraX += cameraDirX * speed;
-			cameraZ += cameraDirZ * speed;
-			if (!::move) {
-				PlaySE(0);
-				::move = true;
-			}
-		}
-		//後退
-		else if (goBack) {
-			cameraX -= cameraDirX * speed;
-			cameraZ -= cameraDirZ * speed;
-			if (!::move) {
-				PlaySE(0);
-				::move = true;
-			}
-		}
-		Vector3 cameraPosition = { cameraX, cameraY, cameraZ }; //移動後のカメラ座標
-		cameraBox = GetCameraAABB(cameraPosition);
-		//壁の衝突検知
-		for (int i = 0; i < cubes.size(); i++) {
-			if (CheckCollision(cameraBox, cubes[i])) {
-				cameraX = preCameraPos.x;
-				cameraZ = preCameraPos.z;
-				break;
-			}
-		}
-		//鍵の衝突判定
-		if (!keyflag && CheckCollision(cameraBox, KEY)) {
-			keyflag = true;
-			PlaySE(1);
-		}
-		//扉の衝突判定
-		if (CheckCollision(cameraBox, GATE)) {
-			if (!keyflag) {
-				cameraX = preCameraPos.x;
-				cameraZ = preCameraPos.z;
-			}
-			else if (keyflag) {
-				gateflag = true;
-				if (!flag) {
-					PlaySE(2);
-					flag = true;
-				}
-			}
-		}
-		//ゴールの衝突判定
-		if (gateflag && CheckCollision(cameraBox, GOAL)) {
-			//クリアタイム計算
-			auto current_time = chrono::steady_clock::now();
-			auto Goalseconds = chrono::duration_cast<chrono::seconds>(current_time - start_time - pause_time).count();
-			snprintf(Goal_char, sizeof(Goal_char), "Clear Time: %lld Seconds", Goalseconds);
-			//クリアタイムの書き込み
-			switch(::size) {
-			case 9:
-				WriteFile(Goalseconds, "Rank1.txt");
-				break;
-			case 15:
-				WriteFile(Goalseconds, "Rank2.txt");
-				break;
-			case 21:
-				WriteFile(Goalseconds, "Rank3.txt");
-				break;
-			}
-			scene = result;
-		}
-	}
-	//オプション画面
-	else if (scene == option) {
-		SetBGMVolume(currentOpItem3);//BGM音量設定
-		SetSEVolume(currentOpItem4); //SE音量設定
-	}
-	glutPostRedisplay(); //再描画を指示する
-	glutTimerFunc(16, Update, 0);
-}
+
 
 /*******************************************************
 * メイン関数
