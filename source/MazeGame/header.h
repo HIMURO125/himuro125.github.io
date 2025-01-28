@@ -64,6 +64,6 @@ vector<AABB> InitWallAABB(int size, vector<vector<int>> maze);//壁のAABB設定
 vector<int> ReadFile(string filename);						  //ファイルの読み込み
 void WriteFile(long long data, string filename);			  //ファイルの書き込み
 void CheckFile(string filename);							  //ファイルの存在確認
-void ChangeData1(char* str, int data, size_t size);
+void ChangeData1(char* str, int data, size_t size);			  //データの変換
 void ChangeData2(char* str, int data, size_t size);
 void ChangeData3(char* str, int data, size_t size);

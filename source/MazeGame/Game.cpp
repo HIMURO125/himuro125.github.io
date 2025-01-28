@@ -6,7 +6,7 @@
 #pragma once
 #include "header.h"
 
-int window = 0;
+int window = 0;                     //ウィンドウ
 float cameraX = 0.0f;               //カメラのx座標
 float cameraY = 1.0f;               //カメラのy座標
 float cameraZ = 0.0f;               //カメラのz座標
@@ -161,7 +161,8 @@ static void Update(int value) {
 		SetSEVolume(currentOpItem4); //SE音量設定
 	}
 	glutPostRedisplay(); //再描画を指示する
-	if (scene == play || scene == option || scene == pause) {
+	//ゲーム画面、オプション画面の場合60fpsで更新
+	if (scene == play || scene == option) {
 		glutTimerFunc(16, Update, 0);
 	}
 }
@@ -244,6 +245,7 @@ static void myKeyboard(unsigned char key, int x, int y) {
 			else if (currentPaItem == 1) {
 				scene = title;  //タイトル画面に遷移
 			}
+			Update(0);
 		}
 	}
 	//セレクト画面
@@ -276,13 +278,13 @@ static void myKeyboard(unsigned char key, int x, int y) {
 				scene = play;
 				cubes.clear();
 				cubes = InitWallAABB(::size, ::maze);
+				Update(0);
 			}
 			//タイトル画面に遷移
 			else if (currentSeItem == 3) {
 				scene = title;
 			}
 			currentSeItem = 0;
-			Update(0);
 		}
 	}
 	//説明画面とランキング画面
@@ -1047,8 +1049,9 @@ int main(int argc, char** argv) {
 	glutReshapeFunc(myReshape);        //ウィンドウのサイズ、位置を変更した時に呼び出す関数の指定
 	glutDisplayFunc(myDisplay);        //freeglutによる描画を行う関数の指定
 	glutTimerFunc(500, onTimer, 0);    //指定した時間(ミリ秒単位)毎に呼び出す関数の指定
-	glutTimerFunc(16, Update, 0);      //引数は左から呼び出すまでの時間、呼び出す関数名、関数に付与する番号
-	if (!initSDL()) {                  
+									   //引数は左から呼び出すまでの時間、呼び出す関数名、関数に付与する番号
+	Update(0);      
+	if (!initSDL()) {
 		return -1;
 	}
 	LoadSound();

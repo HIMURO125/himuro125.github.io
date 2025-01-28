@@ -56,6 +56,14 @@ void CheckFile(string filename) {
     }
 }
 
+/*******************************************************
+* データの変換を行う関数
+* データが"9999"の場合、処理が異なる
+* 引数
+* str:変換したデータを格納するchar型変数のポインタ
+* data:変換するデータ
+* size:char型変数のサイズ
+********************************************************/
 void ChangeData1(char* str, int data, size_t size) {
     if (data == 9999) {
         snprintf(str, size, "1# NULL");
@@ -65,6 +73,9 @@ void ChangeData1(char* str, int data, size_t size) {
     }
 }
 
+/*******************************************************
+* ChangeData1と同様
+********************************************************/
 void ChangeData2(char* str, int data, size_t size) {
     if (data == 9999) {
         snprintf(str, size, "2# NULL");
@@ -74,6 +85,9 @@ void ChangeData2(char* str, int data, size_t size) {
     }
 }
 
+/*******************************************************
+* ChangeData1と同様
+********************************************************/
 void ChangeData3(char* str, int data, size_t size) {
     if (data == 9999) {
         snprintf(str, size, "3# NULL");
